@@ -31,7 +31,8 @@ function loginAction(loginData) {
     return function(dispatch) {
         return axios.post('https://react-bqasim381.c9users.io/users/login', loginData)
         .then(function(response) {
-            console.log(response);
+            const token = response.data.token;
+            localStorage.setItem('jwt', token);
         })
     }
 }
