@@ -15,6 +15,10 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('./models/user-model');
 
+var JwtStrategy = require('passport-jwt').Strategy,
+    ExtractJwt = require('passport-jwt').ExtractJwt;
+var opts = {}
+
 // app.use(function(req, res, next) {
 //     res.setHeader('Access-Control-Allow-Origin', '*');
 //     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
@@ -41,6 +45,22 @@ passport.deserializeUser(function(id, done) {
     done(err, user);
   });
 });
+
+opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
+opts.secretOrKey = config.jwtSecret;
+passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+    User.findOne({id: jwt_payload.sub}, function(err, user) {
+        if (err) {
+            return done(err, false);
+        }
+        if (user) {
+            done(null, user);
+        } else {
+            done(null, false);
+            // or you could create a new account
+        }
+    });
+}));
 
 var strategy = new LocalStrategy(function(username, password, callback) {
     User.findOne({
@@ -156,14 +176,6 @@ app.post('/users/register', function(req, res) {
     });
 });
 
-// app.post('/users/login',
-//   passport.authenticate('local', { failureRedirect: '/login' }),
-//   function(req, res) {
-//     req.login(user, function(err) {
-//   if (err) { return next(err); }
-//   return res.redirect('/users/' + req.user.username);
-// });
-//   });
 app.post('/users/login',
   passport.authenticate('local'),
   function(req, res) {
