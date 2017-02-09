@@ -7,7 +7,7 @@ var axios = require('axios');
 class Register extends React.Component {
     completeRegistration(event) {
         event.preventDefault();
-        axios.post('https://react-bqasim381.c9users.io/users/register', this.props.registerInput);
+        this.props.dispatch(actions.registerAction(this.props.registerInput));
     }
     inputChange(event) {
         this.props.dispatch(actions.updateRegistrationInput(event.target.name, event.target.value))

@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var path = require('path');
 var expressJWT = require('express-jwt');
-var JWT = require('jsonwebtoken');
+var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 
 var config = require('./config');
@@ -21,7 +21,8 @@ var User = require('./models/user-model');
 //     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
 //     next();
 // });
-
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(bodyParser.json());
 // app.use(expressJWT)
 
@@ -72,7 +73,6 @@ var strategy = new LocalStrategy(function(username, password, callback) {
 passport.use(strategy);
 
 app.post('/users/register', function(req, res) {
-    console.log(req.body);
     if (!req.body) {
         return res.status(400).json({
             message: "No request body"
@@ -156,10 +156,24 @@ app.post('/users/register', function(req, res) {
     });
 });
 
+// app.post('/users/login',
+//   passport.authenticate('local', { failureRedirect: '/login' }),
+//   function(req, res) {
+//     req.login(user, function(err) {
+//   if (err) { return next(err); }
+//   return res.redirect('/users/' + req.user.username);
+// });
+//   });
 app.post('/users/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
+  passport.authenticate('local'),
   function(req, res) {
-    res.redirect('/')
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    const token = jwt.sign({
+        username: req.user.username
+    }, config.jwtSecret);
+    console.log(token);
+    res.json({ token });
   });
   
 app.get('/logout', function(req, res){

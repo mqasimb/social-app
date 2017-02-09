@@ -5,7 +5,7 @@ const actions = require('../actions/index');
 class Login extends React.Component {
     submitLogin(event) {
         event.preventDefault();
-        console.log(event);
+        this.props.dispatch(actions.loginAction(this.props.loginInput));
     }
     inputChange(event) {
         this.props.dispatch(actions.updateLoginInput(event.target.name, event.target.value))
