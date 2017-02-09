@@ -176,7 +176,7 @@ app.post('/users/login',
     res.json({ token });
   });
   
-app.get('/logout', function(req, res){
+app.get('/users/logout', function(req, res){
     req.logout();
     res.redirect('/');
 });

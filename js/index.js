@@ -8,6 +8,8 @@ const Route = router.Route;
 const IndexRoute = router.IndexRoute;
 const browserHistory = router.browserHistory;
 const store = require('./store');
+const { setAuthorizationToken, userLoggedIn } = require('./actions/index')
+const jwtdecode = require('jwt-decode');
 
 const App = require('./components/app')
 const Login = require('./components/login');
@@ -15,6 +17,10 @@ const Register = require('./components/register');
 const Post = require('./components/post');
 const Home = require('./components/home');
 
+if(localStorage.jwt) {
+    setAuthorizationToken(localStorage.jwt);
+    store.dispatch(userLoggedIn(jwtdecode(localStorage.jwt)));
+}
 
 var routes = (
     <Provider store={store}>
