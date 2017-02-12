@@ -14,7 +14,7 @@ const jwtdecode = require('jwt-decode');
 const App = require('./components/app')
 const Login = require('./components/login');
 const Register = require('./components/register');
-const Post = require('./components/post');
+const SinglePost = require('./components/singlepost');
 const Home = require('./components/home');
 
 if(localStorage.jwt) {
@@ -29,6 +29,7 @@ var routes = (
             <IndexRoute component={Home} />
             <Route path='/login' component={Login}/>
             <Route path='/register' component={Register}/>
+            <Route path='/post/:id' component={SinglePost}/>
         </Route>
     </Router>
     </Provider>

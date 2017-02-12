@@ -72,6 +72,79 @@ function setAuthorizationToken(token) {
     }
 }
 
+const UPDATE_POST_INPUT = 'UPDATE_POST_INPUT';
+function updatePostInput(inputName, inputValue) {
+    return ({
+        type: UPDATE_POST_INPUT,
+        inputName: inputName,
+        inputValue: inputValue
+    })
+}
+
+function submitPostToServer(data) {
+    return function(dispatch) {
+        return axios.post('https://react-bqasim381.c9users.io/api/post', data)
+        .then(function(response) {
+            console.log(response);
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+function getPosts() {
+    return function(dispatch) {
+        return axios.get('https://react-bqasim381.c9users.io/api/post')
+        .then(function(response) {
+            console.log(response);
+            return dispatch(postFetchSuccessful(response));
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const POST_FETCH_SUCCESSFUL = 'POST_FETCH_SUCCESSFUL';
+function postFetchSuccessful(data) {
+    return ({
+        type: POST_FETCH_SUCCESSFUL,
+        data: data
+    })
+}
+
+function getSinglePost(id) {
+    return function(dispatch) {
+        return axios.get('https://react-bqasim381.c9users.io/api/post/'+id)
+        .then(function(response) {
+            console.log(response);
+            return dispatch(singlePostFetchSuccessful(response));
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const SINGLE_POST_FETCH_SUCCESSFUL = 'SINGLE_POST_FETCH_SUCCESSFUL';
+function singlePostFetchSuccessful(data) {
+    return ({
+        type: SINGLE_POST_FETCH_SUCCESSFUL,
+        data: data
+    })
+}
+
+exports.getSinglePost = getSinglePost;
+exports.SINGLE_POST_FETCH_SUCCESSFUL = SINGLE_POST_FETCH_SUCCESSFUL;
+
+exports.getPosts = getPosts;
+exports.POST_FETCH_SUCCESSFUL = POST_FETCH_SUCCESSFUL;
+
+exports.submitPostToServer = submitPostToServer;
+exports.updatePostInput = updatePostInput;
+exports.UPDATE_POST_INPUT = UPDATE_POST_INPUT;
+
 exports.logoutAction = logoutAction;
 exports.userLoggedOut = userLoggedOut;
 exports.USER_LOGGED_OUT = USER_LOGGED_OUT;

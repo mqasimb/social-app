@@ -1,13 +1,14 @@
 var mongoose = require('mongoose');
 
+var LikesSchema = new mongoose.Schema({
+    username: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+})
+
 var CommentSchema = new mongoose.Schema({
     type: String,
     username: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-    date: Date
-})
-
-var LikesSchema = new mongoose.Schema({
-    username: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    date: Date,
+    likes: [LikesSchema]
 })
 
 var PostSchema = new mongoose.Schema({
@@ -17,9 +18,10 @@ var PostSchema = new mongoose.Schema({
     },
     comments: [CommentSchema],
     likes: [LikesSchema],
-    image: String
+    image: String,
+    username: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}
 })
 
-var Post = new mongoose.model('Post', PostSchema);
+var Post = mongoose.model('Post', PostSchema);
 
 module.exports = Post;

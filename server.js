@@ -14,6 +14,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('./models/user-model');
+var Post = require('./models/post-model');
 
 var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
@@ -27,14 +28,21 @@ var opts = {}
 // });
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-// app.use(expressJWT)
 
-app.use(express.static('build'));
-
-app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, './index.html'))
-});
+app.use(expressJWT({
+  secret: config.jwtSecret,
+  credentialsRequired: false,
+  getToken: function fromHeaderOrQuerystring (req) {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+        return req.headers.authorization.split(' ')[1];
+    } else if (req.query && req.query.token) {
+      return req.query.token;
+    }
+    return null;
+  }
+}));
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -44,6 +52,175 @@ passport.deserializeUser(function(id, done) {
   User.findById(id, function(err, user) {
     done(err, user);
   });
+});
+
+app.use(express.static('build'));
+
+app.post('/users/login',
+  passport.authenticate('local'),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    const token = jwt.sign({
+        username: req.user.username,
+        _id: req.user._id
+    }, config.jwtSecret);
+    console.log(req.user);
+    res.json({ token });
+  });
+  
+app.get('/users/logout', function(req, res){
+    req.logout();
+    res.redirect('/login');
+});
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+app.get('/api/post', function(req, res) {
+    Post.find({}, function(err, post) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(req.user);
+        res.json(post);
+    });
+});
+
+app.get('/api/post/:id', function(req, res) {
+    Post.findOne({_id: req.params.id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(post);
+        res.json(post);
+    })
+});
+
+app.post('/api/post', function(req, res) {
+
+    Post.create({content: req.body.content, username: req.user._id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(post);
+        res.json(post);
+    })
+});
+
+app.put('/api/post/:id', function(req, res) {
+    Post.findOneAndUpdate({_id: req.params.id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        res.status(200).json(post);
+    })
+});
+
+app.delete('/api/post/:id', function(req, res) {
+    Post.findOneAndRemove({_id: req.params.id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        res.status(200).json(post);
+    })
+});
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+app.get('/api/comments/:id', function(req, res) {
+    Post.find({_id: req.params.id}, function(err, post) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(req.user);
+        res.json(post);
+    });
+});
+
+app.post('/api/comments/:id', function(req, res) {
+    Post.create({content: req.body.content, username: req.user._id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(post);
+        res.json(post);
+    })
+});
+
+app.put('/api/comments/:postid/:commentid', function(req, res) {
+    Post.findOneAndUpdate({_id: req.params.id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        res.status(200).json(post);
+    })
+});
+
+app.delete('/api/comments/:postid/:commentid', function(req, res) {
+    Post.findOneAndRemove({_id: req.params.id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        res.status(200).json(post);
+    })
+});
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+app.get('/api/likes/:id', function(req, res) {
+    Post.findOne({_id: req.params.id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(post);
+        res.json(post);
+    })
+});
+
+app.post('/api/likes/:id', function(req, res) {
+
+    Post.create({content: req.body.content, username: req.user._id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(post);
+        res.json(post);
+    })
+});
+
+app.put('/api/likes/:id', function(req, res) {
+    Post.findOneAndUpdate({_id: req.params.id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        res.status(200).json(post);
+    })
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+app.get('/*', function(req, res) {
+    console.log(req.user)
+    res.sendFile(path.join(__dirname, './index.html'))
 });
 
 opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
@@ -174,23 +351,6 @@ app.post('/users/register', function(req, res) {
             });
         });
     });
-});
-
-app.post('/users/login',
-  passport.authenticate('local'),
-  function(req, res) {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    const token = jwt.sign({
-        username: req.user.username
-    }, config.jwtSecret);
-    console.log(token);
-    res.json({ token });
-  });
-  
-app.get('/users/logout', function(req, res){
-    req.logout();
-    res.redirect('/');
 });
 
 app.use(function(err, req, res, next) {
