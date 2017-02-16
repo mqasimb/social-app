@@ -2,6 +2,8 @@ var React = require('react');
 const { connect } = require('react-redux');
 const actions = require('../actions/index');
 
+const Dropzone = require('react-dropzone');
+
 class NewPost extends React.Component {
     postForm(event) {
         event.preventDefault();
@@ -14,15 +16,19 @@ class NewPost extends React.Component {
         }
     }
     
+    onImageDrop() {
+        
+    }
+    
     render() {
         return(
             <div>
             <form onSubmit={this.postForm.bind(this)}>
             <label>New Post</label><input onChange={this.changeForm.bind(this)} type='text' name='content' />
+            <Dropzone multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop an image or click to select a file to upload.</p></Dropzone>
             <label>Image</label><input onChange={this.changeForm.bind(this)} type='file' name='image' />
             <button>Post</button>
             </form>
-            {this.props.newPost.content}
             </div>
             )
     }

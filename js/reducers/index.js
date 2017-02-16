@@ -7,17 +7,52 @@ var initialState = {
         auth: {authenticated: false, user: {}},
         newPost: {content: '', image: null},
         postData: [],
-        singlePost: {}
+        singlePost: {},
+        postLoading: true,
+        isEdit: false,
+        editInput: {content: ''},
+        commentsInput: {}
     };
 
 var searchReducer = function(state, action) {
     state = state || initialState;
-
     var newState = Object.assign({}, state);
+    
+    if(action.type === actions.EDIT_INPUT) {
+        newChange = {};
+        newChange[action.inputName] = action.inputValue;
+        newState.editInput = Object.assign({}, newChange);
+        return newState;
+    }
+    
+    if(action.type === actions.COMMENT_INPUT_CHANGE) {
+        var newChange = {};
+        newChange[action.inputName] = action.inputValue;
+        newState.commentsInput = Object.assign({}, newChange);
+        return newState;
+    }
+    
+    if(action.type === actions.EDIT_POST_ENABLE) {
+        newState.isEdit = true;
+        return newState;
+    }
+    
+    if(action.type === actions.EDIT_POST_DISABLE) {
+        newState.isEdit = false;
+        return newState;
+    }
     
     if(action.type === actions.SINGLE_POST_FETCH_SUCCESSFUL) {
         var newChange = action.data.data;
         newState.singlePost = Object.assign({}, newChange);
+        newState.postLoading = false;
+        return newState;
+    }
+    
+    if(action.type === actions.DISMOUNT_SINGLE_POST) {
+        newState.isEdit = false;
+        newState.postLoading = true;
+        newState.singlePost = Object.assign({});
         return newState;
     }
     

@@ -2,16 +2,18 @@ var mongoose = require('mongoose');
 
 var LikesSchema = new mongoose.Schema({
     username: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    like: Boolean
 })
 
 var CommentSchema = new mongoose.Schema({
-    type: String,
-    username: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    comment: String,
+    username: String,
     date: Date,
-    likes: [LikesSchema]
+    // likes: [LikesSchema]
 })
 
 var PostSchema = new mongoose.Schema({
+    name: String,
     content: {
         type: String,
         required: true
@@ -23,5 +25,6 @@ var PostSchema = new mongoose.Schema({
 })
 
 var Post = mongoose.model('Post', PostSchema);
+
 
 module.exports = Post;

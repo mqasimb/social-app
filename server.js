@@ -5,6 +5,7 @@ var path = require('path');
 var expressJWT = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
+var unless = require('express-unless');
 
 var config = require('./config');
 
@@ -20,29 +21,25 @@ var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 var opts = {}
 
-// app.use(function(req, res, next) {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-//     next();
-// });
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(expressJWT({
-  secret: config.jwtSecret,
-  credentialsRequired: false,
-  getToken: function fromHeaderOrQuerystring (req) {
-    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-        return req.headers.authorization.split(' ')[1];
-    } else if (req.query && req.query.token) {
-      return req.query.token;
-    }
-    return null;
-  }
-}));
+// app.use(expressJWT({ secret: config.jwtSecret}).unless({path: ['/login', '/users/login', 'register', '/users/register']}));
+// }
+// app.use(expressJWT({
+//   secret: config.jwtSecret,
+//   credentialsRequired: false,
+//   getToken: function fromHeaderOrQuerystring (req) {
+//     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+//         return req.headers.authorization.split(' ')[1];
+//     } else if (req.query && req.query.token) {
+//       return req.query.token;
+//     }
+//     return null;
+//   }
+// }));
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -65,7 +62,7 @@ app.post('/users/login',
         username: req.user.username,
         _id: req.user._id
     }, config.jwtSecret);
-    console.log(req.user);
+    console.log('req.user AUTHENTICATE', req.user);
     res.json({ token });
   });
   
@@ -74,44 +71,89 @@ app.get('/users/logout', function(req, res){
     res.redirect('/login');
 });
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-app.get('/api/post', function(req, res) {
+app.get('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     Post.find({}, function(err, post) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-        console.log(req.user);
+        // console.log(req.user);
         res.json(post);
     });
 });
 
-app.get('/api/post/:id', function(req, res) {
+app.get('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     Post.findOne({_id: req.params.id}, function(err, post) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-        console.log(post);
         res.json(post);
     })
 });
 
-app.post('/api/post', function(req, res) {
-
-    Post.create({content: req.body.content, username: req.user._id}, function(err, post) {
+app.post('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    /// check whether user object
+    // console.log('user', req.user);
+    Post.create({content: req.body.content, username: req.user._id, name:req.user.username}, function(err, post) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-        console.log(post);
+        // console.log(post);
         res.json(post);
     })
 });
 
-app.put('/api/post/:id', function(req, res) {
+app.put('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    Post.findOneAndUpdate({_id: req.params.id}, {$set: {content: req.body.content}}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(post)
+        res.status(200).json(post);
+    })
+});
+
+app.delete('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    Post.findOneAndRemove({_id: req.params.id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        res.status(200).json(post);
+    })
+});
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+app.post('/api/comments/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    console.log(req.body)
+    console.log(req.userW)
+    Post.findOne({_id: req.params.id}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(post, 'comment post');
+        post.comments.push({comment: req.body.comment, username: req.user.username, date: Date.now()});
+        console.log(post.comments);
+        console.log(post.comments.length);
+        post.save(function(err) {
+            if(err) return res.json({message: err})
+          res.json(post);  
+        })
+    })
+});
+
+app.put('/api/comments/:postid/:commentid', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     Post.findOneAndUpdate({_id: req.params.id}, function(err, post) {
         if(err) {
             return res.status(500).json({
@@ -122,7 +164,7 @@ app.put('/api/post/:id', function(req, res) {
     })
 });
 
-app.delete('/api/post/:id', function(req, res) {
+app.delete('/api/comments/:postid/:commentid', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     Post.findOneAndRemove({_id: req.params.id}, function(err, post) {
         if(err) {
             return res.status(500).json({
@@ -134,80 +176,53 @@ app.delete('/api/post/:id', function(req, res) {
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-app.get('/api/comments/:id', function(req, res) {
-    Post.find({_id: req.params.id}, function(err, post) {
-        if (err) {
-            return res.status(500).json({
-                message: 'Internal Server Error'
-            });
-        }
-        console.log(req.user);
-        res.json(post);
-    });
-});
+// app.get('/api/likes/:id', function(req, res) {
+//     Post.findOne({_id: req.params.id}, function(err, post) {
+//         if(err) {
+//             return res.status(500).json({
+//                 message: 'Internal Server Error'
+//             });
+//         }
+//         console.log(post);
+//         res.json(post);
+//     })
+// });
 
-app.post('/api/comments/:id', function(req, res) {
-    Post.create({content: req.body.content, username: req.user._id}, function(err, post) {
-        if(err) {
-            return res.status(500).json({
-                message: 'Internal Server Error'
-            });
-        }
-        console.log(post);
-        res.json(post);
-    })
-});
+app.post('/api/likes/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
 
-app.put('/api/comments/:postid/:commentid', function(req, res) {
-    Post.findOneAndUpdate({_id: req.params.id}, function(err, post) {
-        if(err) {
-            return res.status(500).json({
-                message: 'Internal Server Error'
-            });
-        }
-        res.status(200).json(post);
-    })
-});
-
-app.delete('/api/comments/:postid/:commentid', function(req, res) {
-    Post.findOneAndRemove({_id: req.params.id}, function(err, post) {
-        if(err) {
-            return res.status(500).json({
-                message: 'Internal Server Error'
-            });
-        }
-        res.status(200).json(post);
-    })
-});
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-app.get('/api/likes/:id', function(req, res) {
     Post.findOne({_id: req.params.id}, function(err, post) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-        console.log(post);
+        
+    console.log(post.likes, 'This.likes');
+    var returnIndex = post.likes.findIndex(function(user) { 
+        console.log(user.username, 'username', req.user._id)
+        return user.username == req.user._id;
+    });
+    console.log(returnIndex, 'index')
+    if(returnIndex > -1) {
+        //remove like
+        post.likes.splice(returnIndex, 1);
+    }
+    else {
+        //add like
+        console.log({username: req.user._id, like: true}, 'object log')
+        post.likes.push({username: req.user._id, like: true})
+    }
+    post.save(function(err) {
+        if(err) return res.send(err);
+        console.log(post, 'changed post');
         res.json(post);
-    })
+    });
+});
 });
 
-app.post('/api/likes/:id', function(req, res) {
-
-    Post.create({content: req.body.content, username: req.user._id}, function(err, post) {
-        if(err) {
-            return res.status(500).json({
-                message: 'Internal Server Error'
-            });
-        }
-        console.log(post);
-        res.json(post);
-    })
-});
-
-app.put('/api/likes/:id', function(req, res) {
-    Post.findOneAndUpdate({_id: req.params.id}, function(err, post) {
+app.put('/api/likes/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    var newBool = req.body.likes.boolean;
+    Post.findOneAndUpdate({_id: req.params.id}, {"$set": {likes: {username: req.user._id, boolean: newBool}}}, function(err, post) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
@@ -218,27 +233,6 @@ app.put('/api/likes/:id', function(req, res) {
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-app.get('/*', function(req, res) {
-    console.log(req.user)
-    res.sendFile(path.join(__dirname, './index.html'))
-});
-
-opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
-opts.secretOrKey = config.jwtSecret;
-passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.sub}, function(err, user) {
-        if (err) {
-            return done(err, false);
-        }
-        if (user) {
-            done(null, user);
-        } else {
-            done(null, false);
-            // or you could create a new account
-        }
-    });
-}));
-
 var strategy = new LocalStrategy(function(username, password, callback) {
     User.findOne({
         username: username
@@ -351,6 +345,11 @@ app.post('/users/register', function(req, res) {
             });
         });
     });
+});
+
+app.get('/*', function(req, res) {
+    console.log(req.user)
+    res.sendFile(path.join(__dirname, './index.html'))
 });
 
 app.use(function(err, req, res, next) {

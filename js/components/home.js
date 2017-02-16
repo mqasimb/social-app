@@ -8,17 +8,24 @@ const Post = require('./post');
 
 class Home extends React.Component {
     componentDidMount() {
-        this.props.dispatch(actions.getPosts());
+        if(!this.props.auth.authenticated) {
+            router.browserHistory.push('/login');
+        }
+        if(this.props.auth.authenticated) {
+            this.props.dispatch(actions.getPosts());
+        }
+        this.props.dispatch(actions.dismountSinglePost());
     }
     
     userLogout(event) {
         event.preventDefault();
         this.props.dispatch(actions.logoutAction());
+        router.browserHistory.push('/login');;
     }
     render() {
         var isLoggedIn = this.props.auth.authenticated;
         var arrayPosts = this.props.postData.map(function(post) {
-            return <Post content={post.content} key={post._id} id={post._id} likes={post.likes}/>
+            return <Post content={post.content} name={post.name} key={post._id} id={post._id} likes={post.likes} comments={post.comments}/>
         })
         return (
             <div>

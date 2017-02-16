@@ -1,11 +1,16 @@
 var React = require('react');
+const router = require('react-router');
 var { connect } = require('react-redux');
 const actions = require('../actions/index');
 
 class Login extends React.Component {
     submitLogin(event) {
         event.preventDefault();
-        this.props.dispatch(actions.loginAction(this.props.loginInput));
+        this.props.dispatch(actions.loginAction(this.props.loginInput)).then(function(bool) {
+           if(bool) {
+               router.browserHistory.push('/');
+           } 
+        });
     }
     inputChange(event) {
         this.props.dispatch(actions.updateLoginInput(event.target.name, event.target.value))
@@ -26,6 +31,7 @@ class Login extends React.Component {
 
 function mapStateToProps(state, props) {
     return({
+        auth: state.auth,
         loginInput: state.loginInput
     })
 }

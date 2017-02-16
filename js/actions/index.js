@@ -59,13 +59,14 @@ function loginAction(loginData) {
             setAuthorizationToken(token);
             var decoded = jwtdecode(token);
             dispatch(userLoggedIn(decoded));
+            return true;
         })
     }
 }
 
 function setAuthorizationToken(token) {
     if(token) {
-        axios.defaults.headers.common['Authorization'] = `JWT ${token}`
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     }
     else {
         delete axios.defaults.headers.common['Authorization'];
@@ -86,6 +87,7 @@ function submitPostToServer(data) {
         return axios.post('https://react-bqasim381.c9users.io/api/post', data)
         .then(function(response) {
             console.log(response);
+            return dispatch(getPosts());
         })
         .catch(function(err) {
             console.log(err);
@@ -114,12 +116,20 @@ function postFetchSuccessful(data) {
     })
 }
 
+const DISMOUNT_SINGLE_POST = 'DISMOUNT_SINGLE_POST';
+function dismountSinglePost() {
+    return ({
+        type: DISMOUNT_SINGLE_POST,
+    })
+}
+
 function getSinglePost(id) {
     return function(dispatch) {
         return axios.get('https://react-bqasim381.c9users.io/api/post/'+id)
         .then(function(response) {
             console.log(response);
-            return dispatch(singlePostFetchSuccessful(response));
+            dispatch(singlePostFetchSuccessful(response));
+            return response;
         })
         .catch(function(err) {
             console.log(err);
@@ -135,6 +145,128 @@ function singlePostFetchSuccessful(data) {
     })
 }
 
+function deletePost(id) {
+    return function(dispatch) {
+        return axios.delete('https://react-bqasim381.c9users.io/api/post/'+id)
+        .then(function(response) {
+            return dispatch(getPosts());
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+function editPost(id) {
+    return function(dispatch) {
+        return axios.put('https://react-bqasim381.c9users.io/api/post/'+id)
+        .then(function(response) {
+            console.log(response);
+            return dispatch(getPosts());
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const EDIT_POST_ENABLE = 'EDIT_POST_ENABLE';
+function editPostEnable() {
+    return ({
+        type: EDIT_POST_ENABLE
+    })
+}
+
+const EDIT_POST_DISABLE = 'EDIT_POST_DISABLE';
+function editPostDisable() {
+    return ({
+        type: EDIT_POST_DISABLE
+    })
+}
+
+function updateLikeStatus(postID) {
+    return function(dispatch) {
+        return axios.post('https://react-bqasim381.c9users.io/api/likes/'+postID)
+        .then(function(response) {
+            return dispatch(getPosts());
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const LIKE_STATUS_CHANGE_SUCCESSFUL = 'LIKE_STATUS_CHANGE_SUCCESSFUL';
+function likeStatusChangeSuccessful(data) {
+    return ({
+        type: LIKE_STATUS_CHANGE_SUCCESSFUL,
+        data: data
+    })
+}
+
+const COMMENT_INPUT_CHANGE = 'COMMENT_INPUT_CHANGE';
+function commentInputChange(inputName, inputValue) {
+    return ({
+        type: COMMENT_INPUT_CHANGE,
+        inputName: inputName,
+        inputValue: inputValue
+    })
+}
+
+function submitComment(postID, data) {
+    return function(dispatch) {
+        return axios.post('https://react-bqasim381.c9users.io/api/comments/'+postID, data)
+        .then(function(response) {
+            return dispatch(getPosts());
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const EDIT_INPUT = 'EDIT_INPUT';
+function editInput(inputName, inputValue) {
+    return ({
+        type: EDIT_INPUT,
+        inputName: inputName,
+        inputValue: inputValue
+    })
+}
+
+function submitEdittedPost(postID, data) {
+    return function(dispatch) {
+        return axios.put('https://react-bqasim381.c9users.io/api/post/'+postID, data)
+        .then(function(response) {
+            return response;
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+exports.submitEdittedPost = submitEdittedPost;
+exports.EDIT_INPUT = EDIT_INPUT;
+exports.editInput = editInput;
+
+exports.COMMENT_INPUT_CHANGE = COMMENT_INPUT_CHANGE;
+exports.commentInputChange = commentInputChange;
+
+exports.submitComment = submitComment;
+
+exports.DISMOUNT_SINGLE_POST = DISMOUNT_SINGLE_POST;
+exports.dismountSinglePost = dismountSinglePost;
+
+exports.EDIT_POST_ENABLE = EDIT_POST_ENABLE;
+exports.editPostEnable = editPostEnable;
+
+exports.EDIT_POST_DISABLE = EDIT_POST_DISABLE;
+exports.editPostDisable = editPostDisable;
+
+exports.updateLikeStatus = updateLikeStatus;
+exports.editPost = editPost;
+exports.deletePost = deletePost;
 exports.getSinglePost = getSinglePost;
 exports.SINGLE_POST_FETCH_SUCCESSFUL = SINGLE_POST_FETCH_SUCCESSFUL;
 

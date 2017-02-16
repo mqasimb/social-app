@@ -4,7 +4,7 @@
   "description": "A React template",
   "main": "js/index.js",
   "scripts": {
-    "start": "node server.js -c-1 build",
+    "start": "nodemon server.js -c-1 build",
     "dev": "run-p watch serve",
     "test": "mocha --recursive --compilers js:babel-core/register",
     "build": "run-s build:*",
@@ -64,9 +64,11 @@
     "axios": "^0.15.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.16.0",
+    "cloudinary": "^1.7.0",
     "cors": "^2.8.1",
     "express": "^4.14.1",
     "express-jwt": "^5.1.0",
+    "express-unless": "^0.3.0",
     "isomorphic-fetch": "^2.2.1",
     "jsonwebtoken": "^7.2.1",
     "jwt-decode": "^2.1.0",
@@ -77,11 +79,13 @@
     "path": "^0.12.7",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
+    "react-dropzone": "^3.10.0",
     "react-redux": "^4.4.6",
     "react-router": "^3.0.2",
     "redux": "^3.6.0",
     "redux-logger": "^2.8.1",
     "redux-promise": "^0.5.3",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "superagent": "^3.4.3"
   }
 }
