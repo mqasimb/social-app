@@ -7,6 +7,8 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var unless = require('express-unless');
 
+const cloudinary = require('cloudinary');
+
 var config = require('./config');
 
 var app = express();
@@ -233,6 +235,12 @@ app.put('/api/likes/:id', expressJWT({ secret: config.jwtSecret}), function(req,
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+cloudinary.config({ 
+  cloud_name: 'mqasimb', 
+  api_key: 'mqasimb', 
+  api_secret: 'pRC9jsjqVMw7QALtFXyb4__Wj0w' 
+});
 var strategy = new LocalStrategy(function(username, password, callback) {
     User.findOne({
         username: username

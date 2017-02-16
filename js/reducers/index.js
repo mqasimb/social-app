@@ -11,12 +11,24 @@ var initialState = {
         postLoading: true,
         isEdit: false,
         editInput: {content: ''},
-        commentsInput: {}
+        commentsInput: {},
+        uploadedFile: '',
+        uploadedFileCloudinaryUrl: ''
     };
 
 var searchReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
+    
+    if(action.type === actions.UPLOAD_FILE) {
+        newState.uploadedFile = action.files;
+        return newState;
+    }
+    
+    if(action.type === actions.SET_UPLOAD_FILE_CLOUDINARY_URL) {
+        newState.uploadedFileCloudinaryUrl = action.url;
+        return newState;
+    }
     
     if(action.type === actions.EDIT_INPUT) {
         newChange = {};

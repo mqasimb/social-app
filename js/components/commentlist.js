@@ -8,11 +8,9 @@ const Comment = require('./comment');
 
 class CommentList extends React.Component {
     render(props) {
-        console.log(this.props.comments)
         var comments = this.props.comments.map(function(comment) {
             return <Comment key={comment._id} username={comment.username} comment={comment.comment} date={comment.date} />;
         })
-        console.log(comments);
         return (
             <div>
             <ul>{comments}</ul>

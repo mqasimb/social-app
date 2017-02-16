@@ -3,6 +3,7 @@ const { connect } = require('react-redux');
 const actions = require('../actions/index');
 
 const Dropzone = require('react-dropzone');
+const request = require('superagent');
 
 class NewPost extends React.Component {
     postForm(event) {
@@ -16,16 +17,36 @@ class NewPost extends React.Component {
         }
     }
     
-    onImageDrop() {
-        
+    onImageDrop(files) {
+        this.props.dispatch(actions.uploadFile(files[0]));
+        this.handleImageUpload(files[0]);
     }
+    handleImageUpload(file) {
+    let upload = request.post('https://api.cloudinary.com/v1_1/mqasimb/image/upload')
+                        .field('api_key', '875199226668767')
+                        .field('api-secret', 'pRC9jsjqVMw7QALtFXyb4__Wj0w')
+                        .field('upload_preset', 'khh5rnsu')
+                        .field('file', file);
+
+    upload.end((err, response) => {
+      if (err) {
+        console.error(err);
+      }
+
+      if (response.body.secure_url !== '') {
+        this.props.dispatch(actions.setCloudinaryURL(response.body.secure_url));
+      }
+    });
+  }
     
     render() {
+        var imgStyle = {width: 100, height: 100}
         return(
             <div>
             <form onSubmit={this.postForm.bind(this)}>
             <label>New Post</label><input onChange={this.changeForm.bind(this)} type='text' name='content' />
             <Dropzone multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop an image or click to select a file to upload.</p></Dropzone>
+            <img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/>
             <label>Image</label><input onChange={this.changeForm.bind(this)} type='file' name='image' />
             <button>Post</button>
             </form>
@@ -36,7 +57,9 @@ class NewPost extends React.Component {
 
 function mapStateToProps(state, props) {
     return( {
-        newPost: state.newPost
+        newPost: state.newPost,
+        uploadedFile: state.uploadedFile,
+        uploadedFileCloudinaryUrl: state.uploadedFileCloudinaryUrl
     } )
 }
 

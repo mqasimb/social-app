@@ -246,6 +246,31 @@ function submitEdittedPost(postID, data) {
     }
 }
 
+const CLOUDINARY_UPLOAD_PRESET = 'khh5rnsu';
+const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/your_cloudinary_app_name/upload';
+
+const SET_UPLOAD_FILE_CLOUDINARY_URL = 'SET_UPLOAD_FILE_CLOUDINARY_URL';
+function setCloudinaryURL(url) {
+    return ({
+        type: SET_UPLOAD_FILE_CLOUDINARY_URL,
+        url: url
+    })
+}
+
+const UPLOAD_FILE = 'UPLOAD_FILE';
+function uploadFile(files) {
+    return ({
+        type: UPLOAD_FILE,
+        files: files
+    })
+}
+
+exports.SET_UPLOAD_FILE_CLOUDINARY_URL = SET_UPLOAD_FILE_CLOUDINARY_URL;
+exports.setCloudinaryURL = setCloudinaryURL;
+
+exports.uploadFile = uploadFile;
+exports.UPLOAD_FILE = UPLOAD_FILE;
+
 exports.submitEdittedPost = submitEdittedPost;
 exports.EDIT_INPUT = EDIT_INPUT;
 exports.editInput = editInput;
