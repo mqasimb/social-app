@@ -86,13 +86,20 @@ function submitPostToServer(data) {
     return function(dispatch) {
         return axios.post('https://react-bqasim381.c9users.io/api/post', data)
         .then(function(response) {
-            console.log(response);
+            dispatch(postSuccesful());
             return dispatch(getPosts());
         })
         .catch(function(err) {
             console.log(err);
         })
     }
+}
+
+const POST_SUCCESSFUL = 'POST_SUCCESSFUL';
+function postSuccesful() {
+    return ({
+        type: POST_SUCCESSFUL
+    })
 }
 
 function getPosts() {
@@ -213,10 +220,19 @@ function commentInputChange(inputName, inputValue) {
     })
 }
 
+const COMMENT_SUBMIT_SUCCESS = 'COMMENT_SUBMIT_SUCCESS';
+function commentSubmitSuccess(inputName) {
+    return ({
+        type: COMMENT_SUBMIT_SUCCESS,
+        inputName: inputName
+    })
+}
+
 function submitComment(postID, data) {
     return function(dispatch) {
         return axios.post('https://react-bqasim381.c9users.io/api/comments/'+postID, data)
         .then(function(response) {
+            dispatch(commentSubmitSuccess(postID));
             return dispatch(getPosts());
         })
         .catch(function(err) {
@@ -264,6 +280,12 @@ function uploadFile(files) {
         files: files
     })
 }
+
+exports.postSuccesful = postSuccesful;
+exports.POST_SUCCESSFUL = POST_SUCCESSFUL;
+
+exports.commentSubmitSuccess = commentSubmitSuccess;
+exports.COMMENT_SUBMIT_SUCCESS = COMMENT_SUBMIT_SUCCESS;
 
 exports.SET_UPLOAD_FILE_CLOUDINARY_URL = SET_UPLOAD_FILE_CLOUDINARY_URL;
 exports.setCloudinaryURL = setCloudinaryURL;

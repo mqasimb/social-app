@@ -44,11 +44,11 @@ class NewPost extends React.Component {
         return(
             <div>
             <form onSubmit={this.postForm.bind(this)}>
-            <label>New Post</label><input onChange={this.changeForm.bind(this)} type='text' name='content' />
+            <label>New Post</label><input onChange={this.changeForm.bind(this)} type='text' name='content' ref='newPostInput' value={this.props.newPost.content || ''} />
             <Dropzone multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop an image or click to select a file to upload.</p></Dropzone>
             <img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/>
             <label>Image</label><input onChange={this.changeForm.bind(this)} type='file' name='image' />
-            <button>Post</button>
+            <button disabled={!this.props.newPost.content}>Post</button>
             </form>
             </div>
             )

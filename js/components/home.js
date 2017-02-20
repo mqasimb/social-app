@@ -25,7 +25,7 @@ class Home extends React.Component {
     render() {
         var isLoggedIn = this.props.auth.authenticated;
         var arrayPosts = this.props.postData.map(function(post) {
-            return <Post content={post.content} name={post.name} key={post._id} id={post._id} likes={post.likes} comments={post.comments}/>
+            return <Post content={post.content} name={post.name} key={post._id} id={post._id} likes={post.likes} comments={post.comments} image={post.image}/>
         })
         return (
             <div>

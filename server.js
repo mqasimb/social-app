@@ -98,14 +98,14 @@ app.get('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(req, 
 
 app.post('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     /// check whether user object
-    // console.log('user', req.user);
-    Post.create({content: req.body.content, username: req.user._id, name:req.user.username}, function(err, post) {
+    console.log(req.body);
+    Post.create({content: req.body.content, image: req.body.image, username: req.user._id, name:req.user.username}, function(err, post) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-        // console.log(post);
+        console.log(post);
         res.json(post);
     })
 });

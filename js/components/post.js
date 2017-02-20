@@ -1,4 +1,5 @@
 var React = require('react');
+const ReactDOM = require('react-dom');
 var { connect } = require('react-redux');
 const Content = require('./content');
 const { Link } = require('react-router');
@@ -33,17 +34,20 @@ class Post extends React.Component {
         var editButton = <button onClick={this.editClick.bind(this)}>Edit Post</button>;
         var isDelete = (this.props.name === this.props.auth.user.username) ? (deleteButton) : (null);
         var isEdit = (this.props.name === this.props.auth.user.username) ? (editButton) : (null);
+        var image = (this.props.image) ? (<img src={this.props.image}/>) : (null)
         return (
             <div>
             <Link to={'/post/'+this.props.id}><Content content={this.props.content}/></Link>{this.props.name}
+            {image}
             <LikeBox likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
             {isEdit}
             {isDelete}
             Comments
             <CommentList comments={this.props.comments}/>
             <form onSubmit={this.submitComment.bind(this)}>
-            <label>Comment</label><input type='text' name={this.props.id} onChange={this.commentInput.bind(this)}/>
-            <button>Submit Comment</button>
+            <label>Comment</label>
+            <input type='text' name={this.props.id} onChange={this.commentInput.bind(this)} ref='inputComment' value={this.props.commentsInput[this.props.id] || ''}/>
+            <button disabled={!this.props.commentsInput[this.props.id]}>Submit Comment</button>
             </form>
             </div>
         )
