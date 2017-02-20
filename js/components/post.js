@@ -34,7 +34,11 @@ class Post extends React.Component {
         var editButton = <button onClick={this.editClick.bind(this)}>Edit Post</button>;
         var isDelete = (this.props.name === this.props.auth.user.username) ? (deleteButton) : (null);
         var isEdit = (this.props.name === this.props.auth.user.username) ? (editButton) : (null);
-        var image = (this.props.image) ? (<img src={this.props.image}/>) : (null)
+        var imageStyle = {
+            width: 200,
+            height: 200
+        }
+        var image = (this.props.image) ? (<img src={this.props.image} style={imageStyle}/>) : (null)
         return (
             <div>
             <Link to={'/post/'+this.props.id}><Content content={this.props.content}/></Link>{this.props.name}
