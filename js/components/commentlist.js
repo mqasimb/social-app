@@ -5,15 +5,17 @@ const { Link } = require('react-router');
 const LikeBox = require('./likebox');
 const actions = require('../actions/index')
 const Comment = require('./comment');
+const { ListGroup } = require('react-bootstrap');
+var moment = require('moment');
 
 class CommentList extends React.Component {
     render(props) {
         var comments = this.props.comments.map(function(comment) {
-            return <Comment key={comment._id} username={comment.username} comment={comment.comment} date={comment.date} />;
+            return <Comment key={comment._id} username={comment.username} comment={comment.comment} date={moment(comment.date).format('MMMM Do YYYY, h:mm a')} />;
         })
         return (
             <div>
-            <ul>{comments}</ul>
+            <ListGroup>{comments}</ListGroup>
             </div>
         )
     }
@@ -21,9 +23,9 @@ class CommentList extends React.Component {
 
 function mapStateToProps(state, props) {
     return ({
-        auth: state.auth,
-        isEdit: state.isEdit,
-        commentsInput: state.commentsInput
+        auth: state.app.auth,
+        isEdit: state.app.isEdit,
+        commentsInput: state.app.commentsInput
     })
 }
 var Container = connect(mapStateToProps)(CommentList);

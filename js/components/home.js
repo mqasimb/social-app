@@ -17,19 +17,12 @@ class Home extends React.Component {
         this.props.dispatch(actions.dismountSinglePost());
     }
     
-    userLogout(event) {
-        event.preventDefault();
-        this.props.dispatch(actions.logoutAction());
-        router.browserHistory.push('/login');;
-    }
     render() {
-        var isLoggedIn = this.props.auth.authenticated;
         var arrayPosts = this.props.postData.map(function(post) {
             return <Post content={post.content} name={post.name} key={post._id} id={post._id} likes={post.likes} comments={post.comments} image={post.image}/>
         })
         return (
             <div>
-            {(isLoggedIn) ? (<a href='' onClick={this.userLogout.bind(this)}>Logout</a>) : (<Link to='/login'>Login</Link>)}
             <NewPost />
             {arrayPosts}
             </div>
@@ -39,8 +32,8 @@ class Home extends React.Component {
 
 function mapStateToProps(state, props) {
     return ( {
-        auth: state.auth,
-        postData: state.postData
+        auth: state.app.auth,
+        postData: state.app.postData
     })
 }
 

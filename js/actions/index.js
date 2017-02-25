@@ -1,7 +1,7 @@
 var fetch = require('isomorphic-fetch');
 var axios = require('axios');
 var jwtdecode = require('jwt-decode');
-
+var router = require('react-router');
 
 const USER_LOGGED_IN = 'USER_LOGGED_IN';
 function userLoggedIn(decodedToken) {
@@ -35,6 +35,13 @@ function updateRegistrationInput(inputName, inputValue) {
     }
 }
 
+const REGISTRATION_SUCCESFUL = 'REGISTRATION_SUCCESFUL';
+function registrationSuccesful() {
+    return {
+        type: REGISTRATION_SUCCESFUL
+    }
+}
+
 const UPDATE_LOGIN_INPUT = 'UPDATE_LOGIN_INPUT';
 function updateLoginInput(inputName, inputValue) {
     return {
@@ -46,7 +53,14 @@ function updateLoginInput(inputName, inputValue) {
 
 function registerAction(registerData) {
     return function(dispatch) {
-        return axios.post('https://react-bqasim381.c9users.io/users/register', registerData);
+        return axios.post('https://react-bqasim381.c9users.io/users/register', registerData)
+        .then(function(response) {
+            dispatch(registrationSuccesful());
+            router.browserHistory.push('/login');
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
     }
 }
 
@@ -280,6 +294,20 @@ function uploadFile(files) {
         files: files
     })
 }
+
+const TOGGLE_MODAL = 'TOGGLE_MODAL';
+function toggleModal(toggle) {
+    return ({
+        type: TOGGLE_MODAL,
+        toggle: toggle
+    })
+}
+
+exports.toggleModal = toggleModal;
+exports.TOGGLE_MODAL = TOGGLE_MODAL;
+
+exports.REGISTRATION_SUCCESFUL = REGISTRATION_SUCCESFUL;
+exports.registrationSuccesful = registrationSuccesful;
 
 exports.postSuccesful = postSuccesful;
 exports.POST_SUCCESSFUL = POST_SUCCESSFUL;

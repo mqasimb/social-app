@@ -7,6 +7,9 @@ const LikeBox = require('./likebox');
 const actions = require('../actions/index');
 const CommentList = require('./commentlist');
 const router = require('react-router');
+const CommentForm = require('./comment-form');
+const { Modal, Button } = require('react-bootstrap');
+import {reset} from 'redux-form';
 
 class Post extends React.Component {
     likeBoxClick(event) {
@@ -16,6 +19,7 @@ class Post extends React.Component {
     deleteClick(event) {
         event.preventDefault();
         this.props.dispatch(actions.deletePost(this.props.id));
+        this.props.dispatch(actions.toggleModal(false));
     }
     editClick(event) {
         event.preventDefault();
@@ -25,12 +29,18 @@ class Post extends React.Component {
     commentInput(event) {
         this.props.dispatch(actions.commentInputChange(event.target.name, event.target.value))
     }
-    submitComment(event) {
-        event.preventDefault();
-        this.props.dispatch(actions.submitComment(this.props.id, {comment: this.props.commentsInput[this.props.id]}))
+    submitComment(values) {
+        this.props.dispatch(actions.submitComment(this.props.id, values))
+        this.props.dispatch(reset(this.props.id));
+    }
+    close() {
+        this.props.dispatch(actions.toggleModal(false));
+    }
+    open() {
+        this.props.dispatch(actions.toggleModal(true));
     }
     render(props) {
-        var deleteButton = <button onClick={this.deleteClick.bind(this)}>Delete Post</button>;
+        var deleteButton = <button onClick={this.open.bind(this)}>Delete Post</button>;
         var editButton = <button onClick={this.editClick.bind(this)}>Edit Post</button>;
         var isDelete = (this.props.name === this.props.auth.user.username) ? (deleteButton) : (null);
         var isEdit = (this.props.name === this.props.auth.user.username) ? (editButton) : (null);
@@ -43,16 +53,29 @@ class Post extends React.Component {
             <div>
             <Link to={'/post/'+this.props.id}><Content content={this.props.content}/></Link>{this.props.name}
             {image}
-            <LikeBox likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
+            <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
             {isEdit}
             {isDelete}
+          <Modal show={this.props.showModal} onHide={this.close.bind(this)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Post Delete</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Would you like to delete this post?.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <button onClick={this.deleteClick.bind(this)}>Delete</button>;
+            <Button onClick={this.close.bind(this)}>Close</Button>
+          </Modal.Footer>
+        </Modal>
             Comments
             <CommentList comments={this.props.comments}/>
-            <form onSubmit={this.submitComment.bind(this)}>
+            <CommentForm onSubmit={this.submitComment.bind(this)} form={this.props.id}/>
+            {/*<form onSubmit={this.submitComment.bind(this)}>
             <label>Comment</label>
             <input type='text' name={this.props.id} onChange={this.commentInput.bind(this)} ref='inputComment' value={this.props.commentsInput[this.props.id] || ''}/>
             <button disabled={!this.props.commentsInput[this.props.id]}>Submit Comment</button>
-            </form>
+            </form>*/}
             </div>
         )
     }
@@ -60,9 +83,10 @@ class Post extends React.Component {
 
 function mapStateToProps(state, props) {
     return ({
-        auth: state.auth,
-        isEdit: state.isEdit,
-        commentsInput: state.commentsInput
+        auth: state.app.auth,
+        isEdit: state.app.isEdit,
+        commentsInput: state.app.commentsInput,
+        showModal: state.app.showModal
     })
 }
 var Container = connect(mapStateToProps)(Post);

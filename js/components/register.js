@@ -3,10 +3,11 @@ var { connect } = require('react-redux');
 const actions = require('../actions/index');
 var fetch = require('isomorphic-fetch');
 var axios = require('axios');
+const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel} = require('react-bootstrap');
+const RegistrationForm = require('./registration-form');
 
 class Register extends React.Component {
-    completeRegistration(event) {
-        event.preventDefault();
+    completeRegistration() {
         this.props.dispatch(actions.registerAction(this.props.registerInput));
     }
     inputChange(event) {
@@ -15,13 +16,7 @@ class Register extends React.Component {
     render(props) {
         return (
             <div>
-            <form onSubmit={this.completeRegistration.bind(this)}>
-            <label>Username</label><input onChange={this.inputChange.bind(this)} type='text' name='username'/>
-            <label>Email</label><input onChange={this.inputChange.bind(this)} type='email' name='email'/>
-            <label>Password</label><input onChange={this.inputChange.bind(this)} type='password' name='password'/>
-            <label>Confirm Password</label><input onChange={this.inputChange.bind(this)} type='password' name='confirm-password'/>
-            <button>Sign Up</button>
-            </form>
+            <RegistrationForm/>
             </div>
             )
     }
@@ -29,7 +24,7 @@ class Register extends React.Component {
 
 function mapStateToProps(state, props) {
     return({
-        registerInput: state.registerInput
+        registerInput: state.app.registerInput
     })
 }
 

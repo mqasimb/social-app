@@ -1,10 +1,16 @@
 var React = require('react');
+var { Button } = require('react-bootstrap');
 
 class LikeBox extends React.Component {
     render() {
+        var LikeButton = <Button onClick={this.props.onClick}>Like</Button>;
+        var LikedButton = <Button bsStyle='primary' onClick={this.props.onClick}>Liked</Button>;
+        var isLiked = this.props.likes.findIndex((item) => {
+            return item.username === this.props.username;
+        })
         return(
             <div>
-            <button onClick={this.props.onClick}>Like</button>
+            {(isLiked > -1) ? (LikedButton) : (LikeButton)}
             {this.props.likes.length}
             </div>
             )

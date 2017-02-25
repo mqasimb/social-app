@@ -2,11 +2,12 @@ var React = require('react');
 const router = require('react-router');
 var { connect } = require('react-redux');
 const actions = require('../actions/index');
+const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel} = require('react-bootstrap');
+const LoginForm = require('./login-form');
 
 class Login extends React.Component {
-    submitLogin(event) {
-        event.preventDefault();
-        this.props.dispatch(actions.loginAction(this.props.loginInput)).then(function(bool) {
+    submitLogin(values) {
+          this.props.dispatch(actions.loginAction(values)).then(function(bool) {
            if(bool) {
                router.browserHistory.push('/');
            } 
@@ -19,11 +20,7 @@ class Login extends React.Component {
     render(props) {
         return (
             <div>
-            <form onSubmit={this.submitLogin.bind(this)}>
-            <label>Username</label><input onChange={this.inputChange.bind(this)} type='text' name='username'/>
-            <label>Password</label><input onChange={this.inputChange.bind(this)} type='password' name='password'/>
-            <button>Login</button>
-            </form>
+            <LoginForm onSubmit={this.submitLogin}/>
             </div>
             )
     }
@@ -31,8 +28,9 @@ class Login extends React.Component {
 
 function mapStateToProps(state, props) {
     return({
-        auth: state.auth,
-        loginInput: state.loginInput
+        auth: state.app.auth,
+        loginInput: state.app.loginInput,
+        flashMessages : state.app.flashMessages
     })
 }
 

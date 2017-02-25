@@ -66,10 +66,10 @@ class SinglePost extends React.Component {
 
 function mapStateToProps(state, props) {
     return ({
-        singlePost: state.singlePost,
-        postLoading : state.postLoading,
-        isEdit: state.isEdit,
-        editInput: state.editInput
+        singlePost: state.app.singlePost,
+        postLoading : state.app.postLoading,
+        isEdit: state.app.isEdit,
+        editInput: state.app.editInput
     })
 }
 var Container = connect(mapStateToProps)(SinglePost);

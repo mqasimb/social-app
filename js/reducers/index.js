@@ -13,12 +13,25 @@ var initialState = {
         editInput: {content: ''},
         commentsInput: {},
         uploadedFile: '',
-        uploadedFileCloudinaryUrl: ''
+        uploadedFileCloudinaryUrl: '',
+        flashMessages: {},
+        showModal: false
     };
 
-var searchReducer = function(state, action) {
+var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
+
+    if(action.type === actions.TOGGLE_MODAL) {
+        newState.showModal = action.toggle;
+        return newState;
+    }
+    
+    if(action.type === actions.REGISTRATION_SUCCESFUL) {
+        newState.flashMessages.newlyRegistered = 'You have succesfully registered!'
+        newState.flashMessages = Object.assign({}, newState.flashMessages);
+        return newState;
+    }
     
     if(action.type === actions.POST_SUCCESSFUL) {
         newState.newPost.content = '';
@@ -129,4 +142,4 @@ var searchReducer = function(state, action) {
     return state;
 }
 
-module.exports = searchReducer;
+module.exports = appReducer;

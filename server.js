@@ -137,7 +137,7 @@ app.delete('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(re
 
 app.post('/api/comments/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     console.log(req.body)
-    console.log(req.userW)
+    console.log(req.user)
     Post.findOne({_id: req.params.id}, function(err, post) {
         if(err) {
             return res.status(500).json({
@@ -272,6 +272,7 @@ var strategy = new LocalStrategy(function(username, password, callback) {
 passport.use(strategy);
 
 app.post('/users/register', function(req, res) {
+    console.log(req.body)
     if (!req.body) {
         return res.status(400).json({
             message: "No request body"

@@ -57,9 +57,9 @@ class NewPost extends React.Component {
 
 function mapStateToProps(state, props) {
     return( {
-        newPost: state.newPost,
-        uploadedFile: state.uploadedFile,
-        uploadedFileCloudinaryUrl: state.uploadedFileCloudinaryUrl
+        newPost: state.app.newPost,
+        uploadedFile: state.app.uploadedFile,
+        uploadedFileCloudinaryUrl: state.app.uploadedFileCloudinaryUrl
     } )
 }
 
