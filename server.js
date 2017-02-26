@@ -357,6 +357,7 @@ app.post('/users/register', function(req, res) {
 });
 
 app.get('/*', function(req, res) {
+    console.log('catch all route')
     console.log(req.user)
     res.sendFile(path.join(__dirname, './index.html'))
 });

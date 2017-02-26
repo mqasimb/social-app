@@ -4,6 +4,7 @@ const actions = require('../actions/index');
 
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
+const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button } = require('react-bootstrap');
 
 class NewPost extends React.Component {
     postForm(event) {
@@ -44,7 +45,10 @@ class NewPost extends React.Component {
         return(
             <div>
             <form onSubmit={this.postForm.bind(this)}>
-            <label>New Post</label><input onChange={this.changeForm.bind(this)} type='text' name='content' ref='newPostInput' value={this.props.newPost.content || ''} />
+            <FormGroup controlId="formControlsTextarea">
+              <ControlLabel>New Post</ControlLabel>
+              <FormControl onChange={this.changeForm.bind(this)} name='content' value={this.props.newPost.content || ''} componentClass="textarea" placeholder="textarea" />
+            </FormGroup>
             <Dropzone multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop an image or click to select a file to upload.</p></Dropzone>
             <img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/>
             <label>Image</label><input onChange={this.changeForm.bind(this)} type='file' name='image' />

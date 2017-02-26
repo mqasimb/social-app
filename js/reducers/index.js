@@ -15,13 +15,20 @@ var initialState = {
         uploadedFile: '',
         uploadedFileCloudinaryUrl: '',
         flashMessages: {},
-        showModal: false
+        showModal: false,
+        editComment: {}
     };
 
 var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
 
+    if(action.type === actions.TOGGLE_EDIT_COMMENT) {
+        newState.editComment[action.commentID] = action.toggle;
+        newState.editComment = Object.assign({}, newState.editComment)
+        return newState;
+    }
+    
     if(action.type === actions.TOGGLE_MODAL) {
         newState.showModal = action.toggle;
         return newState;
@@ -84,8 +91,8 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.SINGLE_POST_FETCH_SUCCESSFUL) {
-        var newChange = action.data.data;
-        newState.singlePost = Object.assign({}, newChange);
+        newState.singlePost = action.data.data;
+        newState.singlePost = Object.assign({}, newState.singlePost);
         newState.postLoading = false;
         return newState;
     }

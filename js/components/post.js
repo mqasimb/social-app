@@ -8,8 +8,8 @@ const actions = require('../actions/index');
 const CommentList = require('./commentlist');
 const router = require('react-router');
 const CommentForm = require('./comment-form');
-const { Modal, Button } = require('react-bootstrap');
-import {reset} from 'redux-form';
+const { Panel, Modal, Button } = require('react-bootstrap');
+const { reset } = require('redux-form');
 
 class Post extends React.Component {
     likeBoxClick(event) {
@@ -51,8 +51,10 @@ class Post extends React.Component {
         var image = (this.props.image) ? (<img src={this.props.image} style={imageStyle}/>) : (null)
         return (
             <div>
+            <Panel>
             <Link to={'/post/'+this.props.id}><Content content={this.props.content}/></Link>{this.props.name}
             {image}
+            </Panel>
             <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
             {isEdit}
             {isDelete}
@@ -69,13 +71,8 @@ class Post extends React.Component {
           </Modal.Footer>
         </Modal>
             Comments
-            <CommentList comments={this.props.comments}/>
+            <CommentList post={this.props.id} comments={this.props.comments}/>
             <CommentForm onSubmit={this.submitComment.bind(this)} form={this.props.id}/>
-            {/*<form onSubmit={this.submitComment.bind(this)}>
-            <label>Comment</label>
-            <input type='text' name={this.props.id} onChange={this.commentInput.bind(this)} ref='inputComment' value={this.props.commentsInput[this.props.id] || ''}/>
-            <button disabled={!this.props.commentsInput[this.props.id]}>Submit Comment</button>
-            </form>*/}
             </div>
         )
     }

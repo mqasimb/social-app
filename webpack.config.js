@@ -8,6 +8,9 @@ module.exports = {
         path: path.resolve(__dirname, 'build/js'),
         filename: 'index.js',
     },
+    query  :{
+                presets:['react','es2015']
+            },
     devtool: 'inline-source-map',
     module: {
       loaders: [
