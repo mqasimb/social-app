@@ -6,12 +6,13 @@ const LikeBox = require('./likebox');
 const actions = require('../actions/index')
 const Comment = require('./comment');
 const { ListGroup } = require('react-bootstrap');
+const uuid = require('uuid');
 var moment = require('moment');
 
 class CommentList extends React.Component {
     render(props) {
-        var comments = this.props.comments.map((comment) => {
-            return <Comment post={this.props.post} key={comment._id} id={comment._id} username={comment.username} comment={comment.comment} date={moment(comment.date).format('MMMM Do YYYY, h:mm a')} />;
+        var comments = this.props.comments.map(function(comment) {
+            return <Comment post={comment.post} key={uuid.v4()} id={comment._id} username={comment.username} comment={comment.comment} date={moment(comment.date).format('MMMM Do YYYY, h:mm a')} />;
         })
         return (
             <div>

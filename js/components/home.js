@@ -5,6 +5,7 @@ const { connect } = require('react-redux');
 const actions = require('../actions/index');
 const NewPost = require('./newpost');
 const Post = require('./post');
+const uuid = require('uuid');
 
 class Home extends React.Component {
     componentDidMount() {
@@ -19,12 +20,12 @@ class Home extends React.Component {
     
     render() {
         var arrayPosts = this.props.postData.map(function(post) {
-            return <Post content={post.content} name={post.name} key={post._id} id={post._id} likes={post.likes} comments={post.comments} image={post.image}/>
+            return <Post content={post.content} name={post.name} key={post.date} id={post._id} likes={post.likes} comments={post.comments} image={post.image}/>
         })
         return (
             <div>
             <NewPost />
-            {arrayPosts}
+            {arrayPosts.reverse()}
             </div>
             )
     }

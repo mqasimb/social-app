@@ -242,6 +242,16 @@ function commentSubmitSuccess(inputName) {
     })
 }
 
+const COMMENT_EDIT_SUCCESS = 'COMMENT_EDIT_SUCCESS';
+function commentEditSuccess(postID, commentID, data) {
+    return ({
+        type: COMMENT_EDIT_SUCCESS,
+        postID: postID,
+        commentID: commentID,
+        data: data
+    })
+}
+
 function submitComment(postID, data) {
     return function(dispatch) {
         return axios.post('https://react-bqasim381.c9users.io/api/comments/'+postID, data)
@@ -255,12 +265,13 @@ function submitComment(postID, data) {
     }
 }
 
-function editComment(postID, data) {
+function editComment(postID, commentID, data) {
     return function(dispatch) {
-        return axios.post('https://react-bqasim381.c9users.io/api/comments/'+postID, data)
+        return axios.put('https://react-bqasim381.c9users.io/api/comments/'+postID+'/'+commentID, data)
         .then(function(response) {
-            dispatch(commentSubmitSuccess(postID));
+            dispatch(toggleEditComment(commentID, false));
             return dispatch(getPosts());
+            
         })
         .catch(function(err) {
             console.log(err);
@@ -338,6 +349,10 @@ function toggleModal(toggle) {
     })
 }
 
+exports.commentEditSuccess = commentEditSuccess;
+exports.COMMENT_EDIT_SUCCESS = COMMENT_EDIT_SUCCESS;
+
+exports.editComment = editComment;
 exports.TOGGLE_EDIT_COMMENT = TOGGLE_EDIT_COMMENT;
 exports.toggleEditComment = toggleEditComment;
 

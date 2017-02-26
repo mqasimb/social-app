@@ -49,9 +49,26 @@ var appReducer = function(state, action) {
         return newState;
     }
     
-    if(action.type === actions.COMMENT_SUBMIT_SUCCESS) {
-        newState.commentsInput[action.inputName] = '';
-        newState.commentsInput = Object.assign({}, newState.commentsInput);
+    if(action.type === actions.COMMENT_EDIT_SUCCESS) {
+        var returnIndex = newState.postData.findIndex(function(post) {
+            console.log(post._id, 'postid', action.postID)
+            return post._id = action.postID;
+        });
+        console.log(returnIndex, 'returnindex')
+        if(returnIndex > -1) {
+            var returnComment = newState.postData[returnIndex].comments.findIndex(function(comment) {
+                return comment._id = action.commentID;
+            })
+            console.log(returnComment, 'return comment')
+            if(returnComment > -1) {
+                newState.postData[returnIndex].comments[returnComment].comment = action.data.comment;
+                newState.postData = newState.postData.slice();
+                newState.postData[returnIndex] = Object.assign({}. newState.postData[returnIndex]);
+                newState.postData[returnIndex].comments = newState.postData[returnIndex].comments.slice();
+                newState.postData[returnIndex].comments[returnComment] = Object.assign({}, newState.postData[returnIndex].comments[returnComment])
+                return newState;
+            }
+        }
         return newState;
     }
     

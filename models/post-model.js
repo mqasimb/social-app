@@ -9,7 +9,7 @@ var CommentSchema = new mongoose.Schema({
     comment: String,
     username: String,
     date: Date,
-    // likes: [LikesSchema]
+    post: {type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true}
 })
 
 var PostSchema = new mongoose.Schema({

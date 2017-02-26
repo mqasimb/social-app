@@ -136,16 +136,16 @@ app.delete('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(re
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.post('/api/comments/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    console.log(req.body)
-    console.log(req.user)
+    console.log(req.params.id)
     Post.findOne({_id: req.params.id}, function(err, post) {
+        console.log(post, 'how is found?')
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
         console.log(post, 'comment post');
-        post.comments.push({comment: req.body.comment, username: req.user.username, date: Date.now()});
+        post.comments.push({comment: req.body.comment, username: req.user.username, date: Date.now(), post: req.params.id});
         console.log(post.comments);
         console.log(post.comments.length);
         post.save(function(err) {
@@ -156,13 +156,35 @@ app.post('/api/comments/:id', expressJWT({ secret: config.jwtSecret}), function(
 });
 
 app.put('/api/comments/:postid/:commentid', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    Post.findOneAndUpdate({_id: req.params.id}, function(err, post) {
+    console.log(req.body);
+    console.log(req.params.postid);
+    console.log(req.params.commentid)
+    Post.findOne({_id: req.params.postid}, function(err, post) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-        res.status(200).json(post);
+        console.log(post, 'change comment edit');
+        
+        var returnIndex = post.comments.findIndex(function(comment) { 
+            return comment._id == req.params.commentid;
+        });
+        console.log(returnIndex, 'index')
+        if(returnIndex < 0) {
+            //remove like
+            return res.json({message: 'Server error finding comment'});
+        }
+        else {
+            //add like
+            console.log({username: req.user._id, like: true}, 'object log')
+            post.comments[returnIndex].comment = req.body.comment;
+        }
+        post.save(function(err) {
+            if(err) return res.send(err);
+            console.log(post, 'changed post');
+            res.json(post);
+        });
     })
 });
 

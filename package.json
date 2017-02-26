@@ -92,6 +92,7 @@
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
     "semantic-ui-react": "^0.66.0",
-    "superagent": "^3.4.3"
+    "superagent": "^3.4.3",
+    "uuid": "^3.0.1"
   }
 }

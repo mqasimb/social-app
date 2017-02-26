@@ -71,7 +71,7 @@ class Post extends React.Component {
           </Modal.Footer>
         </Modal>
             Comments
-            <CommentList post={this.props.id} comments={this.props.comments}/>
+            <CommentList comments={this.props.comments}/>
             <CommentForm onSubmit={this.submitComment.bind(this)} form={this.props.id}/>
             </div>
         )
