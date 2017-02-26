@@ -19,8 +19,8 @@ class Home extends React.Component {
     }
     
     render() {
-        var arrayPosts = this.props.postData.map(function(post) {
-            return <Post content={post.content} name={post.name} key={post.date} id={post._id} likes={post.likes} comments={post.comments} image={post.image}/>
+        var arrayPosts = this.props.postData.map(function(post, index) {
+            return <Post content={post.content} name={post.name} key={uuid.v1()} id={post._id} likes={post.likes} comments={post.comments} image={post.image}/>
         })
         return (
             <div>

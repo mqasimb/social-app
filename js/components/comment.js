@@ -9,7 +9,7 @@ const EditCommentForm = require('./edit-comment-form');
 class Comment extends React.Component {
     deleteClick(event) {
         event.preventDefault();
-        this.props.dispatch(actions.deleteComment(this.props.id));
+        this.props.dispatch(actions.deleteComment(this.props.post, this.props.id));
     }
     editComment(values) {
         this.props.dispatch(actions.editComment(this.props.post, this.props.id, values));
@@ -30,8 +30,8 @@ class Comment extends React.Component {
         this.props.dispatch(actions.toggleEditComment(this.props.id, true));
     }
     render(props) {
-      var deleteButton = <button onClick={this.deleteClick.bind(this)}>Delete Post</button>;
-      var editButton = <button onClick={this.enableEdit.bind(this)}>Edit Post</button>;
+      var deleteButton = <button onClick={this.deleteClick.bind(this)}>Delete Comment</button>;
+      var editButton = <button onClick={this.enableEdit.bind(this)}>Edit Comment</button>;
       var isDelete = (this.props.username === this.props.auth.user.username) ? (deleteButton) : (null);
       var isEdit = (this.props.username === this.props.auth.user.username) ? (editButton) : (null);
       var notEdit = <ListGroupItem>{this.props.username}: {this.props.comment}  -{this.props.date} {isEdit} {isDelete}</ListGroupItem>;

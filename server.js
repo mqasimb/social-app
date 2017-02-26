@@ -189,13 +189,32 @@ app.put('/api/comments/:postid/:commentid', expressJWT({ secret: config.jwtSecre
 });
 
 app.delete('/api/comments/:postid/:commentid', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    Post.findOneAndRemove({_id: req.params.id}, function(err, post) {
+    Post.findOne({_id: req.params.postid}, function(err, post) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-        res.status(200).json(post);
+        console.log(post, 'change comment edit');
+        
+        var returnIndex = post.comments.findIndex(function(comment) { 
+            return comment._id == req.params.commentid;
+        });
+        console.log(returnIndex, 'index')
+        if(returnIndex < 0) {
+            //remove like
+            return res.json({message: 'Server error finding comment'});
+        }
+        else {
+            //add like
+            console.log({username: req.user._id, like: true}, 'delete comment')
+            post.comments.splice(returnIndex, 1);
+        }
+        post.save(function(err) {
+            if(err) return res.send(err);
+            console.log(post, 'deleted post');
+            res.json(post);
+        });
     })
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

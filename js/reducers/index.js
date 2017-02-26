@@ -15,7 +15,7 @@ var initialState = {
         uploadedFile: '',
         uploadedFileCloudinaryUrl: '',
         flashMessages: {},
-        showModal: false,
+        showModal: {toggle: false, postID: null},
         editComment: {}
     };
 
@@ -30,7 +30,9 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.TOGGLE_MODAL) {
-        newState.showModal = action.toggle;
+        newState.showModal.toggle = action.toggle;
+        newState.showModal.postID = action.postID;
+        newState.showModal = Object.assign({}, newState.showModal);
         return newState;
     }
     
@@ -50,22 +52,61 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.COMMENT_EDIT_SUCCESS) {
+        var newChange = [];
         var returnIndex = newState.postData.findIndex(function(post) {
             console.log(post._id, 'postid', action.postID)
-            return post._id = action.postID;
+            return post._id == action.postID;
         });
         console.log(returnIndex, 'returnindex')
         if(returnIndex > -1) {
+            newChange = newState.postData.slice();
             var returnComment = newState.postData[returnIndex].comments.findIndex(function(comment) {
-                return comment._id = action.commentID;
+                return comment._id == action.commentID;
             })
             console.log(returnComment, 'return comment')
             if(returnComment > -1) {
-                newState.postData[returnIndex].comments[returnComment].comment = action.data.comment;
-                newState.postData = newState.postData.slice();
-                newState.postData[returnIndex] = Object.assign({}. newState.postData[returnIndex]);
-                newState.postData[returnIndex].comments = newState.postData[returnIndex].comments.slice();
-                newState.postData[returnIndex].comments[returnComment] = Object.assign({}, newState.postData[returnIndex].comments[returnComment])
+                console.log(newState.postData, 'new state')
+                console.log(newState.postData[returnIndex], 'new index')
+                newChange[returnIndex] = Object.assign({}, newState.postData[returnIndex]);
+                console.log(newChange, ' newchange array 1')
+                newChange[returnIndex].comments = newState.postData[returnIndex].comments.slice();
+                console.log(newChange, ' newchange array 2')
+                newChange[returnIndex].comments[returnComment] = Object.assign({}, newState.postData[returnIndex].comments[returnComment])
+                console.log(newChange, ' newchange array 3')
+                newChange[returnIndex].comments[returnComment].comment = action.data.comment;
+                console.log(newChange, ' newchange array 4')
+                newState.postData = newChange.slice()
+                console.log(newChange, ' newchange array 5')
+                return newState;
+            }
+        }
+        return newState;
+    }
+    
+    if(action.type === actions.COMMENT_DELETE_SUCCESS) {
+        var newChange = [];
+        var returnIndex = newState.postData.findIndex(function(post) {
+            console.log(post._id, 'postid', action.postID)
+            return post._id == action.postID;
+        });
+        console.log(returnIndex, 'returnindex')
+        if(returnIndex > -1) {
+            newChange = newState.postData.slice();
+            var returnComment = newState.postData[returnIndex].comments.findIndex(function(comment) {
+                return comment._id == action.commentID;
+            })
+            console.log(returnComment, 'return comment')
+            if(returnComment > -1) {
+                console.log(newState.postData, 'new state')
+                console.log(newState.postData[returnIndex], 'new index')
+                newChange[returnIndex] = Object.assign({}, newState.postData[returnIndex]);
+                console.log(newChange, ' newchange array 1')
+                newChange[returnIndex].comments = newState.postData[returnIndex].comments.slice();
+                console.log(newChange, ' newchange array 2')
+                newChange[returnIndex].comments.splice(returnComment, 1);
+                console.log(newChange, ' newchange array 4')
+                newState.postData = newChange.slice()
+                console.log(newChange, ' newchange array 5')
                 return newState;
             }
         }

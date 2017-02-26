@@ -10,6 +10,8 @@ const router = require('react-router');
 const CommentForm = require('./comment-form');
 const { Panel, Modal, Button } = require('react-bootstrap');
 const { reset } = require('redux-form');
+const uuid = require('uuid');
+const DeleteModal = require('./delete-modal');
 
 class Post extends React.Component {
     likeBoxClick(event) {
@@ -18,8 +20,9 @@ class Post extends React.Component {
     }
     deleteClick(event) {
         event.preventDefault();
-        this.props.dispatch(actions.deletePost(this.props.id));
-        this.props.dispatch(actions.toggleModal(false));
+        console.log(this.props.content)
+        this.props.dispatch(actions.deletePost(this.props.showModal.postID));
+        this.props.dispatch(actions.toggleModal(null, false));
     }
     editClick(event) {
         event.preventDefault();
@@ -34,13 +37,14 @@ class Post extends React.Component {
         this.props.dispatch(reset(this.props.id));
     }
     close() {
-        this.props.dispatch(actions.toggleModal(false));
+        this.props.dispatch(actions.toggleModal(null, false));
     }
     open() {
-        this.props.dispatch(actions.toggleModal(true));
+        this.props.dispatch(actions.toggleModal(this.props.id, true));
     }
     render(props) {
         var deleteButton = <button onClick={this.open.bind(this)}>Delete Post</button>;
+        var confirmDelete = <button onClick={this.deleteClick.bind(this)}>Delete Post</button>;
         var editButton = <button onClick={this.editClick.bind(this)}>Edit Post</button>;
         var isDelete = (this.props.name === this.props.auth.user.username) ? (deleteButton) : (null);
         var isEdit = (this.props.name === this.props.auth.user.username) ? (editButton) : (null);
@@ -58,18 +62,7 @@ class Post extends React.Component {
             <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
             {isEdit}
             {isDelete}
-          <Modal show={this.props.showModal} onHide={this.close.bind(this)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Confirm Post Delete</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>Would you like to delete this post?.</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <button onClick={this.deleteClick.bind(this)}>Delete</button>;
-            <Button onClick={this.close.bind(this)}>Close</Button>
-          </Modal.Footer>
-        </Modal>
+            <DeleteModal key={uuid.v4()} delete={this.deleteClick.bind(this)} close={this.close.bind(this)}/>
             Comments
             <CommentList comments={this.props.comments}/>
             <CommentForm onSubmit={this.submitComment.bind(this)} form={this.props.id}/>

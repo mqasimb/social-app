@@ -270,7 +270,8 @@ function editComment(postID, commentID, data) {
         return axios.put('https://react-bqasim381.c9users.io/api/comments/'+postID+'/'+commentID, data)
         .then(function(response) {
             dispatch(toggleEditComment(commentID, false));
-            return dispatch(getPosts());
+            console.log(data)
+            dispatch(commentEditSuccess(postID, commentID, data));
             
         })
         .catch(function(err) {
@@ -288,17 +289,25 @@ function toggleEditComment(commentID, toggle) {
     })
 }
 
-function deleteComment(postID, data) {
+function deleteComment(postID, commentID) {
     return function(dispatch) {
-        return axios.post('https://react-bqasim381.c9users.io/api/comments/'+postID, data)
+        return axios.delete('https://react-bqasim381.c9users.io/api/comments/'+postID+'/'+commentID)
         .then(function(response) {
-            dispatch(commentSubmitSuccess(postID));
-            return dispatch(getPosts());
+            return dispatch(commentDeleteSuccess(postID, commentID));
         })
         .catch(function(err) {
             console.log(err);
         })
     }
+}
+
+const COMMENT_DELETE_SUCCESS = 'COMMENT_DELETE_SUCCESS';
+function commentDeleteSuccess(postID, commentID) {
+    return ({
+        type: COMMENT_DELETE_SUCCESS,
+        postID: postID,
+        commentID: commentID
+    })
 }
 
 const EDIT_INPUT = 'EDIT_INPUT';
@@ -342,12 +351,17 @@ function uploadFile(files) {
 }
 
 const TOGGLE_MODAL = 'TOGGLE_MODAL';
-function toggleModal(toggle) {
+function toggleModal(postID, toggle) {
     return ({
         type: TOGGLE_MODAL,
+        postID: postID,
         toggle: toggle
     })
 }
+
+exports.deleteComment = deleteComment;
+exports.COMMENT_DELETE_SUCCESS = COMMENT_DELETE_SUCCESS;
+exports.commentDeleteSuccess = commentDeleteSuccess;
 
 exports.commentEditSuccess = commentEditSuccess;
 exports.COMMENT_EDIT_SUCCESS = COMMENT_EDIT_SUCCESS;
