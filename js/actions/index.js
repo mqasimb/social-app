@@ -53,7 +53,7 @@ function updateLoginInput(inputName, inputValue) {
 
 function registerAction(registerData) {
     return function(dispatch) {
-        return axios.post('https://react-bqasim381.c9users.io/users/register', registerData)
+        return axios.post('/users/register', registerData)
         .then(function(response) {
             dispatch(registrationSuccesful());
             router.browserHistory.push('/login');
@@ -66,7 +66,7 @@ function registerAction(registerData) {
 
 function loginAction(loginData) {
     return function(dispatch) {
-        return axios.post('https://react-bqasim381.c9users.io/users/login', loginData)
+        return axios.post('/users/login', loginData)
         .then(function(response) {
             const token = response.data.token;
             localStorage.setItem('jwt', token);
@@ -98,7 +98,7 @@ function updatePostInput(inputName, inputValue) {
 
 function submitPostToServer(data) {
     return function(dispatch) {
-        return axios.post('https://react-bqasim381.c9users.io/api/post', data)
+        return axios.post('/api/post', data)
         .then(function(response) {
             dispatch(postSuccesful());
             return dispatch(getPosts());
@@ -118,7 +118,7 @@ function postSuccesful() {
 
 function getPosts() {
     return function(dispatch) {
-        return axios.get('https://react-bqasim381.c9users.io/api/post')
+        return axios.get('/api/post')
         .then(function(response) {
             console.log(response);
             return dispatch(postFetchSuccessful(response));
@@ -146,7 +146,7 @@ function dismountSinglePost() {
 
 function getSinglePost(id) {
     return function(dispatch) {
-        return axios.get('https://react-bqasim381.c9users.io/api/post/'+id)
+        return axios.get('/api/post/'+id)
         .then(function(response) {
             console.log(response);
             dispatch(singlePostFetchSuccessful(response));
@@ -168,7 +168,7 @@ function singlePostFetchSuccessful(data) {
 
 function deletePost(id) {
     return function(dispatch) {
-        return axios.delete('https://react-bqasim381.c9users.io/api/post/'+id)
+        return axios.delete('/api/post/'+id)
         .then(function(response) {
             return dispatch(getPosts());
         })
@@ -180,7 +180,7 @@ function deletePost(id) {
 
 function editPost(id) {
     return function(dispatch) {
-        return axios.put('https://react-bqasim381.c9users.io/api/post/'+id)
+        return axios.put('/api/post/'+id)
         .then(function(response) {
             console.log(response);
             return dispatch(getPosts());
@@ -207,7 +207,7 @@ function editPostDisable() {
 
 function updateLikeStatus(postID) {
     return function(dispatch) {
-        return axios.post('https://react-bqasim381.c9users.io/api/likes/'+postID)
+        return axios.post('/api/likes/'+postID)
         .then(function(response) {
             return dispatch(getPosts());
         })
@@ -254,7 +254,7 @@ function commentEditSuccess(postID, commentID, data) {
 
 function submitComment(postID, data) {
     return function(dispatch) {
-        return axios.post('https://react-bqasim381.c9users.io/api/comments/'+postID, data)
+        return axios.post('/api/comments/'+postID, data)
         .then(function(response) {
             dispatch(commentSubmitSuccess(postID));
             return dispatch(getPosts());
@@ -267,7 +267,7 @@ function submitComment(postID, data) {
 
 function editComment(postID, commentID, data) {
     return function(dispatch) {
-        return axios.put('https://react-bqasim381.c9users.io/api/comments/'+postID+'/'+commentID, data)
+        return axios.put('/api/comments/'+postID+'/'+commentID, data)
         .then(function(response) {
             dispatch(toggleEditComment(commentID, false));
             console.log(data)
@@ -291,7 +291,7 @@ function toggleEditComment(commentID, toggle) {
 
 function deleteComment(postID, commentID) {
     return function(dispatch) {
-        return axios.delete('https://react-bqasim381.c9users.io/api/comments/'+postID+'/'+commentID)
+        return axios.delete('/api/comments/'+postID+'/'+commentID)
         .then(function(response) {
             return dispatch(commentDeleteSuccess(postID, commentID));
         })
@@ -321,7 +321,7 @@ function editInput(inputName, inputValue) {
 
 function submitEdittedPost(postID, data) {
     return function(dispatch) {
-        return axios.put('https://react-bqasim381.c9users.io/api/post/'+postID, data)
+        return axios.put('/api/post/'+postID, data)
         .then(function(response) {
             return response;
         })

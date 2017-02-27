@@ -15,7 +15,8 @@ var UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    profile: {type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true}
 });
 
 UserSchema.methods.validatePassword = function(password, callback) {

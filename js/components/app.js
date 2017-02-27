@@ -53,4 +53,5 @@ function mapStateToProps(state, props) {
 
 var Container = connect(mapStateToProps)(App);
 
+exports.App = App;
 module.exports = Container;
