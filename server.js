@@ -18,6 +18,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('./models/user-model');
 var Post = require('./models/post-model');
+var UserProfile = require('./models/user-profile-model');
 
 var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
@@ -72,6 +73,43 @@ app.get('/users/logout', function(req, res){
     req.logout();
     res.redirect('/login');
 });
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+app.get('/api/profile/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    UserProfile.find({username: req.params.username}, function(err, userprofile) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        // console.log(req.user);
+        res.json(userprofile);
+    });
+});
+
+app.put('/api/profilepicture/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    console.log(req.body);
+    UserProfile.findOne({username: req.params.username}, function(err, userprofile) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        userprofile.ProfilePicture = req.body.pictureURL;
+        
+        userprofile.save(function(err) {
+            if(err) {
+                return res.json({message: 'Internal Server Error'});
+            }
+            return res.json(userprofile);
+        })
+    });
+});
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.get('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     Post.find({}, function(err, post) {
@@ -365,6 +403,21 @@ app.post('/users/register', function(req, res) {
         });
     }
     
+    UserProfile.create({username: req.body.username}, function(err, userprofile) {
+        if(err) {
+            return res.json({message: 'Internal Server Error'});
+        }
+        console.log('user profile is created not saved yet')
+        userprofile.save(function(err) {
+            if(err) {
+                return res.status(500).json({
+                        message: 'Internal server error'
+            })
+        }
+        })
+    
+
+    console.log(userprofile)
     bcrypt.genSalt(10, function(err, salt) {
         if (err) {
             return res.status(500).json({
@@ -382,7 +435,8 @@ app.post('/users/register', function(req, res) {
             var user = new User({
                 username: username,
                 password: hash,
-                email: email
+                email: email,
+                profile: userprofile._id
             });
 
             user.save(function(err) {
@@ -395,6 +449,7 @@ app.post('/users/register', function(req, res) {
             });
         });
     });
+    })
 });
 
 app.get('/*', function(req, res) {

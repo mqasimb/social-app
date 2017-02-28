@@ -350,6 +350,22 @@ function uploadFile(files) {
     })
 }
 
+const SET_PROFILE_PIC_CLOUDINARY_URL = 'SET_PROFILE_PIC_CLOUDINARY_URL';
+function setProfilePicCloudinaryURL(url) {
+    return ({
+        type: SET_PROFILE_PIC_CLOUDINARY_URL,
+        url: url
+    })
+}
+
+const UPLOAD_PROFILE_PIC = 'UPLOAD_PROFILE_PIC';
+function uploadProfilePic(files) {
+    return ({
+        type: UPLOAD_PROFILE_PIC,
+        files: files
+    })
+}
+
 const TOGGLE_MODAL = 'TOGGLE_MODAL';
 function toggleModal(postID, toggle) {
     return ({
@@ -358,6 +374,70 @@ function toggleModal(postID, toggle) {
         toggle: toggle
     })
 }
+
+function getProfile(username) {
+    return function(dispatch) {
+        return axios.get('/api/profile/'+username)
+        .then(function(response) {
+            dispatch(getProfileSuccess(response.data[0]));
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const GET_PROFILE_SUCCESS = 'GET_PROFILE_SUCCESS';
+function getProfileSuccess(data) {
+    return ({
+        type: GET_PROFILE_SUCCESS,
+        data: data
+    })
+}
+
+const CHANGE_PICTURE_MODAL = 'CHANGE_PICTURE_MODAL';
+function changePictureModal(username, toggle) {
+    return ({
+        type: CHANGE_PICTURE_MODAL,
+        username: username,
+        toggle: toggle
+    })
+}
+
+function postNewProfilePicture(username, pictureURL) {
+    return function(dispatch) {
+        return axios.put('/api/profilepicture/'+username, pictureURL)
+        .then(function(response) {
+            dispatch(postProfilePicSuccessful());
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const POST_PROFILE_PIC_SUCCESFUL = 'POST_PROFILE_PIC_SUCCESFUL' 
+function postProfilePicSuccessful() {
+    return({
+        type: POST_PROFILE_PIC_SUCCESFUL
+    })
+}
+
+exports.POST_PROFILE_PIC_SUCCESFUL = POST_PROFILE_PIC_SUCCESFUL
+
+exports.SET_PROFILE_PIC_CLOUDINARY_URL = SET_PROFILE_PIC_CLOUDINARY_URL;
+exports.setProfilePicCloudinaryURL = setProfilePicCloudinaryURL;
+
+exports.UPLOAD_PROFILE_PIC = UPLOAD_PROFILE_PIC;
+exports.uploadProfilePic = uploadProfilePic;
+exports.postNewProfilePicture = postNewProfilePicture;
+
+exports.CHANGE_PICTURE_MODAL = CHANGE_PICTURE_MODAL;
+exports.changePictureModal = changePictureModal;
+
+exports.getProfile = getProfile;
+exports.getProfileSuccess = getProfileSuccess;
+exports.GET_PROFILE_SUCCESS = GET_PROFILE_SUCCESS;
 
 exports.deleteComment = deleteComment;
 exports.COMMENT_DELETE_SUCCESS = COMMENT_DELETE_SUCCESS;

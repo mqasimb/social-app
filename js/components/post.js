@@ -56,7 +56,7 @@ class Post extends React.Component {
         return (
             <div>
             <Panel>
-            <Link to={'/post/'+this.props.id}><Content content={this.props.content}/></Link>{this.props.name}
+            <Link to={'/post/'+this.props.id}><Content content={this.props.content}/></Link><Link to={'/profile/'+this.props.name}>{this.props.name}</Link>
             {image}
             </Panel>
             <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>

@@ -1,19 +1,34 @@
 var mongoose = require('mongoose');
 
-var ProfileSchema = new mongoose.Schema({
+var FriendSchema = new mongoose.Schema({
     username: String,
     Name: String,
-    AboutMe: String,
-    Friends:[{}],
-    posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
     profile: {type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true}
 });
 
-var Profile = mongoose.model('Profile', ProfileSchema);
+var IncomingRequestsSchema = new mongoose.Schema({
+    username: String,
+    Name: String,
+    profile: {type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true}
+});
 
-module.exports = Profile;
+var OutgoingRequestsSchema = new mongoose.Schema({
+    username: String,
+    Name: String,
+    profile: {type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true}
+});
+
+var UserProfileSchema = new mongoose.Schema({
+    username: String,
+    Name: String,
+    AboutMe: String,
+    ProfilePicture: { type: String, default: 'https://s3.amazonaws.com/37assets/svn/765-default-avatar.png' },
+    Friends:[FriendSchema],
+    incomingRequests: [IncomingRequestsSchema],
+    outgoingRequests: [OutgoingRequestsSchema],
+    posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
+});
+
+var UserProfile = mongoose.model('UserProfile', UserProfileSchema);
+
+module.exports = UserProfile;

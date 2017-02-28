@@ -16,13 +16,47 @@ var initialState = {
         uploadedFileCloudinaryUrl: '',
         flashMessages: {},
         showModal: {toggle: false, postID: null},
-        editComment: {}
+        showPictureModal: {toggle: false, username: null},
+        editComment: {},
+        loadedProfile: {},
+        uploadedProfilePic: '',
+        uploadedProfilePicCloudinaryUrl: '',
     };
 
 var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
-
+    
+    if(action.type === actions.POST_PROFILE_PIC_SUCCESFUL) {
+        newState.loadedProfile.ProfilePicture = newState.uploadedProfilePicCloudinaryUrl;
+        newState.loadedProfile = Object.assign({}, newState.loadedProfile);
+        newState.uploadedProfilePic = '';
+        newState.uploadedProfilePicCloudinaryUrl = '';
+        newState.showPictureModal = {toggle: false, username: null}
+        return newState;
+    }
+    
+    if(action.type === actions.UPLOAD_PROFILE_PIC) {
+        newState.uploadedProfilePic = action.files;
+        return newState;
+    }
+    
+    if(action.type === actions.SET_PROFILE_PIC_CLOUDINARY_URL) {
+        newState.uploadedProfilePicCloudinaryUrl = action.url;
+        return newState;
+    }
+    
+    if(action.type === actions.CHANGE_PICTURE_MODAL) {
+        newState.showPictureModal = {toggle: action.toggle, username: action.username};
+        newState.showPictureModal = Object.assign({}, newState.showPictureModal)
+        return newState;
+    }
+    
+    if(action.type === actions.GET_PROFILE_SUCCESS) {
+        newState.loadedProfile = Object.assign({}, action.data)
+        return newState;
+    }
+    
     if(action.type === actions.TOGGLE_EDIT_COMMENT) {
         newState.editComment[action.commentID] = action.toggle;
         newState.editComment = Object.assign({}, newState.editComment)

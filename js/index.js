@@ -31,7 +31,7 @@ var routes = (
             <Route path='/login' component={Login}/>
             <Route path='/register' component={Register}/>
             <Route path='/post/:id' component={SinglePost}/>
-            <Route path='/profile' component={Profile}/>
+            <Route path='/profile/:username' component={Profile}/>
         </Route>
     </Router>
     </Provider>
