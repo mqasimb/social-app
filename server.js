@@ -88,7 +88,7 @@ app.get('/api/profile/:username', expressJWT({ secret: config.jwtSecret}), funct
     });
 });
 
-app.put('/api/profilepicture/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+app.put('/api/profile/picture/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     console.log(req.body);
     UserProfile.findOne({username: req.params.username}, function(err, userprofile) {
         if (err) {
@@ -97,6 +97,25 @@ app.put('/api/profilepicture/:username', expressJWT({ secret: config.jwtSecret})
             });
         }
         userprofile.ProfilePicture = req.body.pictureURL;
+        
+        userprofile.save(function(err) {
+            if(err) {
+                return res.json({message: 'Internal Server Error'});
+            }
+            return res.json(userprofile);
+        })
+    });
+});
+
+app.put('/api/profile/aboutme/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    console.log(req.body);
+    UserProfile.findOne({username: req.params.username}, function(err, userprofile) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        userprofile.AboutMe = req.body.aboutMe;
         
         userprofile.save(function(err) {
             if(err) {

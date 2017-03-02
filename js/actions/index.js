@@ -406,7 +406,7 @@ function changePictureModal(username, toggle) {
 
 function postNewProfilePicture(username, pictureURL) {
     return function(dispatch) {
-        return axios.put('/api/profilepicture/'+username, pictureURL)
+        return axios.put('/api/profile/picture/'+username, pictureURL)
         .then(function(response) {
             dispatch(postProfilePicSuccessful());
         })
@@ -423,6 +423,40 @@ function postProfilePicSuccessful() {
     })
 }
 
+const CHANGE_ABOUT_ME = 'CHANGE_ABOUT_ME' 
+function changeAboutMe(toggle) {
+    return({
+        type: CHANGE_ABOUT_ME,
+        toggle: toggle
+    })
+}
+
+function postProfileAboutMe(username, aboutMe) {
+    return function(dispatch) {
+        return axios.put('/api/profile/aboutme/'+username, aboutMe)
+        .then(function(response) {
+            dispatch(postProfileAboutMeSuccessful(aboutMe));
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const POST_PROFILE_ABOUT_ME_SUCCESFUL = 'POST_PROFILE_ABOUT_ME_SUCCESFUL' 
+function postProfileAboutMeSuccessful(aboutMe) {
+    return({
+        type: POST_PROFILE_ABOUT_ME_SUCCESFUL,
+        aboutMe: aboutMe
+    })
+}
+
+exports.changeAboutMe = changeAboutMe;
+exports.CHANGE_ABOUT_ME = CHANGE_ABOUT_ME;
+
+exports.postProfileAboutMe = postProfileAboutMe;
+exports.POST_PROFILE_ABOUT_ME_SUCCESFUL = POST_PROFILE_ABOUT_ME_SUCCESFUL;
+exports.postProfileAboutMeSuccessful = postProfileAboutMeSuccessful;
 exports.POST_PROFILE_PIC_SUCCESFUL = POST_PROFILE_PIC_SUCCESFUL
 
 exports.SET_PROFILE_PIC_CLOUDINARY_URL = SET_PROFILE_PIC_CLOUDINARY_URL;

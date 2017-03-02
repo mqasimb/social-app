@@ -14,6 +14,7 @@ const FriendsList = require('./friends-list');
 const ChangePictureModal = require('./change-picture-modal');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
+const AboutMeForm = require('./aboutme-form');
 
 class Profile extends React.Component {
     componentDidMount() {
@@ -21,6 +22,16 @@ class Profile extends React.Component {
     }
     changeProfilePicture() {
         this.props.dispatch(actions.postNewProfilePicture(this.props.params.username, {pictureURL: this.props.uploadedProfilePicCloudinaryUrl}))
+    }
+    changeAboutMe(values) {
+        this.props.dispatch(actions.postProfileAboutMe(this.props.params.username, values));
+        this.props.dispatch(actions.changeAboutMe(false)); 
+    }
+    enableAboutMeChange() {
+        this.props.dispatch(actions.changeAboutMe(true));
+    }
+    aboutMeCancelEdit() {
+        this.props.dispatch(actions.changeAboutMe(false));   
     }
     close() {
         this.props.dispatch(actions.changePictureModal(null, false));
@@ -34,9 +45,10 @@ class Profile extends React.Component {
         return (
             <div>
             <ProfilePicture img={this.props.loadedProfile.ProfilePicture} onClick={this.open.bind(this)}/>
-            <button onClick={this.open.bind(this)}>Change Profile Pic</button>
+            {(this.props.auth.user.username == this.props.params.username) ? (<button onClick={this.open.bind(this)}>Change Profile Pic</button>) : (null)}
             <ChangePictureModal setPicture={this.changeProfilePicture.bind(this)} close={this.close.bind(this)}/>
-            <AboutMe text='Hi I am a very cool person! Add me as a friend to learn more about me!'/>
+            <AboutMe text={this.props.loadedProfile.AboutMe}/>
+            {(this.props.auth.user.username == this.props.params.username) ? ((this.props.changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: this.props.loadedProfile.AboutMe}}/>) : (<button onClick={this.enableAboutMeChange.bind(this)}>Change About Me</button>)) : (null)}
             <ProfilePosts posts={[{content: 'abc', username:'1'}, {content: 'cde', username:'1'}, {content: '123', username:'1'}]}/>
             <FriendsList list={[{name:'Harry'}, {name:'Hermione'}, {name:'Ron'}]}/>
             </div>
@@ -50,6 +62,7 @@ function mapStateToProps(state, props) {
         isEdit: state.app.isEdit,
         commentsInput: state.app.commentsInput,
         loadedProfile: state.app.loadedProfile,
+        changeAboutMe: state.app.changeAboutMe,
         uploadedProfilePicCloudinaryUrl: state.app.uploadedProfilePicCloudinaryUrl
     })
 }
