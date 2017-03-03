@@ -29,7 +29,39 @@ var initialState = {
 var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
-
+    
+    if(action.type === actions.SEND_FRIEND_REQUEST_SUCCESFUL) {
+        newState.mainProfile.outgoingRequests.push({username: newState.loadedProfile.username});
+        newState.mainProfile.outgoingRequests = newState.mainProfile.outgoingRequests.slice();
+        newState.mainProfile = Object.assign({}, newState.mainProfile);
+        return newState;
+    }
+    
+    if(action.type === actions.CANCEL_FRIEND_REQUEST_SUCCESFUL) {
+        var firstIndex = newState.mainProfile.outgoingRequests.findIndex(function(request) {
+            return request.username == newState.loadedProfile.username;
+        })
+        if(firstIndex > -1) {
+            newState.mainProfile.outgoingRequests.splice(firstIndex, 1);
+            newState.mainProfile.outgoingRequests = newState.mainProfile.outgoingRequests.slice();
+            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+        }
+        return newState;
+    }
+    
+    if(action.type === actions.DENY_FRIEND_REQUEST_SUCCESFUL) {
+        var firstIndex = newState.mainProfile.incomingRequests.findIndex(function(request) {
+            return request.username == newState.loadedProfile.username;
+        })
+        if(firstIndex > -1) {
+            newState.mainProfile.incomingRequests.splice(firstIndex, 1);
+            newState.mainProfile.incomingRequests = newState.mainProfile.incomingRequests.slice();
+            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+        }
+        return newState;
+    }
+    
+    
     if(action.type === actions.GET_MAIN_PROFILE_SUCCESS) {
         newState.mainProfile = action.data;
         newState.mainProfile = Object.assign({}, newState.mainProfile);
