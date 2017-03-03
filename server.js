@@ -296,58 +296,152 @@ app.post('/api/friend/add/:username', expressJWT({ secret: config.jwtSecret}), f
 });
 
 app.put('/api/friend/confirm/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    UserProfile.findOneAndUpdate({_id: req.params.id}, {$set: {content: req.body.content}}, function(err, userprofile) {
+    UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
         console.log(userprofile)
-        res.status(200).json(userprofile);
+        UserProfile.findOne({username: req.params.username}).exec(function(err, seconduserprofile) {
+          if(err) {
+              return res.json({message: 'Internal Server Error'});
+          }
+          var firstIndex = userprofile.outgoingRequests.findIndex(function(profile) {
+              return seconduserprofile._id == profile._id
+          })
+          var secondIndex = seconduserprofile.incomingRequests.findIndex(function(profile) {
+              return userprofile._id == profile._id
+          })
+          userprofile.incomingRequests.splice(firstIndex, 1);
+          seconduserprofile.outgoingRequests.splice(secondIndex, 1);
+          
+          userprofile.Friends.push(seconduserprofile._id);
+          seconduserprofile.Friends.push(userprofile._id);
+          
+          userprofile.save(function(err) {
+             if(err) {
+                 return res.json({message: 'Internal Server Error'});
+             }
+             seconduserprofile.save(function(err) {
+             if(err) {
+                 return res.json({message: 'Internal Server Error'});
+             }
+             res.status(200).json(userprofile);
+             });
+          });
+        })
     })
 });
 
 app.put('/api/friend/cancel/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    UserProfile.findOne({_id: req.params.id}, {$set: {content: req.body.content}}, function(err, userprofile) {
+    UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
         console.log(userprofile)
-        res.status(200).json(userprofile);
+        UserProfile.findOne({username: req.params.username}).exec(function(err, seconduserprofile) {
+          if(err) {
+              return res.json({message: 'Internal Server Error'});
+          }
+          var firstIndex = userprofile.outgoingRequests.findIndex(function(profile) {
+              return seconduserprofile._id == profile._id
+          })
+          var secondIndex = seconduserprofile.incomingRequests.findIndex(function(profile) {
+              return userprofile._id == profile._id
+          })
+          userprofile.outgoingRequests.splice(firstIndex, 1);
+          seconduserprofile.incomingRequests.splice(secondIndex, 1);
+          
+          userprofile.save(function(err) {
+             if(err) {
+                 return res.json({message: 'Internal Server Error'});
+             }
+             seconduserprofile.save(function(err) {
+             if(err) {
+                 return res.json({message: 'Internal Server Error'});
+             }
+             res.status(200).json(userprofile);
+             });
+          });
+        })
     })
 });
 
-app.delete('/api/friend/deny/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    UserProfile.findOne({_id: req.params.id}, function(err, userprofile) {
+app.put('/api/friend/deny/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-        UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
-            if(err) {
-                return res.json({message: 'Internal Server Error'});
-            }
-            var postIndex = userprofile.posts.findIndex(function(singlePost) {
-                console.log(req.params.id, 'req id --- post id ', singlePost)
-                return req.params.id == singlePost;
-            });
-            console.log(postIndex, 'post index delete post')
-            if(postIndex > -1) {
-                userprofile.posts.splice(postIndex, 1);
-            }
-            console.log(userprofile.posts, 'posts')
-            userprofile.save(function(err) {
-                if(err) {
-                    return res.json({message: 'Internal Server Error'});
-                }
-                res.json(userprofile);
-            })
+        console.log(userprofile)
+        UserProfile.findOne({username: req.params.username}).exec(function(err, seconduserprofile) {
+          if(err) {
+              return res.json({message: 'Internal Server Error'});
+          }
+          var firstIndex = userprofile.outgoingRequests.findIndex(function(profile) {
+              return seconduserprofile._id == profile._id
+          })
+          var secondIndex = seconduserprofile.incomingRequests.findIndex(function(profile) {
+              return userprofile._id == profile._id
+          })
+          userprofile.incomingRequests.splice(firstIndex, 1);
+          seconduserprofile.outgoingRequests.splice(secondIndex, 1);
+          
+          userprofile.save(function(err) {
+             if(err) {
+                 return res.json({message: 'Internal Server Error'});
+             }
+             seconduserprofile.save(function(err) {
+             if(err) {
+                 return res.json({message: 'Internal Server Error'});
+             }
+             res.status(200).json(userprofile);
+             });
+          });
         })
     })
 });
+
+app.put('/api/friend/remove/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(userprofile)
+        UserProfile.findOne({username: req.params.username}).exec(function(err, seconduserprofile) {
+          if(err) {
+              return res.json({message: 'Internal Server Error'});
+          }
+          var firstIndex = userprofile.outgoingRequests.findIndex(function(profile) {
+              return seconduserprofile._id == profile._id
+          })
+          var secondIndex = seconduserprofile.incomingRequests.findIndex(function(profile) {
+              return userprofile._id == profile._id
+          })
+          userprofile.Friends.splice(firstIndex, 1);
+          seconduserprofile.Friends.splice(secondIndex, 1);
+          
+          userprofile.save(function(err) {
+             if(err) {
+                 return res.json({message: 'Internal Server Error'});
+             }
+             seconduserprofile.save(function(err) {
+             if(err) {
+                 return res.json({message: 'Internal Server Error'});
+             }
+             res.status(200).json(userprofile);
+             });
+          });
+        })
+    })
+});
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

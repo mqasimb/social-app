@@ -476,7 +476,7 @@ function cancelFriendRequest(username) {
     return function(dispatch) {
         return axios.put('/api/friend/cancel/'+username)
         .then(function(response) {
-            dispatch(postProfileAboutMeSuccessful());
+            dispatch(cancelFriendRequestSuccesful());
         })
         .catch(function(err) {
             console.log(err);
@@ -495,7 +495,7 @@ function confirmFriendRequest(username) {
     return function(dispatch) {
         return axios.put('/api/friend/confirm/'+username)
         .then(function(response) {
-            dispatch(postProfileAboutMeSuccessful());
+            dispatch(confirmFriendRequestSuccesful());
         })
         .catch(function(err) {
             console.log(err);
@@ -514,7 +514,7 @@ function denyFriendRequest(username) {
     return function(dispatch) {
         return axios.put('/api/friend/deny/'+username)
         .then(function(response) {
-            dispatch(postProfileAboutMeSuccessful());
+            dispatch(denyFriendRequestSuccesful());
         })
         .catch(function(err) {
             console.log(err);
@@ -526,6 +526,25 @@ const DENY_FRIEND_REQUEST_SUCCESFUL = 'DENY_FRIEND_REQUEST_SUCCESFUL'
 function denyFriendRequestSuccesful() {
     return({
         type: DENY_FRIEND_REQUEST_SUCCESFUL
+    })
+}
+
+function removeFriendRequest(username) {
+    return function(dispatch) {
+        return axios.put('/api/friend/remove/'+username)
+        .then(function(response) {
+            dispatch(removeFriendRequestSuccesful());
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const REMOVE_FRIEND_REQUEST_SUCCESFUL = 'REMOVE_FRIEND_REQUEST_SUCCESFUL' 
+function removeFriendRequestSuccesful(aboutMe) {
+    return({
+        type: REMOVE_FRIEND_REQUEST_SUCCESFUL
     })
 }
 
@@ -548,6 +567,10 @@ function getMainProfileSuccess(data) {
         data: data
     })
 }
+
+exports.removeFriendRequest = removeFriendRequest;
+exports.REMOVE_FRIEND_REQUEST_SUCCESFUL = REMOVE_FRIEND_REQUEST_SUCCESFUL;
+exports.removeFriendRequestSuccesful = removeFriendRequestSuccesful;
 
 exports.getMainProfileSuccess = getMainProfileSuccess;
 exports.GET_MAIN_PROFILE_SUCCESS = GET_MAIN_PROFILE_SUCCESS;

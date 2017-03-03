@@ -42,14 +42,41 @@ class Profile extends React.Component {
         this.props.dispatch(actions.changePictureModal(this.props.params.username, true))
     }
     addFriend() {
-        this.props.dispatch(actions.sendFriendRequest(this.props.loadedProfile.username))
+        this.props.dispatch(actions.sendFriendRequest(this.props.params.username))
+    }
+    cancelRequest() {
+        this.props.dispatch(actions.cancelFriendRequest(this.props.params.username))
+    }
+    acceptRequest() {
+        this.props.dispatch(actions.confirmFriendRequest(this.props.params.username))
+    }
+    denyRequest() {
+        this.props.dispatch(actions.denyFriendRequest(this.props.params.username))
+    }
+    removeFriend() {
+        this.props.dispatch(actions.removeFriendRequest(this.props.params.username))
     }
     render(props) {
-        
+        var acceptFriendRequest = this.props.mainProfile.incomingRequests.findIndex((request) => {
+            return request.username == this.props.params.username;
+        });
+        var denyFriendRequest = acceptFriendRequest;
+        var cancelFriendRequest = this.props.mainProfile.outgoingRequests.findIndex((request) => {
+            return request.username == this.props.params.username;
+        });
+        var isFriend = this.props.mainProfile.Friends.findIndex((request) => {
+            return request.username == this.props.params.username;
+        });
+        var sendFriendRequest = (((acceptFriendRequest > -1) || (cancelFriendRequest > -1)) && (isFriend < 0)) ? (false) : (true);
+        var acceptFriendRequestButton = <button onClick={this.acceptRequest.bind(this)}>Accept Friend Request</button>;
+        var denyFriendRequestButton = <button onClick={this.denyRequest.bind(this)}>Deny Friend Request</button>;
+        var cancelFriendRequestButton = <button onClick={this.cancelRequest.bind(this)}>Cancel Friend Request</button>;
+        var sendFriendRequestButton = <button onClick={this.addFriend.bind(this)}>Add Friend</button>;
+        var removeFriendRequestButton = <button onClick={this.removeFriend.bind(this)}>Remove Friend</button>;
         return (
             <div>
             <ProfilePicture img={this.props.loadedProfile.ProfilePicture} onClick={this.open.bind(this)}/>
-            {(null) ? (null) : (null)}
+            {(this.props.auth.user.username == this.props.params.username) ? (null) : ((acceptFriendRequest > -1) ? (<div>{acceptFriendRequestButton} {denyFriendRequestButton}</div>) : ((isFriend > -1) ? (<div>Friends {removeFriendRequestButton}</div>) : ((cancelFriendRequest > -1) ? (cancelFriendRequestButton) : (sendFriendRequestButton))))}
             {(this.props.auth.user.username == this.props.params.username) ? (<button onClick={this.open.bind(this)}>Change Profile Pic</button>) : (null)}
             <ChangePictureModal setPicture={this.changeProfilePicture.bind(this)} close={this.close.bind(this)}/>
             <AboutMe text={this.props.loadedProfile.AboutMe}/>
@@ -68,6 +95,7 @@ function mapStateToProps(state, props) {
         postData: state.app.postData,
         commentsInput: state.app.commentsInput,
         loadedProfile: state.app.loadedProfile,
+        mainProfile: state.app.mainProfile,
         changeAboutMe: state.app.changeAboutMe,
         uploadedProfilePicCloudinaryUrl: state.app.uploadedProfilePicCloudinaryUrl
     })
