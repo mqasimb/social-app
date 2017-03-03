@@ -77,7 +77,7 @@ app.get('/users/logout', function(req, res){
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.get('/api/profile/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    UserProfile.findOne({username: req.params.username}).populate('posts').exec(function(err, userprofile) {
+    UserProfile.findOne({username: req.params.username}).populate({path: 'posts', populate: {path: 'profile'}}).exec(function(err, userprofile) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
