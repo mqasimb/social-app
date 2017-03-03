@@ -49,7 +49,7 @@ class Profile extends React.Component {
             <ChangePictureModal setPicture={this.changeProfilePicture.bind(this)} close={this.close.bind(this)}/>
             <AboutMe text={this.props.loadedProfile.AboutMe}/>
             {(this.props.auth.user.username == this.props.params.username) ? ((this.props.changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: this.props.loadedProfile.AboutMe}}/>) : (<button onClick={this.enableAboutMeChange.bind(this)}>Change About Me</button>)) : (null)}
-            <ProfilePosts posts={[{content: 'abc', username:'1'}, {content: 'cde', username:'1'}, {content: '123', username:'1'}]}/>
+            <ProfilePosts posts={this.props.postData}/>
             <FriendsList list={[{name:'Harry'}, {name:'Hermione'}, {name:'Ron'}]}/>
             </div>
         )
@@ -60,6 +60,7 @@ function mapStateToProps(state, props) {
     return ({
         auth: state.app.auth,
         isEdit: state.app.isEdit,
+        postData: state.app.postData,
         commentsInput: state.app.commentsInput,
         loadedProfile: state.app.loadedProfile,
         changeAboutMe: state.app.changeAboutMe,

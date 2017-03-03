@@ -379,7 +379,7 @@ function getProfile(username) {
     return function(dispatch) {
         return axios.get('/api/profile/'+username)
         .then(function(response) {
-            dispatch(getProfileSuccess(response.data[0]));
+            dispatch(getProfileSuccess(response.data));
         })
         .catch(function(err) {
             console.log(err);

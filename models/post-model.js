@@ -9,7 +9,8 @@ var CommentSchema = new mongoose.Schema({
     comment: String,
     username: String,
     date: Date,
-    post: {type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true}
+    post: {type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true},
+    profile: {type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile'}
 })
 
 var PostSchema = new mongoose.Schema({
@@ -21,7 +22,7 @@ var PostSchema = new mongoose.Schema({
     comments: [CommentSchema],
     likes: [LikesSchema],
     image: String,
-    username: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}
+    profile: {type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile'}
 })
 
 var Post = mongoose.model('Post', PostSchema);

@@ -21,6 +21,7 @@ var initialState = {
         loadedProfile: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
+        profilePosts: [],
         changeAboutMe: false
     };
 
@@ -33,7 +34,7 @@ var appReducer = function(state, action) {
         newState.loadedProfile = Object.assign({}, newState.loadedProfile);
         return newState;
     }
-    
+     
     if(action.type === actions.CHANGE_ABOUT_ME) {
         newState.changeAboutMe = action.toggle;
         return newState;
@@ -65,7 +66,8 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.GET_PROFILE_SUCCESS) {
-        newState.loadedProfile = Object.assign({}, action.data)
+        newState.loadedProfile = Object.assign({}, action.data);
+        newState.postData = newState.loadedProfile.posts.slice();
         return newState;
     }
     

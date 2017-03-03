@@ -77,7 +77,7 @@ app.get('/users/logout', function(req, res){
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.get('/api/profile/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    UserProfile.find({username: req.params.username}, function(err, userprofile) {
+    UserProfile.findOne({username: req.params.username}).populate('posts').exec(function(err, userprofile) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
@@ -131,7 +131,7 @@ app.put('/api/profile/aboutme/:username', expressJWT({ secret: config.jwtSecret}
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.get('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    Post.find({}, function(err, post) {
+    Post.find({}).populate('profile', 'ProfilePicture').exec(function(err, post) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
@@ -153,17 +153,44 @@ app.get('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(req, 
     })
 });
 
+app.get('/api/profile/posts/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    Post.find({name: req.params.username}, function(err, post) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        res.json(post);
+    })
+});
+
 app.post('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     /// check whether user object
     console.log(req.body);
-    Post.create({content: req.body.content, image: req.body.image, username: req.user._id, name:req.user.username}, function(err, post) {
+    UserProfile.findOne({username: req.user.username}).exec(function(err, userprofile) {
+      if(err) {
+          return res.json({message: 'Internal Server Error'});
+      }
+      Post.create({content: req.body.content, image: req.body.image, profile: userprofile._id, name:req.user.username}, function(err, post) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
         console.log(post);
-        res.json(post);
+        UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
+            if(err) {
+                return res.json({message: 'Internal Server Error'});
+            }
+            userprofile.posts.push(post._id);
+            userprofile.save(function(err) {
+                if(err) {
+                    return res.json({message: 'Internal Server Error'});
+                }
+                res.json(post);
+            })
+        })
+    })
     })
 });
 
@@ -186,7 +213,26 @@ app.delete('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(re
                 message: 'Internal Server Error'
             });
         }
-        res.status(200).json(post);
+        UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
+            if(err) {
+                return res.json({message: 'Internal Server Error'});
+            }
+            var postIndex = userprofile.posts.findIndex(function(singlePost) {
+                console.log(req.params.id, 'req id --- post id ', singlePost)
+                return req.params.id == singlePost;
+            });
+            console.log(postIndex, 'post index delete post')
+            if(postIndex > -1) {
+                userprofile.posts.splice(postIndex, 1);
+            }
+            console.log(userprofile.posts, 'posts')
+            userprofile.save(function(err) {
+                if(err) {
+                    return res.json({message: 'Internal Server Error'});
+                }
+                res.json(post);
+            })
+        })
     })
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
