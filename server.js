@@ -76,15 +76,39 @@ app.get('/users/logout', function(req, res){
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-app.get('/api/profile/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    UserProfile.findOne({username: req.params.username}).populate({path: 'posts', populate: {path: 'profile'}}).exec(function(err, userprofile) {
+app.get('/api/profile', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    UserProfile.findOne({username: req.user.username}).populate({path: 'outgoingRequests', select:'ProfilePicture username'}).populate({path: 'incomingRequests', select:'ProfilePicture username'}).populate({path: 'Friends', select:'ProfilePicture username'}).exec(function(err, userprofile) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-        // console.log(req.user);
+        console.log(userprofile, 'userprofile 1111')
         res.json(userprofile);
+        // console.log(req.user);
+    });
+});
+
+app.get('/api/profile/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    UserProfile.findOne({username: req.params.username}).populate({path: 'posts', populate: {path: 'profile', select:'ProfilePicture'}}).exec(function(err, userprofile) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(userprofile, 'userprofile')
+        var safeData = userprofile;
+        if(req.params.username === req.user.username) {
+            res.json(userprofile);
+        }
+        else {
+            safeData = safeData.toObject();
+            delete safeData.incomingRequests;
+            delete safeData.outgoingRequests;
+            console.log(safeData, 'safedata')
+            res.json(safeData);
+        }
+        // console.log(req.user);
     });
 });
 
@@ -231,6 +255,95 @@ app.delete('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(re
                     return res.json({message: 'Internal Server Error'});
                 }
                 res.json(post);
+            })
+        })
+    })
+});
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+app.post('/api/friend/add/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    /// check whether user object
+    console.log(req.body);
+    UserProfile.findOne({username: req.user.username}).exec(function(err, userprofile) {
+      if(err) {
+          return res.json({message: 'Internal Server Error'});
+      }
+      console.log('1', userprofile)
+      UserProfile.findOne({username: req.params.username}).exec(function(err, seconduserprofile) {
+          if(err) {
+              return res.json({message: 'Internal Server Error'});
+          }
+          console.log('2', seconduserprofile)
+      userprofile.outgoingRequests.push(seconduserprofile._id);
+      seconduserprofile.incomingRequests.push(userprofile._id);
+      console.log(userprofile.outgoingRequests, 'first profile ----- second profile',seconduserprofile.incomingRequests);
+      userprofile.save(function(err) {
+        if(err) {
+            console.log('error 1' ,err)
+            return res.json({message: 'Internal Server Error'});
+        }
+        seconduserprofile.save(function(err) {
+            if(err) {
+                console.log('error 2', err)
+            return res.json({message: 'Internal Server Error'});
+            }
+            console.log(userprofile)
+          res.json(userprofile);  
+        })
+        })
+        })
+    })
+});
+
+app.put('/api/friend/confirm/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    UserProfile.findOneAndUpdate({_id: req.params.id}, {$set: {content: req.body.content}}, function(err, userprofile) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(userprofile)
+        res.status(200).json(userprofile);
+    })
+});
+
+app.put('/api/friend/cancel/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    UserProfile.findOne({_id: req.params.id}, {$set: {content: req.body.content}}, function(err, userprofile) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(userprofile)
+        res.status(200).json(userprofile);
+    })
+});
+
+app.delete('/api/friend/deny/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    UserProfile.findOne({_id: req.params.id}, function(err, userprofile) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
+            if(err) {
+                return res.json({message: 'Internal Server Error'});
+            }
+            var postIndex = userprofile.posts.findIndex(function(singlePost) {
+                console.log(req.params.id, 'req id --- post id ', singlePost)
+                return req.params.id == singlePost;
+            });
+            console.log(postIndex, 'post index delete post')
+            if(postIndex > -1) {
+                userprofile.posts.splice(postIndex, 1);
+            }
+            console.log(userprofile.posts, 'posts')
+            userprofile.save(function(err) {
+                if(err) {
+                    return res.json({message: 'Internal Server Error'});
+                }
+                res.json(userprofile);
             })
         })
     })

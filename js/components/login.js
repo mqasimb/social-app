@@ -9,6 +9,7 @@ class Login extends React.Component {
     submitLogin(values) {
           this.props.dispatch(actions.loginAction(values)).then(function(bool) {
            if(bool) {
+               //If user logs in succesfully redirect to the home page
                router.browserHistory.push('/');
            } 
         });

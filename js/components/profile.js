@@ -41,10 +41,15 @@ class Profile extends React.Component {
     open() {
         this.props.dispatch(actions.changePictureModal(this.props.params.username, true))
     }
+    addFriend() {
+        this.props.dispatch(actions.sendFriendRequest(this.props.loadedProfile.username))
+    }
     render(props) {
+        
         return (
             <div>
             <ProfilePicture img={this.props.loadedProfile.ProfilePicture} onClick={this.open.bind(this)}/>
+            {(null) ? (null) : (null)}
             {(this.props.auth.user.username == this.props.params.username) ? (<button onClick={this.open.bind(this)}>Change Profile Pic</button>) : (null)}
             <ChangePictureModal setPicture={this.changeProfilePicture.bind(this)} close={this.close.bind(this)}/>
             <AboutMe text={this.props.loadedProfile.AboutMe}/>

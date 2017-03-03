@@ -121,6 +121,7 @@ function getPosts() {
         return axios.get('/api/post')
         .then(function(response) {
             console.log(response);
+            dispatch(getMainUserProfile());
             return dispatch(postFetchSuccessful(response));
         })
         .catch(function(err) {
@@ -450,6 +451,127 @@ function postProfileAboutMeSuccessful(aboutMe) {
         aboutMe: aboutMe
     })
 }
+
+function sendFriendRequest(username) {
+    return function(dispatch) {
+        return axios.post('/api/friend/add/'+username)
+        .then(function(response) {
+            console.log(response.data)
+            dispatch(sendFriendRequestSuccesful());
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const SEND_FRIEND_REQUEST_SUCCESFUL = 'SEND_FRIEND_REQUEST_SUCCESFUL' 
+function sendFriendRequestSuccesful() {
+    return({
+        type: SEND_FRIEND_REQUEST_SUCCESFUL
+    })
+}
+
+function cancelFriendRequest(username) {
+    return function(dispatch) {
+        return axios.put('/api/friend/cancel/'+username)
+        .then(function(response) {
+            dispatch(postProfileAboutMeSuccessful());
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const CANCEL_FRIEND_REQUEST_SUCCESFUL = 'CANCEL_FRIEND_REQUEST_SUCCESFUL' 
+function cancelFriendRequestSuccesful() {
+    return({
+        type: CANCEL_FRIEND_REQUEST_SUCCESFUL
+    })
+}
+
+function confirmFriendRequest(username) {
+    return function(dispatch) {
+        return axios.put('/api/friend/confirm/'+username)
+        .then(function(response) {
+            dispatch(postProfileAboutMeSuccessful());
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const CONFIRM_FRIEND_REQUEST_SUCCESFUL = 'CONFIRM_FRIEND_REQUEST_SUCCESFUL' 
+function confirmFriendRequestSuccesful(aboutMe) {
+    return({
+        type: CONFIRM_FRIEND_REQUEST_SUCCESFUL
+    })
+}
+
+function denyFriendRequest(username) {
+    return function(dispatch) {
+        return axios.put('/api/friend/deny/'+username)
+        .then(function(response) {
+            dispatch(postProfileAboutMeSuccessful());
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const DENY_FRIEND_REQUEST_SUCCESFUL = 'DENY_FRIEND_REQUEST_SUCCESFUL' 
+function denyFriendRequestSuccesful() {
+    return({
+        type: DENY_FRIEND_REQUEST_SUCCESFUL
+    })
+}
+
+function getMainUserProfile() {
+    return function(dispatch) {
+        return axios.get('/api/profile/')
+        .then(function(response) {
+            return dispatch(getMainProfileSuccess(response.data));
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const GET_MAIN_PROFILE_SUCCESS = 'GET_MAIN_PROFILE_SUCCESS';
+function getMainProfileSuccess(data) {
+    return ({
+        type: GET_MAIN_PROFILE_SUCCESS,
+        data: data
+    })
+}
+
+exports.getMainProfileSuccess = getMainProfileSuccess;
+exports.GET_MAIN_PROFILE_SUCCESS = GET_MAIN_PROFILE_SUCCESS;
+exports.getMainUserProfile = getMainUserProfile;
+
+exports.sendFriendRequest = sendFriendRequest;
+
+exports.SEND_FRIEND_REQUEST_SUCCESFUL = SEND_FRIEND_REQUEST_SUCCESFUL;
+exports.sendFriendRequestSuccesful = sendFriendRequestSuccesful;
+exports.cancelFriendRequest = cancelFriendRequest;
+
+exports.CANCEL_FRIEND_REQUEST_SUCCESFUL = CANCEL_FRIEND_REQUEST_SUCCESFUL; 
+exports.cancelFriendRequestSuccesful = cancelFriendRequestSuccesful;
+
+exports.confirmFriendRequest = confirmFriendRequest;
+
+exports.CONFIRM_FRIEND_REQUEST_SUCCESFUL = CONFIRM_FRIEND_REQUEST_SUCCESFUL;
+exports.confirmFriendRequestSuccesful = confirmFriendRequestSuccesful;
+
+exports.denyFriendRequest = denyFriendRequest;
+
+exports.DENY_FRIEND_REQUEST_SUCCESFUL = DENY_FRIEND_REQUEST_SUCCESFUL;
+exports.denyFriendRequestSuccesful = denyFriendRequestSuccesful;
+
 
 exports.changeAboutMe = changeAboutMe;
 exports.CHANGE_ABOUT_ME = CHANGE_ABOUT_ME;

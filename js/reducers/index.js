@@ -19,6 +19,7 @@ var initialState = {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
+        mainProfile: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
         profilePosts: [],
@@ -29,6 +30,12 @@ var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
 
+    if(action.type === actions.GET_MAIN_PROFILE_SUCCESS) {
+        newState.mainProfile = action.data;
+        newState.mainProfile = Object.assign({}, newState.mainProfile);
+        return newState;
+    }
+    
     if(action.type === actions.POST_PROFILE_ABOUT_ME_SUCCESFUL) {
         newState.loadedProfile.AboutMe = action.aboutMe.aboutMe;
         newState.loadedProfile = Object.assign({}, newState.loadedProfile);
