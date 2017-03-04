@@ -48,6 +48,32 @@ var appReducer = function(state, action) {
         }
         return newState;
     }
+      
+    if(action.type === actions.CONFIRM_FRIEND_REQUEST_SUCCESFUL) {
+        var firstIndex = newState.mainProfile.incomingRequests.findIndex(function(request) {
+            return request.username == newState.loadedProfile.username;
+        })
+        if(firstIndex > -1) {
+            newState.mainProfile.incomingRequests.splice(firstIndex, 1);
+            newState.mainProfile.incomingRequests = newState.mainProfile.outgoingRequests.slice();
+            newState.mainProfile.Friends.push({username: newState.loadedProfile.username});
+            newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
+            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+        }
+        return newState;
+    }
+    
+    if(action.type === actions.REMOVE_FRIEND_REQUEST_SUCCESFUL) {
+        var firstIndex = newState.mainProfile.Friends.findIndex(function(request) {
+            return request.username == newState.loadedProfile.username;
+        })
+        if(firstIndex > -1) {
+            newState.mainProfile.Friends.splice(firstIndex, 1);
+            newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
+            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+        }
+        return newState;
+    }
     
     if(action.type === actions.DENY_FRIEND_REQUEST_SUCCESFUL) {
         var firstIndex = newState.mainProfile.incomingRequests.findIndex(function(request) {
