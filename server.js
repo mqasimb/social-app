@@ -6,7 +6,7 @@ var expressJWT = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var unless = require('express-unless');
-
+var cors = require('cors')
 const cloudinary = require('cloudinary');
 
 var config = require('./config');
@@ -23,7 +23,7 @@ var UserProfile = require('./models/user-profile-model');
 var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 var opts = {}
-
+app.use(cors())
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: false }));
