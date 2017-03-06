@@ -1,8 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+const React = require('react');
+const chai = require('chai');
+const should = require('chai').should();
+const TestUtils = require('react-addons-test-utils');
+const { Provider } = require('react-redux');
+const store = require('./store');
+var { App } = require('./App');
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
+describe('App Component', function() {
+    it('Renders Hello World',  function() {
+        var renderer = TestUtils.createRenderer();
+        renderer.render(<Provider store={store}><App>Hello World</App></Provider>);
+        var result = renderer.getRenderOutput();
+        var content = result.props.children;
+        content.should.equal('Hello World');
+    });
 });
