@@ -54,7 +54,7 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-app.use(express.static('../react-ui/build'));
+app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
 app.post('/users/login',
   passport.authenticate('local'),
@@ -727,7 +727,7 @@ app.post('/users/register', function(req, res) {
 app.get('/*', function(req, res) {
     console.log('catch all route')
     console.log(req.user)
-    res.sendFile(path.join(__dirname, '../react-ui/index.html'))
+    res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
 });
 
 app.use(function(err, req, res, next) {
