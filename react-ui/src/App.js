@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 
 import './main.css';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Button } from '@sketchpixy/rubix';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem, FormGroup, FormControl, Button } from '@sketchpixy/rubix';
 
 const router = require('react-router');
 const Link = router.Link;
 const actions = require('./actions/index');
 const { connect } = require('react-redux');
+const AsyncTypeahead = require('react-bootstrap-typeahead').AsyncTypeahead;
 
 class App extends React.Component {
     userLogout(event) {
@@ -52,7 +53,8 @@ class App extends React.Component {
 
 function mapStateToProps(state, props) {
     return ({
-        auth: state.app.auth
+        auth: state.app.auth,
+        userSearchResults: state.app.userSearchResults
     })
 }
 

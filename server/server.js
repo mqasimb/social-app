@@ -20,6 +20,11 @@ var User = require('./models/user-model');
 var Post = require('./models/post-model');
 var UserProfile = require('./models/user-profile-model');
 
+const socket = require('socket.io');
+const http = require('http');
+const server = http.Server(app); 
+const io = socket(server);
+
 var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 var opts = {}
@@ -74,6 +79,21 @@ app.get('/users/logout', function(req, res){
     res.redirect('/login');
 });
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+app.post('/api/search/profile', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    console.log(req.body)
+    if(req.body.autoSearch == '') {
+        res.json([])
+    }
+    UserProfile.find({username: new RegExp(req.body.autoSearch, "i")}).exec(function(err, userprofile) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        console.log(userprofile);
+        res.json(userprofile);
+    });
+});
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.get('/api/profile', expressJWT({ secret: config.jwtSecret}), function(req, res) {
@@ -90,7 +110,7 @@ app.get('/api/profile', expressJWT({ secret: config.jwtSecret}), function(req, r
 });
 
 app.get('/api/profile/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    UserProfile.findOne({username: req.params.username}).populate({path: 'posts', populate: {path: 'profile', select:'ProfilePicture'}}).exec(function(err, userprofile) {
+     UserProfile.findOne({username: req.params.username}).populate({path: 'posts', populate: {path: 'profile', select:'ProfilePicture'}}).populate({path: 'Friends', select:'ProfilePicture username'}).exec(function(err, userprofile) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
@@ -734,6 +754,12 @@ app.use(function(err, req, res, next) {
    res.send(err);
 });
 
+io.on('connection', function(socket) {  
+     socket.on('authenticate', function() {
+     console.log('a user connected')   
+    })
+})
+
 
 var runServer = function(callback) {
     mongoose.connect(config.DATABASE_URL, function(err) {
@@ -741,7 +767,7 @@ var runServer = function(callback) {
             return callback(err);
         }
 
-        app.listen(config.PORT, function() {
+        server.listen(config.PORT, function() {
             console.log('Listening on localhost:' + config.PORT);
             if (callback) {
                 callback();

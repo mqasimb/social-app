@@ -23,13 +23,20 @@ var initialState = {
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
         profilePosts: [],
-        changeAboutMe: false
+        changeAboutMe: false,
+        userSearchResults: []
     };
 
 var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
     
+    if(action.type === actions.GET_SEARCH_USERNAMES_SUCCESS) {
+        newState.userSearchResults = action.data;
+        newState.userSearchResults = newState.userSearchResults.slice();
+        return newState;
+    }
+
     if(action.type === actions.SEND_FRIEND_REQUEST_SUCCESFUL) {
         newState.mainProfile.outgoingRequests.push({username: newState.loadedProfile.username});
         newState.mainProfile.outgoingRequests = newState.mainProfile.outgoingRequests.slice();

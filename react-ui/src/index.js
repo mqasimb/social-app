@@ -19,6 +19,9 @@ const SinglePost = require('./components/singlepost');
 const Profile = require('./components/profile');
 const Home = require('./components/home');
 
+const io = require('socket.io-client');
+const socket = io();
+
 if(localStorage.jwt) {
     setAuthorizationToken(localStorage.jwt);
     store.dispatch(userLoggedIn(jwtdecode(localStorage.jwt)));

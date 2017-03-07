@@ -568,6 +568,32 @@ function getMainProfileSuccess(data) {
     })
 }
 
+function getSearchUserNames(search) {
+    return function(dispatch) {
+        return axios.post('/api/search/profile', search)
+        .then(function(response) {
+            return dispatch(getSearchUserNamesSuccess(response.data));
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+const GET_SEARCH_USERNAMES_SUCCESS = 'GET_SEARCH_USERNAMES_SUCCESS';
+function getSearchUserNamesSuccess(data) {
+    return ({
+        type: GET_SEARCH_USERNAMES_SUCCESS,
+        data: data
+    })
+}
+
+exports.getSearchUserNames = getSearchUserNames;
+exports.GET_SEARCH_USERNAMES_SUCCESS = GET_SEARCH_USERNAMES_SUCCESS;
+exports.getSearchUserNamesSuccess = getSearchUserNamesSuccess;
+
+
+
 exports.removeFriendRequest = removeFriendRequest;
 exports.REMOVE_FRIEND_REQUEST_SUCCESFUL = REMOVE_FRIEND_REQUEST_SUCCESFUL;
 exports.removeFriendRequestSuccesful = removeFriendRequestSuccesful;
