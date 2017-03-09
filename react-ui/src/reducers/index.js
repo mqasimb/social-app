@@ -20,6 +20,7 @@ var initialState = {
         editComment: {},
         loadedProfile: {},
         mainProfile: {},
+        chatMessages: [],
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
         profilePosts: [],
@@ -31,6 +32,15 @@ var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
     
+    if(action.type === actions.SOCKET_RECEIVED) {
+        console.log(newState.chatMessages)
+        console.log(action)
+        console.log(action.data.message)
+        newState.chatMessages.push(action.data.message);
+        newState.chatMessages = newState.chatMessages.slice();
+        return newState;
+    }
+
     if(action.type === actions.GET_SEARCH_USERNAMES_SUCCESS) {
         newState.userSearchResults = action.data;
         newState.userSearchResults = newState.userSearchResults.slice();

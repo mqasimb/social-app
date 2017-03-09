@@ -755,9 +755,25 @@ app.use(function(err, req, res, next) {
 });
 
 io.on('connection', function(socket) {  
-     socket.on('authenticate', function() {
-     console.log('a user connected')   
-    })
+     console.log('a user connected')
+     socket.on('user-online', function(userDetails) {
+      console.log(userDetails, ' is online')
+      socket.join(userDetails);
+     });
+     socket.on('private-chat', function(generatedRoom) {
+      console.log(generatedRoom);
+      socket.join(generatedRoom);
+     })
+     socket.on('private-chat-message', function(values) {
+      console.log(values.message);
+      console.log('generated room', values.channelID)
+      io.sockets.in(values.channelID).emit('private-chat-message', {message: values.message});
+     })
+     socket.on('workplz', function(values) {
+      console.log('why not working')
+      console.log(values)
+      io.sockets.emit('plzwork', {message: values});
+     })
 })
 
 

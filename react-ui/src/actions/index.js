@@ -588,11 +588,20 @@ function getSearchUserNamesSuccess(data) {
     })
 }
 
+const SOCKET_RECEIVED = 'SOCKET_RECEIVED';
+function socketReceived(data) {
+    return ({
+        type: SOCKET_RECEIVED,
+        data: data
+    })
+}
+
+exports.SOCKET_RECEIVED = SOCKET_RECEIVED;
+exports.socketReceived = socketReceived;
+
 exports.getSearchUserNames = getSearchUserNames;
 exports.GET_SEARCH_USERNAMES_SUCCESS = GET_SEARCH_USERNAMES_SUCCESS;
 exports.getSearchUserNamesSuccess = getSearchUserNamesSuccess;
-
-
 
 exports.removeFriendRequest = removeFriendRequest;
 exports.REMOVE_FRIEND_REQUEST_SUCCESFUL = REMOVE_FRIEND_REQUEST_SUCCESFUL;

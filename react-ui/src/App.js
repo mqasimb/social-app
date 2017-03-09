@@ -9,6 +9,7 @@ const Link = router.Link;
 const actions = require('./actions/index');
 const { connect } = require('react-redux');
 const AsyncTypeahead = require('react-bootstrap-typeahead').AsyncTypeahead;
+const Chat = require('./components/chat');
 
 class App extends React.Component {
     userLogout(event) {
@@ -46,6 +47,7 @@ class App extends React.Component {
                 </Navbar.Collapse>
               </Navbar>
               {this.props.children}
+              {(isLoggedIn) ? (<Chat />) : (null)}
         </div>
             )
     }
