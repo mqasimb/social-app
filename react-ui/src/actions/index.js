@@ -596,6 +596,28 @@ function socketReceived(data) {
     })
 }
 
+const FRIEND_ONLINE = 'FRIEND_ONLINE';
+function friendOnline(username) {
+    return ({
+        type: FRIEND_ONLINE,
+        username: username
+    })
+}
+
+const OPEN_CHAT = 'OPEN_CHAT';
+function openChat(username) {
+    return ({
+        type: OPEN_CHAT,
+        username: username
+    })
+}
+
+exports.OPEN_CHAT = OPEN_CHAT;
+exports.openChat = openChat;
+
+exports.FRIEND_ONLINE = FRIEND_ONLINE;
+exports.friendOnline = friendOnline;
+
 exports.SOCKET_RECEIVED = SOCKET_RECEIVED;
 exports.socketReceived = socketReceived;
 

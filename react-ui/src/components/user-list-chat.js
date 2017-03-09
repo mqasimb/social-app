@@ -7,13 +7,13 @@ const router = require('react-router');
 const { Button } = require('@sketchpixy/rubix');
 
 class UserListChat extends React.Component {
+    openChat() {
+            this.props.dispatch(actions.openChat(this.props.friend))
+        }
     render(props) {
-        var onlineFriendsList = this.props.onlineFriends.map(function(friend) {
-            return <li>{friend.name}</li>
-        })
         return (
-            <div>
-            {onlineFriendsList}
+            <div onClick={this.openChat.bind(this)}>
+            {this.props.friend}
             </div>
         )
     }
@@ -21,7 +21,7 @@ class UserListChat extends React.Component {
 
 function mapStateToProps(state, props) {
     return ({
-        onlineFriends: state.app.onlineFriends
+        friendsOnline: state.app.friendsOnline
     })
 }
 var Container = connect(mapStateToProps)(UserListChat);

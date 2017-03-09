@@ -756,9 +756,19 @@ app.use(function(err, req, res, next) {
 
 io.on('connection', function(socket) {  
      console.log('a user connected')
-     socket.on('user-online', function(userDetails) {
-      console.log(userDetails, ' is online')
-      socket.join(userDetails);
+     socket.on('user-online', function(username) {
+      UserProfile.findOne({username: username}).populate('Friends', 'username').exec(function(err, userprofile) {
+        if(err) {
+          return err;
+        }
+        console.log(userprofile.Friends)
+        userprofile.Friends.forEach(function(friend) {
+          console.log(friend.username, ' is online')
+        })
+      })
+      console.log(username, ' is online')
+      socket.join(username);
+      socket.broadcast.emit('friend-online', username);
      });
      socket.on('private-chat', function(generatedRoom) {
       console.log(generatedRoom);
@@ -767,12 +777,7 @@ io.on('connection', function(socket) {
      socket.on('private-chat-message', function(values) {
       console.log(values.message);
       console.log('generated room', values.channelID)
-      io.sockets.in(values.channelID).emit('private-chat-message', {message: values.message});
-     })
-     socket.on('workplz', function(values) {
-      console.log('why not working')
-      console.log(values)
-      io.sockets.emit('plzwork', {message: values});
+      io.sockets.in(values.channelID).emit('private-chat-message', {username: values.username, message: values.message});
      })
 })
 

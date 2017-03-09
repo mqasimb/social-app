@@ -25,18 +25,39 @@ var initialState = {
         uploadedProfilePicCloudinaryUrl: '',
         profilePosts: [],
         changeAboutMe: false,
-        userSearchResults: []
+        userSearchResults: [],
+        friendsOnline: [],
+        chatsOpen: []
     };
 
 var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
     
+    if(action.type === actions.OPEN_CHAT) {
+        var firstIndex = newState.chatsOpen.findIndex(function(friend) {
+            return friend === action.username;
+        });
+        if((firstIndex < 0) && (newState.auth.user.username != action.username)) {
+            newState.chatsOpen.push(action.username);
+            newState.chatsOpen = newState.chatsOpen.slice();
+        }
+        return newState;
+    }
+
+    if(action.type === actions.FRIEND_ONLINE) {
+        var firstIndex = newState.friendsOnline.findIndex(function(friend) {
+            return friend === action.username;
+        });
+        if((firstIndex < 0) && (newState.auth.user.username != action.username)) {
+            newState.friendsOnline.push(action.username);
+            newState.friendsOnline = newState.friendsOnline.slice();
+        }
+        return newState;
+    }
+
     if(action.type === actions.SOCKET_RECEIVED) {
-        console.log(newState.chatMessages)
-        console.log(action)
-        console.log(action.data.message)
-        newState.chatMessages.push(action.data.message);
+        newState.chatMessages.push(action.data);
         newState.chatMessages = newState.chatMessages.slice();
         return newState;
     }
