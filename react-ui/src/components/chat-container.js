@@ -22,16 +22,17 @@ class ChatContainer extends React.Component {
             console.log(data)
             this.props.dispatch(actions.socketReceived(data))
         })
+        this.socket.on('chat-started', (friend) => {
+            console.log(friend)
+            this.props.dispatch(actions.openChat(friend))
+        })
     }
 
     render(props) {
         var chatBoxStyle = {
             width: 300,
-            height: 500,
-            position: 'fixed',
-            bottom: 10,
-            right: 0,
-            'zindex': 1
+            height: 500
+            
         }
         var friendListStyle = {
             position: 'fixed',
@@ -39,10 +40,10 @@ class ChatContainer extends React.Component {
             left:0
         }
         var chats = this.props.chatsOpen.map((chat) => {
-            return <Chat socket={this.socket}/>
+            return <Chat name={chat} socket={this.socket}/>
         })
         var onlineFriendsList = this.props.friendsOnline.map((friend) => {
-            return <UserListChat friend={friend} />
+            return <UserListChat socket={this.socket} friend={friend} />
         })
         return (
             <div>

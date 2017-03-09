@@ -779,6 +779,10 @@ io.on('connection', function(socket) {
       console.log('generated room', values.channelID)
       io.sockets.in(values.channelID).emit('private-chat-message', {username: values.username, message: values.message});
      })
+     socket.on('chat-started', function(friend, username) {
+      console.log(friend, ' ---- ', username)
+      io.sockets.in(friend).emit('chat-started', username);
+     })
 })
 
 

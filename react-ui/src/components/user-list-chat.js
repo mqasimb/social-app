@@ -9,6 +9,7 @@ const { Button } = require('@sketchpixy/rubix');
 class UserListChat extends React.Component {
     openChat() {
             this.props.dispatch(actions.openChat(this.props.friend))
+            this.props.socket.emit('chat-started', this.props.friend, this.props.auth.user.username)
         }
     render(props) {
         return (
@@ -21,6 +22,7 @@ class UserListChat extends React.Component {
 
 function mapStateToProps(state, props) {
     return ({
+        auth: state.app.auth,
         friendsOnline: state.app.friendsOnline
     })
 }

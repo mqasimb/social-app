@@ -20,6 +20,7 @@ class Chat extends React.Component {
     render(props) {
         return (
             <div>
+            {this.props.name}
             <ChatBox />
             <MessageForm onSubmit={this._handleSubmit.bind(this)} form="MessageForm"/>
             </div>
