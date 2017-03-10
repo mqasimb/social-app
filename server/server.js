@@ -745,8 +745,6 @@ app.post('/users/register', function(req, res) {
 });
 
 app.get('/*', function(req, res) {
-    console.log('catch all route')
-    console.log(req.user)
     res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
 });
 
@@ -766,7 +764,6 @@ io.on('connection', function(socket) {
           console.log(friend.username, ' is online')
         })
       })
-      console.log(username, ' is online')
       socket.join(username);
       socket.broadcast.emit('friend-online', username);
      });
@@ -775,13 +772,17 @@ io.on('connection', function(socket) {
       socket.join(generatedRoom);
      })
      socket.on('private-chat-message', function(values) {
-      console.log(values.message);
       console.log('generated room', values.channelID)
-      io.sockets.in(values.channelID).emit('private-chat-message', {username: values.username, message: values.message});
+      io.sockets.in(values.channelID).emit('private-chat-message', {username: values.username, friend: values.friend, message: values.message});
      })
-     socket.on('chat-started', function(friend, username) {
-      console.log(friend, ' ---- ', username)
-      io.sockets.in(friend).emit('chat-started', username);
+     socket.on('chat-started', function(friend, username, roomName) {
+      console.log(roomName, 'roomname')
+      socket.join(roomName)
+      io.sockets.in(friend).emit('chat-started', friend, username, roomName);
+     })
+     socket.on('join-private-chat', function(roomName) {
+      console.log(roomName, 'roomname private chat')
+      socket.join(roomName)
      })
 })
 

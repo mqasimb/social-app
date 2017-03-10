@@ -8,8 +8,11 @@ const { Button } = require('@sketchpixy/rubix');
 
 class UserListChat extends React.Component {
     openChat() {
-            this.props.dispatch(actions.openChat(this.props.friend))
-            this.props.socket.emit('chat-started', this.props.friend, this.props.auth.user.username)
+            var friend = this.props.friend.toLowerCase();
+            var username = this.props.auth.user.username.toLowerCase();
+            var roomName = (friend < username) ? (friend+'-'+username) : (username+'-'+friend);
+            this.props.dispatch(actions.openChat({username: this.props.friend, roomName: roomName}))
+            this.props.socket.emit('chat-started', this.props.friend, this.props.auth.user.username, roomName)
         }
     render(props) {
         return (

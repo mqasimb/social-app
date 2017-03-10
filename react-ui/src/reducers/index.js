@@ -20,7 +20,7 @@ var initialState = {
         editComment: {},
         loadedProfile: {},
         mainProfile: {},
-        chatMessages: [],
+        chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
         profilePosts: [],
@@ -36,11 +36,15 @@ var appReducer = function(state, action) {
     
     if(action.type === actions.OPEN_CHAT) {
         var firstIndex = newState.chatsOpen.findIndex(function(friend) {
-            return friend === action.username;
+            return friend.username === action.data.username;
         });
-        if((firstIndex < 0) && (newState.auth.user.username != action.username)) {
-            newState.chatsOpen.push(action.username);
+        if((firstIndex < 0)) {
+            newState.chatsOpen.push(action.data);
             newState.chatsOpen = newState.chatsOpen.slice();
+        }
+        if(newState.chatMessages[action.data.username] === undefined) {
+            newState.chatMessages[action.data.username] = [];
+            newState.chatMessages = Object.assign({}, newState.chatMessages);
         }
         return newState;
     }
@@ -57,8 +61,8 @@ var appReducer = function(state, action) {
     }
 
     if(action.type === actions.SOCKET_RECEIVED) {
-        newState.chatMessages.push(action.data);
-        newState.chatMessages = newState.chatMessages.slice();
+        newState.chatMessages[action.data.friend].push(action.data);
+        newState.chatMessages = Object.assign({}, newState.chatMessages);
         return newState;
     }
 

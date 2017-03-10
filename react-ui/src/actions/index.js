@@ -590,6 +590,7 @@ function getSearchUserNamesSuccess(data) {
 
 const SOCKET_RECEIVED = 'SOCKET_RECEIVED';
 function socketReceived(data) {
+    console.log(data)
     return ({
         type: SOCKET_RECEIVED,
         data: data
@@ -605,10 +606,10 @@ function friendOnline(username) {
 }
 
 const OPEN_CHAT = 'OPEN_CHAT';
-function openChat(username) {
+function openChat(data) {
     return ({
         type: OPEN_CHAT,
-        username: username
+        data: data
     })
 }
 

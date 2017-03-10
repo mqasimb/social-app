@@ -8,7 +8,7 @@ const { Button } = require('@sketchpixy/rubix');
 
 class ChatBox extends React.Component {
     render(props) {
-        var messagesList = this.props.chatMessages.map(function(message) {
+        var messagesList = this.props.chatMessages[this.props.name].map(function(message) {
             return <li>{message.username}: {message.message}</li>
         })
         return (
