@@ -18,7 +18,7 @@ class ChatBox extends React.Component {
         })
         return (
             <div>
-            <Infinite containerHeight={200} elementHeight={24, 50}
+            <Infinite containerHeight={200} elementHeight={24}
           displayBottomUpwards>
             {messagesList}
             </Infinite>

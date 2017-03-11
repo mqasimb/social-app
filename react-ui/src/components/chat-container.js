@@ -16,7 +16,7 @@ class ChatContainer extends React.Component {
         this.socket = io();
         this.socket.emit('user-online', this.props.auth.user.username);
         this.socket.on('friend-online', (username) => {
-            this.props.dispatch(actions.friendOnline(username));
+            this.props.dispatch(actions.userConnect(username));
         })
         this.socket.on('private-chat-message', (data) => {
             console.log(data)
@@ -25,6 +25,9 @@ class ChatContainer extends React.Component {
         this.socket.on('chat-started', (chatData) => {
             this.socket.emit('join-private-chat', chatData.roomName)
             this.props.dispatch(actions.openChatWithSocket(chatData))
+        })
+        this.socket.on('user-disconnected', (username) => {
+            this.props.dispatch(actions.userDisconnect(username));
         })
     }
 
@@ -42,7 +45,7 @@ class ChatContainer extends React.Component {
             return <Chat key={index} name={key} socket={this.socket}/>
         });
         var onlineFriendsList = this.props.friendsOnline.map((friend, index) => {
-            return <UserListChat key={index} socket={this.socket} friend={friend} />
+            return <UserListChat key={index} socket={this.socket} friend={friend.username} />
         })
         return (
             <div>

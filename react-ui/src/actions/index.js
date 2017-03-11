@@ -647,6 +647,28 @@ function uploadMessageImage(files, friendUsername) {
     })
 }
 
+const USER_CONNECT = 'USER_CONNECT';
+function userConnect(username) {
+    return ({
+        type: USER_CONNECT,
+        username: username
+    })
+}
+
+const USER_DISCONNECT = 'USER_DISCONNECT';
+function userDisconnect(username) {
+    return ({
+        type: USER_DISCONNECT,
+        username: username
+    })
+}
+
+exports.USER_CONNECT = USER_CONNECT;
+exports.userConnect = userConnect;
+
+exports.USER_DISCONNECT = USER_DISCONNECT;
+exports.userDisconnect = userDisconnect;
+
 exports.SET_MESSAGE_IMAGE_CLOUDINARY_URL = SET_MESSAGE_IMAGE_CLOUDINARY_URL;
 exports.setMessageImageCloudinaryURL = setMessageImageCloudinaryURL;
 exports.UPLOAD_MESSAGE_IMAGE = UPLOAD_MESSAGE_IMAGE;

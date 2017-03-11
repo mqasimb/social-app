@@ -9,6 +9,7 @@ var UserProfileSchema = new mongoose.Schema({
     incomingRequests: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true}],
     outgoingRequests: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true}],
     posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
+    onlineStatus: {type: Boolean, default: false, required: true}
 });
 
 var UserProfile = mongoose.model('UserProfile', UserProfileSchema);

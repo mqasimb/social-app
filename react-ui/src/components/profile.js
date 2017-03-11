@@ -82,7 +82,7 @@ class Profile extends React.Component {
             <AboutMe text={this.props.loadedProfile.AboutMe}/>
             {(this.props.auth.user.username == this.props.params.username) ? ((this.props.changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: this.props.loadedProfile.AboutMe}}/>) : (<button onClick={this.enableAboutMeChange.bind(this)}>Change About Me</button>)) : (null)}
             <ProfilePosts posts={this.props.postData}/>
-            <FriendsList list={[{name:'Harry'}, {name:'Hermione'}, {name:'Ron'}]}/>
+            <FriendsList list={this.props.mainProfile.Friends}/>
             </div>
         )
     }

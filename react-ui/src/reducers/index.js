@@ -36,6 +36,40 @@ var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
 
+    if(action.type === actions.USER_CONNECT) {
+        var firstIndex = newState.mainProfile.Friends.findIndex(function(friend) {
+            return friend.username == action.username;
+        })
+        if(firstIndex > -1) {
+            newState.mainProfile.Friends[firstIndex].onlineStatus = true;
+            newState.mainProfile.Friends[firstIndex] = Object.assign({}, newState.mainProfile.Friends[firstIndex]);
+            newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
+            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+        }
+        newState.friendsOnline = newState.mainProfile.Friends.filter(function(friend) {
+            return friend.onlineStatus == true;
+        })
+        newState.friendsOnline = newState.friendsOnline.slice();
+        return newState;
+    }
+
+    if(action.type === actions.USER_DISCONNECT) {
+        var firstIndex = newState.mainProfile.Friends.findIndex(function(friend) {
+            return friend.username == action.username;
+        })
+        if(firstIndex > -1) {
+            newState.mainProfile.Friends[firstIndex].onlineStatus = false;
+            newState.mainProfile.Friends[firstIndex] = Object.assign({}, newState.mainProfile.Friends[firstIndex]);
+            newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
+            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+        }
+        newState.friendsOnline = newState.mainProfile.Friends.filter(function(friend) {
+            return friend.onlineStatus == true;
+        })
+        newState.friendsOnline = newState.friendsOnline.slice();
+        return newState;
+    }
+
     if(action.type === actions.UPLOAD_MESSAGE_IMAGE) {
         newState.chatImagesUpload[action.friendUsername] = action.files;
         newState.chatImagesUpload = Object.assign({}, newState.chatImagesUpload);
@@ -79,12 +113,6 @@ var appReducer = function(state, action) {
             newState.chatMessages[action.data.username] = [];
             newState.chatMessages = Object.assign({}, newState.chatMessages);
         }
-        return newState;
-    }
-
-    if(action.type === actions.FRIEND_ONLINE) {
-        newState.friendsOnline.push(action.username);
-        newState.friendsOnline = newState.friendsOnline.slice();
         return newState;
     }
 
@@ -161,6 +189,9 @@ var appReducer = function(state, action) {
     if(action.type === actions.GET_MAIN_PROFILE_SUCCESS) {
         newState.mainProfile = action.data;
         newState.mainProfile = Object.assign({}, newState.mainProfile);
+        newState.friendsOnline = action.data.Friends.filter(function(friend) {
+            return friend.onlineStatus == true;
+        })
         return newState;
     }
     

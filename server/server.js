@@ -97,7 +97,7 @@ app.post('/api/search/profile', expressJWT({ secret: config.jwtSecret}), functio
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.get('/api/profile', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    UserProfile.findOne({username: req.user.username}).populate({path: 'outgoingRequests', select:'ProfilePicture username'}).populate({path: 'incomingRequests', select:'ProfilePicture username'}).populate({path: 'Friends', select:'ProfilePicture username'}).exec(function(err, userprofile) {
+    UserProfile.findOne({username: req.user.username}).populate({path: 'outgoingRequests', select:'ProfilePicture username'}).populate({path: 'incomingRequests', select:'ProfilePicture username'}).populate({path: 'Friends', select:'ProfilePicture username onlineStatus'}).exec(function(err, userprofile) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
@@ -757,6 +757,23 @@ io.on('connection', function(socket) {
      console.log('a user connected')
      socket.on('user-online', function(username) {
       	socket.join(username);
+      	socket.username = username;
+      	if(username) {
+      		UserProfile.findOne({username: username}, function(err, userprofile) {
+      		if(err) {
+      			console.log('error finding profile')
+      			return err;
+      		}
+      		userprofile.onlineStatus = true;
+      		userprofile.save(function(err) {
+      			if(err) {
+      				console.log('error saving profile')
+      				return err;
+      			}
+      			console.log('profile saved', userprofile)
+      		})
+      	})
+      	}
       	socket.broadcast.emit('friend-online', username);
      });
      socket.on('private-chat', function(generatedRoom) {
@@ -777,6 +794,23 @@ io.on('connection', function(socket) {
       socket.join(roomName)
      })
      socket.on('disconnect', function() {
+     	if(socket.username) {
+     	UserProfile.findOne({username: socket.username}, function(err, userprofile) {
+      		if(err) {
+      			console.log('error finding profile offline')
+      			return err;
+      		}
+      		userprofile.onlineStatus = false;
+      		userprofile.save(function(err) {
+      			if(err) {
+      				console.log('error saving profile offline')
+      				return err;
+      			}
+      			console.log('profile saved offline', userprofile)
+      		})
+      	})
+     }
+     	socket.broadcast.emit('user-disconnected', socket.username)
      	//disconnect the user or change the online status of the user
      })
 })

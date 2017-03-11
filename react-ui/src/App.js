@@ -32,11 +32,13 @@ class App extends React.Component {
         <NavItem eventKey={2} onClick={this.userRegister.bind(this)}>Register</NavItem>
         </Nav>;
         var loggedInUser = <Nav pullRight><NavItem href='' onClick={this.userLogout.bind(this)}>Logout</NavItem></Nav>;
+        var topStyle={
+            marginTop: 80
+        }
         return (
-            <div>
-            <Navbar collapseOnSelect>
+            <div style={topStyle}>
+            <Navbar collapseOnSelect fixedTop inverse>
                 <Navbar.Header>
-                Whats up?
                   <Navbar.Brand>
                     <a href="/">Social-App</a>
                   </Navbar.Brand>
