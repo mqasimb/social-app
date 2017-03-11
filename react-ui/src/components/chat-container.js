@@ -32,12 +32,11 @@ class ChatContainer extends React.Component {
         var chatBoxStyle = {
             width: 300,
             height: 500
-            
         }
         var friendListStyle = {
             position: 'fixed',
-            top:0,
-            left:0
+            bottom:0,
+            right:0
         }
         var chats = Object.keys(this.props.chatsOpen).map((key, index) => {
             return <Chat key={index} name={key} socket={this.socket}/>
@@ -47,10 +46,11 @@ class ChatContainer extends React.Component {
         })
         return (
             <div>
-            <div className='chat-messages' style={chatBoxStyle}>
+            <div className='chat-messages'>
             {chats}
             </div>
             <div className='friend-list' style={friendListStyle}>
+            Online Users
             {onlineFriendsList}
             </div>
             </div>

@@ -629,6 +629,29 @@ function chatSubmit(data) {
     })
 }
 
+const SET_MESSAGE_IMAGE_CLOUDINARY_URL = 'SET_MESSAGE_IMAGE_CLOUDINARY_URL';
+function setMessageImageCloudinaryURL(url, friendUsername) {
+    return ({
+        type: SET_MESSAGE_IMAGE_CLOUDINARY_URL,
+        url: url,
+        friendUsername: friendUsername
+    })
+}
+
+const UPLOAD_MESSAGE_IMAGE = 'UPLOAD_MESSAGE_IMAGE';
+function uploadMessageImage(files, friendUsername) {
+    return ({
+        type: UPLOAD_MESSAGE_IMAGE,
+        files: files,
+        friendUsername: friendUsername
+    })
+}
+
+exports.SET_MESSAGE_IMAGE_CLOUDINARY_URL = SET_MESSAGE_IMAGE_CLOUDINARY_URL;
+exports.setMessageImageCloudinaryURL = setMessageImageCloudinaryURL;
+exports.UPLOAD_MESSAGE_IMAGE = UPLOAD_MESSAGE_IMAGE;
+exports.uploadMessageImage = uploadMessageImage;
+
 exports.chatSubmit = chatSubmit;
 exports.CHAT_SUBMIT = CHAT_SUBMIT;
 

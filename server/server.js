@@ -765,7 +765,7 @@ io.on('connection', function(socket) {
      })
      socket.on('private-chat-message', function(values) {
       console.log('generated room', values.channelID)
-      socket.broadcast.to(values.channelID).emit('private-chat-message', {username: values.username, friend: values.friend, message: values.message});
+      socket.broadcast.to(values.channelID).emit('private-chat-message', {username: values.username, friend: values.friend, message: values.message, image: values.image});
      })
      socket.on('chat-started', function(chatData) {
       console.log(chatData.roomName, 'roomname')
@@ -775,6 +775,9 @@ io.on('connection', function(socket) {
      socket.on('join-private-chat', function(roomName) {
       console.log(roomName, 'roomname private chat')
       socket.join(roomName)
+     })
+     socket.on('disconnect', function() {
+     	//disconnect the user or change the online status of the user
      })
 })
 

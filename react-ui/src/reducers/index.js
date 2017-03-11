@@ -27,14 +27,32 @@ var initialState = {
         changeAboutMe: false,
         userSearchResults: [],
         friendsOnline: [],
-        chatsOpen: []
+        chatsOpen: [],
+        chatImagesUpload: {},
+        chatImagesUploadUrl: {}
     };
 
 var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
+
+    if(action.type === actions.UPLOAD_MESSAGE_IMAGE) {
+        newState.chatImagesUpload[action.friendUsername] = action.files;
+        newState.chatImagesUpload = Object.assign({}, newState.chatImagesUpload);
+        return newState;
+    }
     
+    if(action.type === actions.SET_MESSAGE_IMAGE_CLOUDINARY_URL) {
+        newState.chatImagesUploadUrl[action.friendUsername] = action.url;
+        newState.chatImagesUploadUrl = Object.assign({}, newState.chatImagesUploadUrl);
+        return newState;
+    }
+
     if(action.type === actions.CHAT_SUBMIT) {
+        if(newState.chatImagesUploadUrl[action.data.friend]) {
+            newState.chatImagesUploadUrl[action.data.friend] = null;
+            newState.chatImagesUploadUrl = Object.assign({}, newState.chatImagesUploadUrl)
+        }
         newState.chatMessages[action.data.friend].push(action.data);
         newState.chatMessages = Object.assign({}, newState.chatMessages);
         return newState;
