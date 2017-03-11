@@ -34,13 +34,28 @@ var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
     
+    if(action.type === actions.CHAT_SUBMIT) {
+        newState.chatMessages[action.data.friend].push(action.data);
+        newState.chatMessages = Object.assign({}, newState.chatMessages);
+        return newState;
+    }
+
     if(action.type === actions.OPEN_CHAT) {
-        var firstIndex = newState.chatsOpen.findIndex(function(friend) {
-            return friend.username === action.data.username;
-        });
-        if((firstIndex < 0)) {
-            newState.chatsOpen.push(action.data);
-            newState.chatsOpen = newState.chatsOpen.slice();
+        if((action.data.friend != newState.auth.user.username)) {
+            newState.chatsOpen[action.data.friend] = action.data.roomName;
+            newState.chatsOpen = Object.assign({}, newState.chatsOpen);
+        }
+        if(newState.chatMessages[action.data.friend] === undefined) {
+            newState.chatMessages[action.data.friend] = [];
+            newState.chatMessages = Object.assign({}, newState.chatMessages);
+        }
+        return newState;
+    }
+
+    if(action.type === actions.OPEN_CHAT_WITH_SOCKET) {
+        if((action.data.username != newState.auth.user.username)) {
+            newState.chatsOpen[action.data.username] = action.data.roomName;
+            newState.chatsOpen = Object.assign({}, newState.chatsOpen);
         }
         if(newState.chatMessages[action.data.username] === undefined) {
             newState.chatMessages[action.data.username] = [];
@@ -50,18 +65,13 @@ var appReducer = function(state, action) {
     }
 
     if(action.type === actions.FRIEND_ONLINE) {
-        var firstIndex = newState.friendsOnline.findIndex(function(friend) {
-            return friend === action.username;
-        });
-        if((firstIndex < 0) && (newState.auth.user.username != action.username)) {
-            newState.friendsOnline.push(action.username);
-            newState.friendsOnline = newState.friendsOnline.slice();
-        }
+        newState.friendsOnline.push(action.username);
+        newState.friendsOnline = newState.friendsOnline.slice();
         return newState;
     }
 
-    if(action.type === actions.SOCKET_RECEIVED) {
-        newState.chatMessages[action.data.friend].push(action.data);
+    if(action.type === actions.MESSAGE_RECEIVED) {
+        newState.chatMessages[action.data.username].push(action.data);
         newState.chatMessages = Object.assign({}, newState.chatMessages);
         return newState;
     }

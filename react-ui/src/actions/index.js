@@ -588,11 +588,11 @@ function getSearchUserNamesSuccess(data) {
     })
 }
 
-const SOCKET_RECEIVED = 'SOCKET_RECEIVED';
-function socketReceived(data) {
+const MESSAGE_RECEIVED = 'MESSAGE_RECEIVED';
+function messageReceived(data) {
     console.log(data)
     return ({
-        type: SOCKET_RECEIVED,
+        type: MESSAGE_RECEIVED,
         data: data
     })
 }
@@ -613,14 +613,36 @@ function openChat(data) {
     })
 }
 
+const OPEN_CHAT_WITH_SOCKET = 'OPEN_CHAT_WITH_SOCKET';
+function openChatWithSocket(data) {
+    return ({
+        type: OPEN_CHAT_WITH_SOCKET,
+        data: data
+    })
+}
+
+const CHAT_SUBMIT = 'CHAT_SUBMIT';
+function chatSubmit(data) {
+    return ({
+        type: CHAT_SUBMIT,
+        data: data
+    })
+}
+
+exports.chatSubmit = chatSubmit;
+exports.CHAT_SUBMIT = CHAT_SUBMIT;
+
+exports.OPEN_CHAT_WITH_SOCKET = OPEN_CHAT_WITH_SOCKET;
+exports.openChatWithSocket = openChatWithSocket;
+
 exports.OPEN_CHAT = OPEN_CHAT;
 exports.openChat = openChat;
 
 exports.FRIEND_ONLINE = FRIEND_ONLINE;
 exports.friendOnline = friendOnline;
 
-exports.SOCKET_RECEIVED = SOCKET_RECEIVED;
-exports.socketReceived = socketReceived;
+exports.MESSAGE_RECEIVED = MESSAGE_RECEIVED;
+exports.messageReceived = messageReceived;
 
 exports.getSearchUserNames = getSearchUserNames;
 exports.GET_SEARCH_USERNAMES_SUCCESS = GET_SEARCH_USERNAMES_SUCCESS;

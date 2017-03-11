@@ -752,20 +752,12 @@ app.use(function(err, req, res, next) {
    res.send(err);
 });
 
+var onlineUsers = [];
 io.on('connection', function(socket) {  
      console.log('a user connected')
      socket.on('user-online', function(username) {
-      UserProfile.findOne({username: username}).populate('Friends', 'username').exec(function(err, userprofile) {
-        if(err) {
-          return err;
-        }
-        console.log(userprofile.Friends)
-        userprofile.Friends.forEach(function(friend) {
-          console.log(friend.username, ' is online')
-        })
-      })
-      socket.join(username);
-      socket.broadcast.emit('friend-online', username);
+      	socket.join(username);
+      	socket.broadcast.emit('friend-online', username);
      });
      socket.on('private-chat', function(generatedRoom) {
       console.log(generatedRoom);
@@ -773,12 +765,12 @@ io.on('connection', function(socket) {
      })
      socket.on('private-chat-message', function(values) {
       console.log('generated room', values.channelID)
-      io.sockets.in(values.channelID).emit('private-chat-message', {username: values.username, friend: values.friend, message: values.message});
+      socket.broadcast.to(values.channelID).emit('private-chat-message', {username: values.username, friend: values.friend, message: values.message});
      })
-     socket.on('chat-started', function(friend, username, roomName) {
-      console.log(roomName, 'roomname')
-      socket.join(roomName)
-      io.sockets.in(friend).emit('chat-started', friend, username, roomName);
+     socket.on('chat-started', function(chatData) {
+      console.log(chatData.roomName, 'roomname')
+      socket.join(chatData.roomName)
+      socket.broadcast.to(chatData.friend).emit('chat-started', chatData);
      })
      socket.on('join-private-chat', function(roomName) {
       console.log(roomName, 'roomname private chat')

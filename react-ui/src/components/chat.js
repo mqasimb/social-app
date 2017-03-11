@@ -12,16 +12,11 @@ const UserListChat = require('./user-list-chat');
 
 class Chat extends React.Component {
     componentDidMount() {
-        var firstIndex = this.props.chatsOpen.findIndex((friend) => {
-            return friend.username === this.props.name
-        })
-        this.props.socket.emit('private-chat', this.props.chatsOpen[firstIndex].roomName)
+        this.props.socket.emit('private-chat', this.props.chatsOpen[this.props.name])
     }
     _handleSubmit(values) {
-        var firstIndex = this.props.chatsOpen.findIndex((friend) => {
-            return friend.username === this.props.name
-        })
-        this.props.socket.emit('private-chat-message', {username: this.props.auth.user.username, friend: this.props.chatsOpen[firstIndex].username, message:values.message, channelID: this.props.chatsOpen[firstIndex].roomName})
+        this.props.socket.emit('private-chat-message', {username: this.props.auth.user.username, friend: this.props.name, message:values.message, channelID: this.props.chatsOpen[this.props.name]})
+        this.props.dispatch(actions.chatSubmit({username: this.props.auth.user.username, friend: this.props.name, message:values.message, channelID: this.props.chatsOpen[this.props.name]}))
     }
     render(props) {
         return (
