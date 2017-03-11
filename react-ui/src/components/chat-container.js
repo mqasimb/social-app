@@ -10,8 +10,26 @@ const io = require('socket.io-client');
 const MessageForm = require('./message-form');
 const UserListChat = require('./user-list-chat');
 const Chat = require('./chat');
+const Notifications = require('react-notification-system-redux');
+
+const friendRequestReceived = {
+  // uid: 'once-please', // you can specify your own uid if required 
+  username: null,
+  title: 'Friend Request',
+  message: 'New Friend Request Received',
+  position: 'tr',
+  autoDismiss: 0,
+  action: {
+    label: 'View Requests',
+    callback: () => alert('Friend Requests')
+  }
+};
 
 class ChatContainer extends React.Component {
+    handleClick() {
+            console.log('handle click ran');
+            this.props.dispatch(Notifications.success(friendRequestReceived));
+        }
     componentDidMount() {
         this.socket = io();
         this.socket.emit('user-online', this.props.auth.user.username);
@@ -28,6 +46,11 @@ class ChatContainer extends React.Component {
         })
         this.socket.on('user-disconnected', (username) => {
             this.props.dispatch(actions.userDisconnect(username));
+        })
+        this.socket.on('friend-request', (requestUsername) => {
+            console.log('friend request reached back socket')
+            friendRequestReceived.username = requestUsername;
+            this.handleClick()
         })
     }
 

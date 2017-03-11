@@ -793,6 +793,10 @@ io.on('connection', function(socket) {
       console.log(roomName, 'roomname private chat')
       socket.join(roomName)
      })
+     socket.on('friend-request', function(requestUsername) {
+     	console.log('friend request username ', requestUsername)
+     	socket.broadcast.to(requestUsername).emit('friend-request')
+     })
      socket.on('disconnect', function() {
      	if(socket.username) {
      	UserProfile.findOne({username: socket.username}, function(err, userprofile) {

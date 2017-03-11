@@ -11,6 +11,8 @@ const { connect } = require('react-redux');
 const AsyncTypeahead = require('react-bootstrap-typeahead').AsyncTypeahead;
 const ChatContainer = require('./components/chat-container');
 
+const Notifications = require('react-notification-system-redux');
+
 class App extends React.Component {
     userLogout(event) {
         event.preventDefault();
@@ -25,6 +27,7 @@ class App extends React.Component {
         event.preventDefault();
         router.browserHistory.push('/register');;
     }
+
     render(props) {
         var isLoggedIn = this.props.auth.authenticated;
         var loggedOutUser = <Nav pullRight>
@@ -35,8 +38,24 @@ class App extends React.Component {
         var topStyle={
             marginTop: 80
         }
+        var {notifications} = this.props;
+        const notificationStyle = {
+          NotificationItem: { // Override the notification item 
+            DefaultStyle: { // Applied to every notification, regardless of the notification level 
+              margin: '10px 5px 2px 1px'
+            },
+     
+            success: { // Applied only to the success notification item 
+              color: 'red'
+            }
+          }
+        };
         return (
             <div style={topStyle}>
+            <Notifications
+                notifications={notifications}
+                style={notificationStyle}
+              />
             <Navbar collapseOnSelect fixedTop inverse>
                 <Navbar.Header>
                   <Navbar.Brand>
@@ -58,7 +77,8 @@ class App extends React.Component {
 function mapStateToProps(state, props) {
     return ({
         auth: state.app.auth,
-        userSearchResults: state.app.userSearchResults
+        userSearchResults: state.app.userSearchResults,
+        notifications: state.notifications
     })
 }
 

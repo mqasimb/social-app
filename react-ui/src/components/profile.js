@@ -15,9 +15,11 @@ const ChangePictureModal = require('./change-picture-modal');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
 const AboutMeForm = require('./aboutme-form');
+const io = require('socket.io-client');
 
 class Profile extends React.Component {
     componentDidMount() {
+        this.socket = io();
         this.props.dispatch(actions.getProfile(this.props.params.username))
     }
     changeProfilePicture() {
@@ -43,6 +45,7 @@ class Profile extends React.Component {
     }
     addFriend() {
         this.props.dispatch(actions.sendFriendRequest(this.props.params.username))
+        this.socket.emit('friend-request', this.props.params.username)
     }
     cancelRequest() {
         this.props.dispatch(actions.cancelFriendRequest(this.props.params.username))
