@@ -1,10 +1,10 @@
 var React = require('react');
 var moment = require('moment');
-const { ListGroupItem, Button } = require('@sketchpixy/rubix');
 const { connect } = require('react-redux');
 const actions = require('../actions/index');
 const router = require('react-router');
 const EditCommentForm = require('./edit-comment-form');
+const { ListGroupItem, Panel, Modal, Button, Media } = require('@sketchpixy/rubix');
 
 class Comment extends React.Component {
     deleteClick(event) {
@@ -38,7 +38,17 @@ class Comment extends React.Component {
       var editOn = <ListGroupItem><EditCommentForm form={this.props.id} onSubmit={this.editComment.bind(this)} cancel={this.cancelEdit.bind(this)} initialValues={{comment: this.props.comment}} /></ListGroupItem>;
         return (
             <div>
-            {(this.props.editComment[this.props.id]) ? (editOn) : (notEdit)}
+            {(this.props.editComment[this.props.id]) ? (editOn) : (<Media>
+             <Media.Left>
+                <img width={64} height={64} src={this.props.profilePicture} alt="Image"/>
+              </Media.Left>
+              <Media.Body>
+                <Media.Heading>{this.props.username}</Media.Heading>
+                {isEdit} {isDelete}
+                <p>{this.props.comment}</p>
+                <p>{this.props.date}</p>
+              </Media.Body>
+            </Media>)}
             </div>
         )
     }

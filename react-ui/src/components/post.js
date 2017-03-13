@@ -55,8 +55,7 @@ class Post extends React.Component {
         var image = (this.props.image) ? (<img src={this.props.image} style={imageStyle}/>) : (null)
         return (
             <div>
-            <Panel>
-
+            
             <Media>
              <Media.Left>
                 <img width={64} height={64} src={this.props.profilePicture} alt="Image"/>
@@ -64,18 +63,19 @@ class Post extends React.Component {
               <Media.Body>
                 <Media.Heading>{this.props.name}</Media.Heading>
                 <p>{moment(this.props.date).format('MMMM Do YYYY, h:mm a')}</p>
-              </Media.Body>
-            </Media>
-            <Link to={'/post/'+this.props.id}><Content content={this.props.content}/></Link><Link to={'/profile/'+this.props.name}>{this.props.name}</Link>
-            {image}
-            </Panel>
+                <Link to={'/post/'+this.props.id}><Content content={this.props.content}/></Link><Link to={'/profile/'+this.props.name}>{this.props.name}</Link>
+                {image}
             <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
-            {isEdit}
-            {isDelete}
             <DeleteModal key={uuid.v4()} delete={this.deleteClick.bind(this)} close={this.close.bind(this)}/>
-            Comments
-            <CommentList comments={this.props.comments}/>
             <CommentForm onSubmit={this.submitComment.bind(this)} form={this.props.id}/>
+            <h2>Comments</h2>
+            <CommentList comments={this.props.comments}/>
+              </Media.Body>
+              <Media.Right>
+                {isEdit}{isDelete}
+              </Media.Right>
+            </Media>
+
             </div>
         )
     }

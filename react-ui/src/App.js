@@ -14,6 +14,8 @@ const axios = require('axios');
 const Notifications = require('react-notification-system-redux');
 const { LinkContainer } = require('react-router-bootstrap');
 
+const AsyncSearch = require('./components/asyncsearch')
+
 class App extends React.Component {
     userLogout(event) {
         event.preventDefault();
@@ -66,6 +68,9 @@ class App extends React.Component {
                   </Navbar.Brand>
                   <Navbar.Toggle />
                 </Navbar.Header>
+                <Navbar.Form pullLeft>
+                <AsyncSearch />
+                </Navbar.Form>
                 <Navbar.Collapse>
                     {(isLoggedIn) ? (loggedInUser) : (loggedOutUser)}
                 </Navbar.Collapse>

@@ -79,11 +79,11 @@ app.get('/users/logout', function(req, res){
 });
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.post('/api/search/profile', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    console.log(req.body)
-    if(req.body.autoSearch == '') {
+    console.log(req.body, 'search query')
+    if(req.body.search == '') {
         res.json([])
     }
-    UserProfile.find({username: new RegExp(req.body.autoSearch, "i")}).exec(function(err, userprofile) {
+    UserProfile.find({username: new RegExp(req.body.search, "i")}).exec(function(err, userprofile) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
@@ -174,7 +174,7 @@ app.put('/api/profile/aboutme/:username', expressJWT({ secret: config.jwtSecret}
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.get('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    Post.find({}).populate('profile', 'ProfilePicture').exec(function(err, post) {
+    Post.find({}).populate('profile', 'ProfilePicture').populate('comments.profile', 'ProfilePicture').exec(function(err, post) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
@@ -465,7 +465,6 @@ app.put('/api/friend/remove/:username', expressJWT({ secret: config.jwtSecret}),
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.post('/api/comments/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    console.log(req.params.id)
     Post.findOne({_id: req.params.id}, function(err, post) {
         console.log(post, 'how is found?')
         if(err) {
@@ -473,14 +472,19 @@ app.post('/api/comments/:id', expressJWT({ secret: config.jwtSecret}), function(
                 message: 'Internal Server Error'
             });
         }
-        console.log(post, 'comment post');
-        post.comments.push({comment: req.body.comment, username: req.user.username, date: Date.now(), post: req.params.id});
-        console.log(post.comments);
-        console.log(post.comments.length);
-        post.save(function(err) {
-            if(err) return res.json({message: err})
-          res.json(post);  
-        })
+        UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
+        	if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        	}
+	        post.comments.push({comment: req.body.comment, username: req.user.username, date: Date.now(), post: req.params.id, profile: userprofile._id});
+	        console.log(post.comments);
+	        post.save(function(err) {
+	        if(err) return res.json({message: err})
+	          res.json(post);  
+	        })
+        })        
     })
 });
 
