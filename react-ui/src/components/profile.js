@@ -45,19 +45,23 @@ class Profile extends React.Component {
     }
     addFriend() {
         this.props.dispatch(actions.sendFriendRequest(this.props.params.username))
-        this.socket.emit('friend-request', this.props.params.username)
+        this.socket.emit('friend-request', this.props.params.username, this.props.mainProfile.username)
     }
     cancelRequest() {
-        this.props.dispatch(actions.cancelFriendRequest(this.props.params.username))
+        this.props.dispatch(actions.cancelFriendRequest(this.props.params.username));
+        this.socket.emit('cancel-friend-request', this.props.params.username, this.props.mainProfile.username);
     }
     acceptRequest() {
-        this.props.dispatch(actions.confirmFriendRequest(this.props.params.username))
+        this.props.dispatch(actions.confirmFriendRequest(this.props.params.username));
+        this.socket.emit('accept-friend-request', this.props.params.username, this.props.mainProfile.username);
     }
     denyRequest() {
-        this.props.dispatch(actions.denyFriendRequest(this.props.params.username))
+        this.props.dispatch(actions.denyFriendRequest(this.props.params.username));
+        this.socket.emit('deny-friend-request', this.props.params.username, this.props.mainProfile.username);
     }
     removeFriend() {
-        this.props.dispatch(actions.removeFriendRequest(this.props.params.username))
+        this.props.dispatch(actions.removeFriendRequest(this.props.params.username));
+        this.socket.emit('remove-friend', this.props.params.username, this.props.mainProfile.username);
     }
     render(props) {
         var acceptFriendRequest = this.props.mainProfile.incomingRequests.findIndex((request) => {

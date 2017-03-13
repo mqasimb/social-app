@@ -23,7 +23,7 @@ var PostSchema = new mongoose.Schema({
     likes: [LikesSchema],
     image: String,
     profile: {type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile'},
-    date: {type: Date, default: Date.now()}
+    date: Date
 })
 
 var Post = mongoose.model('Post', PostSchema);

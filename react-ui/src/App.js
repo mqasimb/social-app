@@ -10,31 +10,34 @@ const actions = require('./actions/index');
 const { connect } = require('react-redux');
 const AsyncTypeahead = require('react-bootstrap-typeahead').AsyncTypeahead;
 const ChatContainer = require('./components/chat-container');
-
+const axios = require('axios');
 const Notifications = require('react-notification-system-redux');
+const { LinkContainer } = require('react-router-bootstrap');
 
 class App extends React.Component {
     userLogout(event) {
         event.preventDefault();
         this.props.dispatch(actions.logoutAction());
-        router.browserHistory.push('/login');;
+        router.browserHistory.push('/login');
     }
     userLogin(event) {
         event.preventDefault();
-        router.browserHistory.push('/login');;
+        router.browserHistory.push('/login');
     }
     userRegister(event) {
         event.preventDefault();
-        router.browserHistory.push('/register');;
+        router.browserHistory.push('/register');
     }
-
     render(props) {
         var isLoggedIn = this.props.auth.authenticated;
         var loggedOutUser = <Nav pullRight>
-        <NavItem eventKey={1} onClick={this.userLogin.bind(this)}>Login</NavItem>
-        <NavItem eventKey={2} onClick={this.userRegister.bind(this)}>Register</NavItem>
+        <LinkContainer to='/login'><NavItem eventKey={1}>Login</NavItem></LinkContainer>
+        <LinkContainer to='/register'><NavItem eventKey={2}>Register</NavItem></LinkContainer>
         </Nav>;
-        var loggedInUser = <Nav pullRight><NavItem href='' onClick={this.userLogout.bind(this)}>Logout</NavItem></Nav>;
+        var loggedInUser = <Nav pullRight><LinkContainer to={'/profile/'+this.props.auth.user.username}><NavItem>{this.props.auth.user.username}</NavItem></LinkContainer>
+        <LinkContainer to='/'><NavItem>Notifications</NavItem></LinkContainer>
+        <LinkContainer to='/friendRequests'><NavItem>Friend Requests</NavItem></LinkContainer>
+        <NavItem href='' onClick={this.userLogout.bind(this)}>Logout</NavItem></Nav>;
         var topStyle={
             marginTop: 80
         }
@@ -59,7 +62,7 @@ class App extends React.Component {
             <Navbar collapseOnSelect fixedTop inverse>
                 <Navbar.Header>
                   <Navbar.Brand>
-                    <a href="/">Social-App</a>
+                    <Link to='/'>Social-App</Link>
                   </Navbar.Brand>
                   <Navbar.Toggle />
                 </Navbar.Header>

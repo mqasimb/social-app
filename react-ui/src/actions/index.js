@@ -1,4 +1,3 @@
-var fetch = require('isomorphic-fetch');
 var axios = require('axios');
 var jwtdecode = require('jwt-decode');
 var router = require('react-router');
@@ -332,9 +331,6 @@ function submitEdittedPost(postID, data) {
     }
 }
 
-const CLOUDINARY_UPLOAD_PRESET = 'khh5rnsu';
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/your_cloudinary_app_name/upload';
-
 const SET_UPLOAD_FILE_CLOUDINARY_URL = 'SET_UPLOAD_FILE_CLOUDINARY_URL';
 function setCloudinaryURL(url) {
     return ({
@@ -457,7 +453,7 @@ function sendFriendRequest(username) {
         return axios.post('/api/friend/add/'+username)
         .then(function(response) {
             console.log(response.data)
-            dispatch(sendFriendRequestSuccesful());
+            dispatch(sendFriendRequestSuccesful(username));
         })
         .catch(function(err) {
             console.log(err);
@@ -466,9 +462,10 @@ function sendFriendRequest(username) {
 }
 
 const SEND_FRIEND_REQUEST_SUCCESFUL = 'SEND_FRIEND_REQUEST_SUCCESFUL' 
-function sendFriendRequestSuccesful() {
+function sendFriendRequestSuccesful(username) {
     return({
-        type: SEND_FRIEND_REQUEST_SUCCESFUL
+        type: SEND_FRIEND_REQUEST_SUCCESFUL,
+        username: username
     })
 }
 
@@ -476,7 +473,7 @@ function cancelFriendRequest(username) {
     return function(dispatch) {
         return axios.put('/api/friend/cancel/'+username)
         .then(function(response) {
-            dispatch(cancelFriendRequestSuccesful());
+            dispatch(cancelFriendRequestSuccesful(username));
         })
         .catch(function(err) {
             console.log(err);
@@ -485,9 +482,10 @@ function cancelFriendRequest(username) {
 }
 
 const CANCEL_FRIEND_REQUEST_SUCCESFUL = 'CANCEL_FRIEND_REQUEST_SUCCESFUL' 
-function cancelFriendRequestSuccesful() {
+function cancelFriendRequestSuccesful(username) {
     return({
-        type: CANCEL_FRIEND_REQUEST_SUCCESFUL
+        type: CANCEL_FRIEND_REQUEST_SUCCESFUL,
+        username: username
     })
 }
 
@@ -495,7 +493,7 @@ function confirmFriendRequest(username) {
     return function(dispatch) {
         return axios.put('/api/friend/confirm/'+username)
         .then(function(response) {
-            dispatch(confirmFriendRequestSuccesful());
+            dispatch(confirmFriendRequestSuccesful(username));
         })
         .catch(function(err) {
             console.log(err);
@@ -504,9 +502,10 @@ function confirmFriendRequest(username) {
 }
 
 const CONFIRM_FRIEND_REQUEST_SUCCESFUL = 'CONFIRM_FRIEND_REQUEST_SUCCESFUL' 
-function confirmFriendRequestSuccesful(aboutMe) {
+function confirmFriendRequestSuccesful(username) {
     return({
-        type: CONFIRM_FRIEND_REQUEST_SUCCESFUL
+        type: CONFIRM_FRIEND_REQUEST_SUCCESFUL,
+        username: username
     })
 }
 
@@ -514,7 +513,7 @@ function denyFriendRequest(username) {
     return function(dispatch) {
         return axios.put('/api/friend/deny/'+username)
         .then(function(response) {
-            dispatch(denyFriendRequestSuccesful());
+            dispatch(denyFriendRequestSuccesful(username));
         })
         .catch(function(err) {
             console.log(err);
@@ -523,9 +522,10 @@ function denyFriendRequest(username) {
 }
 
 const DENY_FRIEND_REQUEST_SUCCESFUL = 'DENY_FRIEND_REQUEST_SUCCESFUL' 
-function denyFriendRequestSuccesful() {
+function denyFriendRequestSuccesful(username) {
     return({
-        type: DENY_FRIEND_REQUEST_SUCCESFUL
+        type: DENY_FRIEND_REQUEST_SUCCESFUL,
+        username: username
     })
 }
 
@@ -533,7 +533,7 @@ function removeFriendRequest(username) {
     return function(dispatch) {
         return axios.put('/api/friend/remove/'+username)
         .then(function(response) {
-            dispatch(removeFriendRequestSuccesful());
+            dispatch(removeFriendRequestSuccesful(username));
         })
         .catch(function(err) {
             console.log(err);
@@ -542,9 +542,50 @@ function removeFriendRequest(username) {
 }
 
 const REMOVE_FRIEND_REQUEST_SUCCESFUL = 'REMOVE_FRIEND_REQUEST_SUCCESFUL' 
-function removeFriendRequestSuccesful(aboutMe) {
+function removeFriendRequestSuccesful(username) {
     return({
-        type: REMOVE_FRIEND_REQUEST_SUCCESFUL
+        type: REMOVE_FRIEND_REQUEST_SUCCESFUL,
+        username: username
+    })
+}
+
+const RECEIVED_FRIEND_REQUEST = 'RECEIVED_FRIEND_REQUEST' 
+function receivedFriendRequest(username) {
+    return({
+        type: RECEIVED_FRIEND_REQUEST,
+        username: username
+    })
+}
+
+const ACCEPTED_FRIEND_REQUEST = 'ACCEPTED_FRIEND_REQUEST' 
+function acceptedFriendRequest(username) {
+    return({
+        type: ACCEPTED_FRIEND_REQUEST,
+        username: username
+    })
+}
+
+const CANCELLED_FRIEND_REQUEST = 'CANCELLED_FRIEND_REQUEST' 
+function cancelledFriendRequest(username) {
+    return({
+        type: CANCELLED_FRIEND_REQUEST,
+        username: username
+    })
+}
+
+const DENIED_FRIEND_REQUEST = 'DENIED_FRIEND_REQUEST' 
+function deniedFriendRequest(username) {
+    return({
+        type: DENIED_FRIEND_REQUEST,
+        username: username
+    })
+}
+
+const REMOVED_AS_FRIEND = 'REMOVED_AS_FRIEND' 
+function removedAsFriend(username) {
+    return({
+        type: REMOVED_AS_FRIEND,
+        username: username
     })
 }
 
@@ -662,6 +703,21 @@ function userDisconnect(username) {
         username: username
     })
 }
+
+exports.REMOVED_AS_FRIEND = REMOVED_AS_FRIEND;
+exports.removedAsFriend = removedAsFriend;
+
+exports.RECEIVED_FRIEND_REQUEST = RECEIVED_FRIEND_REQUEST; 
+exports.receivedFriendRequest = receivedFriendRequest;
+    
+exports.ACCEPTED_FRIEND_REQUEST = ACCEPTED_FRIEND_REQUEST; 
+exports.acceptedFriendRequest = acceptedFriendRequest;
+
+exports.CANCELLED_FRIEND_REQUEST = CANCELLED_FRIEND_REQUEST; 
+exports.cancelledFriendRequest = cancelledFriendRequest;
+
+exports.DENIED_FRIEND_REQUEST = DENIED_FRIEND_REQUEST
+exports.deniedFriendRequest = deniedFriendRequest; 
 
 exports.USER_CONNECT = USER_CONNECT;
 exports.userConnect = userConnect;

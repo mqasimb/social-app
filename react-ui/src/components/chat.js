@@ -1,5 +1,5 @@
-var React = require('react');
-var { connect } = require('react-redux');
+const React = require('react');
+const { connect } = require('react-redux');
 const Content = require('./content');
 const actions = require('../actions/index');
 const LikeBox = require('./likebox');
@@ -11,6 +11,7 @@ const MessageForm = require('./message-form');
 const UserListChat = require('./user-list-chat');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
+const apikeys = require('../../../apikeys');
 
 class Chat extends React.Component {
     componentDidMount() {
@@ -25,10 +26,10 @@ class Chat extends React.Component {
         this.handleImageUpload(files[0]);
     }
     handleImageUpload(file) {
-    let upload = request.post('https://api.cloudinary.com/v1_1/mqasimb/image/upload')
-                        .field('api_key', '875199226668767')
-                        .field('api-secret', 'pRC9jsjqVMw7QALtFXyb4__Wj0w')
-                        .field('upload_preset', 'khh5rnsu')
+    let upload = request.post(apikeys.CLOUDINARY_UPLOAD_URL)
+                        .field('api_key', apikeys.CLOUDINARY_API_KEY)
+                        .field('api-secret', apikeys.CLOUDINARY_API_SECRET)
+                        .field('upload_preset', apikeys.CLOUDINARY_UPLOAD_PRESET)
                         .field('file', file);
 
     upload.end((err, response) => {

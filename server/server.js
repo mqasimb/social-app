@@ -7,7 +7,6 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var unless = require('express-unless');
 var cors = require('cors')
-const cloudinary = require('cloudinary');
 
 var config = require('./config');
 
@@ -215,7 +214,7 @@ app.post('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res
       if(err) {
           return res.json({message: 'Internal Server Error'});
       }
-      Post.create({content: req.body.content, image: req.body.image, profile: userprofile._id, name:req.user.username}, function(err, post) {
+      Post.create({content: req.body.content, image: req.body.image, profile: userprofile._id, name:req.user.username, date: Date.now()}, function(err, post) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
@@ -607,11 +606,6 @@ app.put('/api/likes/:id', expressJWT({ secret: config.jwtSecret}), function(req,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-cloudinary.config({ 
-  cloud_name: 'mqasimb', 
-  api_key: 'mqasimb', 
-  api_secret: 'pRC9jsjqVMw7QALtFXyb4__Wj0w' 
-});
 var strategy = new LocalStrategy(function(username, password, callback) {
     User.findOne({
         username: username
@@ -793,10 +787,26 @@ io.on('connection', function(socket) {
       console.log(roomName, 'roomname private chat')
       socket.join(roomName)
      })
-     socket.on('friend-request', function(requestUsername) {
+     socket.on('friend-request', function(otherUsername, requestUsername) {
      	console.log('friend request username ', requestUsername)
-     	socket.broadcast.to(requestUsername).emit('friend-request')
+     	socket.broadcast.to(otherUsername).emit('friend-request', requestUsername)
      })
+     socket.on('accept-friend-request', function(otherUsername, requestUsername) {
+     	console.log('accepted request', requestUsername)
+     	socket.broadcast.to(otherUsername).emit('accept-friend-request', requestUsername)
+     })
+     socket.on('cancel-friend-request', function(otherUsername, requestUsername) {
+     	console.log('cancelled request', requestUsername)
+     	socket.broadcast.to(otherUsername).emit('cancel-friend-request', requestUsername)
+     })
+     socket.on('deny-friend-request', function(otherUsername, requestUsername) {
+     	console.log('denied request', requestUsername)
+     	socket.broadcast.to(otherUsername).emit('deny-friend-request', requestUsername)
+     })
+     socket.on('remove-friend', (otherUsername, requestUsername) => {
+        console.log('friend request reached back socket')
+        socket.broadcast.to(otherUsername).emit('remove-friend', requestUsername)
+        })
      socket.on('disconnect', function() {
      	if(socket.username) {
      	UserProfile.findOne({username: socket.username}, function(err, userprofile) {

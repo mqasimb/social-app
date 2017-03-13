@@ -5,6 +5,7 @@ const actions = require('../actions/index');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
 const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button } = require('@sketchpixy/rubix');
+const apikeys = require('../../../apikeys');
 
 class NewPost extends React.Component {
     postForm(event) {
@@ -23,10 +24,10 @@ class NewPost extends React.Component {
         this.handleImageUpload(files[0]);
     }
     handleImageUpload(file) {
-    let upload = request.post('https://api.cloudinary.com/v1_1/mqasimb/image/upload')
-                        .field('api_key', '875199226668767')
-                        .field('api-secret', 'pRC9jsjqVMw7QALtFXyb4__Wj0w')
-                        .field('upload_preset', 'khh5rnsu')
+    let upload = request.post(apikeys.CLOUDINARY_UPLOAD_URL)
+                        .field('api_key', apikeys.CLOUDINARY_API_KEY)
+                        .field('api-secret', apikeys.CLOUDINARY_API_SECRET)
+                        .field('upload_preset', apikeys.CLOUDINARY_UPLOAD_PRESET)
                         .field('file', file);
 
     upload.end((err, response) => {

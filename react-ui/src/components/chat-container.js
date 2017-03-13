@@ -14,14 +14,13 @@ const Notifications = require('react-notification-system-redux');
 
 const friendRequestReceived = {
   // uid: 'once-please', // you can specify your own uid if required 
-  username: null,
   title: 'Friend Request',
   message: 'New Friend Request Received',
   position: 'tr',
   autoDismiss: 0,
   action: {
     label: 'View Requests',
-    callback: () => alert('Friend Requests')
+    callback: () => (router.browserHistory.push('/friendrequests'))
   }
 };
 
@@ -49,8 +48,28 @@ class ChatContainer extends React.Component {
         })
         this.socket.on('friend-request', (requestUsername) => {
             console.log('friend request reached back socket')
-            friendRequestReceived.username = requestUsername;
             this.handleClick()
+            this.props.dispatch(actions.receivedFriendRequest(requestUsername))
+        })
+        this.socket.on('accept-friend-request', (requestUsername) => {
+            console.log('friend request reached back socket')
+            this.handleClick()
+            this.props.dispatch(actions.acceptedFriendRequest(requestUsername))
+        })
+        this.socket.on('cancel-friend-request', (requestUsername) => {
+            console.log('friend request reached back socket')
+            this.handleClick()
+            this.props.dispatch(actions.cancelledFriendRequest(requestUsername))
+        })
+        this.socket.on('deny-friend-request', (requestUsername) => {
+            console.log('friend request reached back socket')
+            this.handleClick()
+            this.props.dispatch(actions.deniedFriendRequest(requestUsername))
+        })
+        this.socket.on('remove-friend', (requestUsername) => {
+            console.log('friend request reached back socket')
+            this.handleClick()
+            this.props.dispatch(actions.removedAsFriend(requestUsername))
         })
     }
 

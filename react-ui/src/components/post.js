@@ -11,6 +11,7 @@ const { Panel, Modal, Button, Media } = require('@sketchpixy/rubix');
 const { reset } = require('redux-form');
 const uuid = require('uuid');
 const DeleteModal = require('./delete-modal');
+var moment = require('moment');
 
 class Post extends React.Component {
     likeBoxClick(event) {
@@ -62,7 +63,7 @@ class Post extends React.Component {
               </Media.Left>
               <Media.Body>
                 <Media.Heading>{this.props.name}</Media.Heading>
-                <p>Date</p>
+                <p>{moment(this.props.date).format('MMMM Do YYYY, h:mm a')}</p>
               </Media.Body>
             </Media>
             <Link to={'/post/'+this.props.id}><Content content={this.props.content}/></Link><Link to={'/profile/'+this.props.name}>{this.props.name}</Link>
