@@ -64,7 +64,7 @@ class Chat extends React.Component {
         return (
             <div style={chatBoxStyle}>
             {this.props.name}
-            <Button onClick={this.loadMessageHistory.bind(this)}>Load Message History</Button>
+            {loadHistoryButton}
             <ChatBox name={this.props.name}/>
             <MessageForm onSubmit={this._handleSubmit.bind(this)} form={"MessageForm -"+this.props.name}/>
             <Dropzone multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop an image or click to select a file to upload.</p></Dropzone>
