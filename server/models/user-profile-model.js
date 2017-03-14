@@ -1,5 +1,10 @@
 var mongoose = require('mongoose');
 
+var messagesSchema = new mongoose.Schema({
+	friend: String,
+	messages: []
+ })
+
 var UserProfileSchema = new mongoose.Schema({
     username: String,
     Name: String,
@@ -10,7 +15,7 @@ var UserProfileSchema = new mongoose.Schema({
     outgoingRequests: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true}],
     posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
     onlineStatus: {type: Boolean, default: false, required: true},
-    messages:{}
+    messages:[messagesSchema]
 });
 
 var UserProfile = mongoose.model('UserProfile', UserProfileSchema);

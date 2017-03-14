@@ -37,7 +37,7 @@ class ChatContainer extends React.Component {
         })
         this.socket.on('private-chat-message', (data) => {
             console.log(data)
-            this.props.dispatch(actions.messageReceived(data))
+            this.props.dispatch(actions.messageReceived(data));
         })
         this.socket.on('chat-started', (chatData) => {
             this.socket.emit('join-private-chat', chatData.roomName)

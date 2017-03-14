@@ -430,7 +430,7 @@ function changeAboutMe(toggle) {
 
 function postProfileAboutMe(username, aboutMe) {
     return function(dispatch) {
-        return axios.put('api/profile/aboutme/'+username, aboutMe)
+        return axios.put('/api/profile/aboutme/'+username, aboutMe)
         .then(function(response) {
             dispatch(postProfileAboutMeSuccessful(aboutMe));
         })
@@ -703,6 +703,32 @@ function userDisconnect(username) {
         username: username
     })
 }
+
+function persistMessage(username, data) {
+    return function(dispatch) {
+        return axios.post('/api/message', data)
+        .then(function(response) {
+            console.log('post successfil')
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+function getMessagesFromServer(friend) {
+    return function(dispatch) {
+        return axios.get('/api/message/'+friend)
+        .then(function(response) {
+            return dispatch(getSearchUserNamesSuccess(response.data));
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+    }
+}
+
+exports.persistMessage = persistMessage;
 
 exports.REMOVED_AS_FRIEND = REMOVED_AS_FRIEND;
 exports.removedAsFriend = removedAsFriend;

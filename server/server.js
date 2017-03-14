@@ -69,7 +69,6 @@ app.post('/users/login',
         username: req.user.username,
         _id: req.user._id
     }, config.jwtSecret);
-    console.log('req.user AUTHENTICATE', req.user);
     res.json({ token });
   });
   
@@ -79,7 +78,6 @@ app.get('/users/logout', function(req, res){
 });
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.post('/api/search/profile', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    console.log(req.body, 'search query')
     if(req.body.search == '') {
         res.json([])
     }
@@ -89,7 +87,6 @@ app.post('/api/search/profile', expressJWT({ secret: config.jwtSecret}), functio
                 message: 'Internal Server Error'
             });
         }
-        console.log(userprofile);
         res.json(userprofile);
     });
 });
@@ -102,9 +99,7 @@ app.get('/api/profile', expressJWT({ secret: config.jwtSecret}), function(req, r
                 message: 'Internal Server Error'
             });
         }
-        console.log(userprofile, 'userprofile 1111')
         res.json(userprofile);
-        // console.log(req.user);
     });
 });
 
@@ -115,7 +110,6 @@ app.get('/api/profile/:username', expressJWT({ secret: config.jwtSecret}), funct
                 message: 'Internal Server Error'
             });
         }
-        console.log(userprofile, 'userprofile')
         var safeData = userprofile;
         if(req.params.username === req.user.username) {
             res.json(userprofile);
@@ -124,15 +118,12 @@ app.get('/api/profile/:username', expressJWT({ secret: config.jwtSecret}), funct
             safeData = safeData.toObject();
             delete safeData.incomingRequests;
             delete safeData.outgoingRequests;
-            console.log(safeData, 'safedata')
             res.json(safeData);
         }
-        // console.log(req.user);
     });
 });
 
 app.put('/api/profile/picture/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    console.log(req.body);
     UserProfile.findOne({username: req.params.username}, function(err, userprofile) {
         if (err) {
             return res.status(500).json({
@@ -151,7 +142,6 @@ app.put('/api/profile/picture/:username', expressJWT({ secret: config.jwtSecret}
 });
 
 app.put('/api/profile/aboutme/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    console.log(req.body);
     UserProfile.findOne({username: req.params.username}, function(err, userprofile) {
         if (err) {
             return res.status(500).json({
@@ -180,7 +170,6 @@ app.get('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res)
                 message: 'Internal Server Error'
             });
         }
-        // console.log(req.user);
         res.json(post);
     });
 });
@@ -209,7 +198,6 @@ app.get('/api/profile/posts/:username', expressJWT({ secret: config.jwtSecret}),
 
 app.post('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     /// check whether user object
-    console.log(req.body);
     UserProfile.findOne({username: req.user.username}).exec(function(err, userprofile) {
       if(err) {
           return res.json({message: 'Internal Server Error'});
@@ -220,7 +208,6 @@ app.post('/api/post', expressJWT({ secret: config.jwtSecret}), function(req, res
                 message: 'Internal Server Error'
             });
         }
-        console.log(post);
         UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
             if(err) {
                 return res.json({message: 'Internal Server Error'});
@@ -244,7 +231,6 @@ app.put('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(req, 
                 message: 'Internal Server Error'
             });
         }
-        console.log(post)
         res.status(200).json(post);
     })
 });
@@ -261,14 +247,11 @@ app.delete('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(re
                 return res.json({message: 'Internal Server Error'});
             }
             var postIndex = userprofile.posts.findIndex(function(singlePost) {
-                console.log(req.params.id, 'req id --- post id ', singlePost)
                 return req.params.id == singlePost;
             });
-            console.log(postIndex, 'post index delete post')
             if(postIndex > -1) {
                 userprofile.posts.splice(postIndex, 1);
             }
-            console.log(userprofile.posts, 'posts')
             userprofile.save(function(err) {
                 if(err) {
                     return res.json({message: 'Internal Server Error'});
@@ -282,31 +265,24 @@ app.delete('/api/post/:id', expressJWT({ secret: config.jwtSecret}), function(re
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 app.post('/api/friend/add/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     /// check whether user object
-    console.log(req.body);
     UserProfile.findOne({username: req.user.username}).exec(function(err, userprofile) {
       if(err) {
           return res.json({message: 'Internal Server Error'});
       }
-      console.log('1', userprofile)
       UserProfile.findOne({username: req.params.username}).exec(function(err, seconduserprofile) {
           if(err) {
               return res.json({message: 'Internal Server Error'});
           }
-          console.log('2', seconduserprofile)
       userprofile.outgoingRequests.push(seconduserprofile._id);
       seconduserprofile.incomingRequests.push(userprofile._id);
-      console.log(userprofile.outgoingRequests, 'first profile ----- second profile',seconduserprofile.incomingRequests);
       userprofile.save(function(err) {
         if(err) {
-            console.log('error 1' ,err)
             return res.json({message: 'Internal Server Error'});
         }
         seconduserprofile.save(function(err) {
             if(err) {
-                console.log('error 2', err)
             return res.json({message: 'Internal Server Error'});
             }
-            console.log(userprofile)
           res.json(userprofile);  
         })
         })
@@ -321,7 +297,6 @@ app.put('/api/friend/confirm/:username', expressJWT({ secret: config.jwtSecret})
                 message: 'Internal Server Error'
             });
         }
-        console.log(userprofile)
         UserProfile.findOne({username: req.params.username}).exec(function(err, seconduserprofile) {
           if(err) {
               return res.json({message: 'Internal Server Error'});
@@ -360,7 +335,6 @@ app.put('/api/friend/cancel/:username', expressJWT({ secret: config.jwtSecret}),
                 message: 'Internal Server Error'
             });
         }
-        console.log(userprofile)
         UserProfile.findOne({username: req.params.username}).exec(function(err, seconduserprofile) {
           if(err) {
               return res.json({message: 'Internal Server Error'});
@@ -396,7 +370,6 @@ app.put('/api/friend/deny/:username', expressJWT({ secret: config.jwtSecret}), f
                 message: 'Internal Server Error'
             });
         }
-        console.log(userprofile)
         UserProfile.findOne({username: req.params.username}).exec(function(err, seconduserprofile) {
           if(err) {
               return res.json({message: 'Internal Server Error'});
@@ -432,7 +405,6 @@ app.put('/api/friend/remove/:username', expressJWT({ secret: config.jwtSecret}),
                 message: 'Internal Server Error'
             });
         }
-        console.log(userprofile)
         UserProfile.findOne({username: req.params.username}).exec(function(err, seconduserprofile) {
           if(err) {
               return res.json({message: 'Internal Server Error'});
@@ -466,7 +438,6 @@ app.put('/api/friend/remove/:username', expressJWT({ secret: config.jwtSecret}),
 
 app.post('/api/comments/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     Post.findOne({_id: req.params.id}, function(err, post) {
-        console.log(post, 'how is found?')
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
@@ -479,7 +450,6 @@ app.post('/api/comments/:id', expressJWT({ secret: config.jwtSecret}), function(
             });
         	}
 	        post.comments.push({comment: req.body.comment, username: req.user.username, date: Date.now(), post: req.params.id, profile: userprofile._id});
-	        console.log(post.comments);
 	        post.save(function(err) {
 	        if(err) return res.json({message: err})
 	          res.json(post);  
@@ -489,33 +459,26 @@ app.post('/api/comments/:id', expressJWT({ secret: config.jwtSecret}), function(
 });
 
 app.put('/api/comments/:postid/:commentid', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-    console.log(req.body);
-    console.log(req.params.postid);
-    console.log(req.params.commentid)
     Post.findOne({_id: req.params.postid}, function(err, post) {
         if(err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-        console.log(post, 'change comment edit');
         
         var returnIndex = post.comments.findIndex(function(comment) { 
             return comment._id == req.params.commentid;
         });
-        console.log(returnIndex, 'index')
         if(returnIndex < 0) {
             //remove like
             return res.json({message: 'Server error finding comment'});
         }
         else {
             //add like
-            console.log({username: req.user._id, like: true}, 'object log')
             post.comments[returnIndex].comment = req.body.comment;
         }
         post.save(function(err) {
             if(err) return res.send(err);
-            console.log(post, 'changed post');
             res.json(post);
         });
     })
@@ -528,28 +491,88 @@ app.delete('/api/comments/:postid/:commentid', expressJWT({ secret: config.jwtSe
                 message: 'Internal Server Error'
             });
         }
-        console.log(post, 'change comment edit');
         
         var returnIndex = post.comments.findIndex(function(comment) { 
             return comment._id == req.params.commentid;
         });
-        console.log(returnIndex, 'index')
         if(returnIndex < 0) {
             //remove like
             return res.json({message: 'Server error finding comment'});
         }
         else {
             //add like
-            console.log({username: req.user._id, like: true}, 'delete comment')
             post.comments.splice(returnIndex, 1);
         }
         post.save(function(err) {
             if(err) return res.send(err);
-            console.log(post, 'deleted post');
             res.json(post);
         });
     })
 });
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+app.get('/api/message/:friend', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
+	      if(err) {
+	          return res.json({message: 'Internal Server Error'});
+	      }
+          var firstIndex = userprofile.messages.findIndex(function(friend) {
+          	return friend.friend === req.params.friend
+          })
+          if(firstIndex > -1) {
+          	res.json(userprofile.messages[firstIndex]);
+          }
+          else {
+          	return res.json({message: 'No chat history with this user'})
+          }
+      })
+    })
+
+app.post('/api/message', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
+	      if(err) {
+	          return res.json({message: 'Internal Server Error'});
+	      }
+          var firstIndex = userprofile.messages.findIndex(function(friend) {
+          	console.log(friend.friend, 'friend---fruebd', 'req----', req.body.friend)
+          	return friend.friend === req.body.friend
+          })
+          if(firstIndex > -1) {
+          	userprofile.messages[firstIndex].messages.push(req.body)
+          }
+          else {
+          	userprofile.messages.push({friend: req.body.friend, messages: [req.body]});
+          }
+          userprofile.save(function(err) {
+	        if(err) {
+	            return res.json({message: 'Internal Server Error'});
+	        }
+	    })
+          console.log(userprofile.messages, 'first profiles messages')
+      })
+     UserProfile.findOne({username: req.body.friend}, function(err, seconduserprofile) {
+          if(err) {
+              return res.json({message: 'Internal Server Error'});
+          }
+            var secondIndex = seconduserprofile.messages.findIndex(function(friend) {
+            	console.log(friend.friend, 'friend---fruebd', 'req----', req.body.friend)
+          	return friend.friend === req.body.username
+          })
+          if(secondIndex > -1) {
+          	seconduserprofile.messages[secondIndex].messages.push(req.body)
+          }
+          else {
+          	seconduserprofile.messages.push({friend: req.body.username, messages: [req.body]});
+          }
+          seconduserprofile.save(function(err) {
+            if(err) {
+            return res.json({message: 'Internal Server Error'});
+            }
+            console.log(seconduserprofile.messages, 'second profiles messages')
+          res.json(seconduserprofile);  
+        })
+        })
+    })
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.post('/api/likes/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
@@ -561,24 +584,19 @@ app.post('/api/likes/:id', expressJWT({ secret: config.jwtSecret}), function(req
             });
         }
         
-    console.log(post.likes, 'This.likes');
     var returnIndex = post.likes.findIndex(function(user) { 
-        console.log(user.username, 'username', req.user._id)
         return user.username == req.user._id;
     });
-    console.log(returnIndex, 'index')
     if(returnIndex > -1) {
         //remove like
         post.likes.splice(returnIndex, 1);
     }
     else {
         //add like
-        console.log({username: req.user._id, like: true}, 'object log')
         post.likes.push({username: req.user._id, like: true})
     }
     post.save(function(err) {
         if(err) return res.send(err);
-        console.log(post, 'changed post');
         res.json(post);
     });
 });
@@ -629,7 +647,6 @@ var strategy = new LocalStrategy(function(username, password, callback) {
 passport.use(strategy);
 
 app.post('/users/register', function(req, res) {
-    console.log(req.body)
     if (!req.body) {
         return res.status(400).json({
             message: "No request body"
@@ -685,7 +702,6 @@ app.post('/users/register', function(req, res) {
         if(err) {
             return res.json({message: 'Internal Server Error'});
         }
-        console.log('user profile is created not saved yet')
         userprofile.save(function(err) {
             if(err) {
                 return res.status(500).json({
@@ -694,8 +710,6 @@ app.post('/users/register', function(req, res) {
         }
         })
     
-
-    console.log(userprofile)
     bcrypt.genSalt(10, function(err, salt) {
         if (err) {
             return res.status(500).json({
@@ -762,56 +776,44 @@ io.on('connection', function(socket) {
       	socket.broadcast.emit('friend-online', username);
      });
      socket.on('private-chat', function(generatedRoom) {
-      console.log(generatedRoom);
       socket.join(generatedRoom);
      })
      socket.on('private-chat-message', function(values) {
-      console.log('generated room', values.channelID)
-      socket.broadcast.to(values.channelID).emit('private-chat-message', {username: values.username, friend: values.friend, message: values.message, image: values.image});
+      socket.broadcast.to(values.channelID).emit('private-chat-message', {username: values.username, friend: values.friend, message: values.message, channelID: values.channelID, image: values.image});
      })
      socket.on('chat-started', function(chatData) {
-      console.log(chatData.roomName, 'roomname')
       socket.join(chatData.roomName)
       socket.broadcast.to(chatData.friend).emit('chat-started', chatData);
      })
      socket.on('join-private-chat', function(roomName) {
-      console.log(roomName, 'roomname private chat')
       socket.join(roomName)
      })
      socket.on('friend-request', function(otherUsername, requestUsername) {
-     	console.log('friend request username ', requestUsername)
      	socket.broadcast.to(otherUsername).emit('friend-request', requestUsername)
      })
      socket.on('accept-friend-request', function(otherUsername, requestUsername) {
-     	console.log('accepted request', requestUsername)
      	socket.broadcast.to(otherUsername).emit('accept-friend-request', requestUsername)
      })
      socket.on('cancel-friend-request', function(otherUsername, requestUsername) {
-     	console.log('cancelled request', requestUsername)
      	socket.broadcast.to(otherUsername).emit('cancel-friend-request', requestUsername)
      })
      socket.on('deny-friend-request', function(otherUsername, requestUsername) {
-     	console.log('denied request', requestUsername)
      	socket.broadcast.to(otherUsername).emit('deny-friend-request', requestUsername)
      })
      socket.on('remove-friend', (otherUsername, requestUsername) => {
-        console.log('friend request reached back socket')
         socket.broadcast.to(otherUsername).emit('remove-friend', requestUsername)
         })
      socket.on('disconnect', function() {
      	if(socket.username) {
      	UserProfile.findOne({username: socket.username}, function(err, userprofile) {
       		if(err) {
-      			console.log('error finding profile offline')
       			return err;
       		}
       		userprofile.onlineStatus = false;
       		userprofile.save(function(err) {
       			if(err) {
-      				console.log('error saving profile offline')
       				return err;
       			}
-      			console.log('profile saved offline', userprofile)
       		})
       	})
      }
