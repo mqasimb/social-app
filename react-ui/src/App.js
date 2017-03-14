@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 
 import './main.css';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem, FormGroup, FormControl, Button } from '@sketchpixy/rubix';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem, FormGroup, FormControl, Button, Select, Glyphicon } from '@sketchpixy/rubix';
 
 const router = require('react-router');
 const Link = router.Link;
@@ -37,7 +37,8 @@ class App extends React.Component {
         <LinkContainer to='/register'><NavItem eventKey={2}>Register</NavItem></LinkContainer>
         </Nav>;
         var loggedInUser = <Nav pullRight><LinkContainer to={'/profile/'+this.props.auth.user.username}><NavItem>{this.props.auth.user.username}</NavItem></LinkContainer>
-        <LinkContainer to='/'><NavItem>Notifications</NavItem></LinkContainer>
+        <LinkContainer to='/games'><NavItem>Search Games</NavItem></LinkContainer>
+        <LinkContainer to='/'><NavItem><Glyphicon glyph='globe'/></NavItem></LinkContainer>
         <LinkContainer to='/friendRequests'><NavItem>Friend Requests</NavItem></LinkContainer>
         <NavItem href='' onClick={this.userLogout.bind(this)}>Logout</NavItem></Nav>;
         var topStyle={

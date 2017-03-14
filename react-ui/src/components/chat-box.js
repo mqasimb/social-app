@@ -13,8 +13,20 @@ class ChatBox extends React.Component {
             width: 50,
             height: 50
         }
-        var messagesList = this.props.chatMessages[this.props.name].map(function(message, index) {
-            return <div key={index}><div>{message.username}: {message.message}</div>{(message.image) ? (<div><img style={imageStyle} src={message.image}/></div>) : (null)}</div>
+        var profilePic;
+        var messagesList = this.props.chatMessages[this.props.name].map((message, index) => {
+            if(message.username === this.props.mainProfile.username) {
+                profilePic = this.props.mainProfile.ProfilePicture;
+            }
+            else {
+                var firstIndex = this.props.mainProfile.Friends.findIndex((friend) => {
+                return friend.username === this.props.name;
+                })
+                if(firstIndex > -1) {
+                    profilePic = this.props.mainProfile.Friends[firstIndex].ProfilePicture;
+                }  
+                }
+            return <div key={index}><div><img width={64} height={64} src={profilePic} alt="Image"/>{message.username}: {message.message}</div>{(message.image) ? (<div><img style={imageStyle} src={message.image}/></div>) : (null)}</div>
         })
         return (
             <div>
@@ -29,7 +41,8 @@ class ChatBox extends React.Component {
 
 function mapStateToProps(state, props) {
     return ({
-        chatMessages: state.app.chatMessages
+        chatMessages: state.app.chatMessages,
+        mainProfile: state.app.mainProfile
     })
 }
 var Container = connect(mapStateToProps)(ChatBox);

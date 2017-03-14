@@ -19,6 +19,7 @@ const SinglePost = require('./components/singlepost');
 const Profile = require('./components/profile');
 const Home = require('./components/home');
 const FriendRequestsContainer = require('./components/friend-requests-container');
+const Games = require('./components/games')
 
 if(localStorage.jwt) {
     setAuthorizationToken(localStorage.jwt);
@@ -35,6 +36,7 @@ var routes = (
             <Route path='/post/:id' component={SinglePost}/>
             <Route path='/profile/:username' component={Profile}/>
             <Route path='/friendrequests' component={FriendRequestsContainer}/>
+            <Route path='/games' component={Games}/>
         </Route>
     </Router>
     </Provider>

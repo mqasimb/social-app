@@ -552,18 +552,6 @@ app.delete('/api/comments/:postid/:commentid', expressJWT({ secret: config.jwtSe
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-// app.get('/api/likes/:id', function(req, res) {
-//     Post.findOne({_id: req.params.id}, function(err, post) {
-//         if(err) {
-//             return res.status(500).json({
-//                 message: 'Internal Server Error'
-//             });
-//         }
-//         console.log(post);
-//         res.json(post);
-//     })
-// });
-
 app.post('/api/likes/:id', expressJWT({ secret: config.jwtSecret}), function(req, res) {
 
     Post.findOne({_id: req.params.id}, function(err, post) {
@@ -750,7 +738,6 @@ app.use(function(err, req, res, next) {
    res.send(err);
 });
 
-var onlineUsers = [];
 io.on('connection', function(socket) {  
      console.log('a user connected')
      socket.on('user-online', function(username) {

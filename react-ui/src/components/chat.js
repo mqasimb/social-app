@@ -49,10 +49,11 @@ class Chat extends React.Component {
             display: 'inline-block'
         }
         var imgStyle = {width: 75, height: 75}
+        var profileImage;
         return (
             <div style={chatBoxStyle}>
             {this.props.name}
-            <ChatBox name={this.props.name}/>
+            <ChatBox name={this.props.name} profilePicture={profileImage}/>
             <MessageForm onSubmit={this._handleSubmit.bind(this)} form="MessageForm"/>
             <Dropzone multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop an image or click to select a file to upload.</p></Dropzone>
             <img src={this.props.chatImagesUploadUrl[this.props.name]} style={imgStyle}/>
@@ -66,6 +67,7 @@ function mapStateToProps(state, props) {
         auth: state.app.auth,
         chatMessages: state.app.chatMessages,
         chatsOpen: state.app.chatsOpen,
+        mainProfile: state.app.mainProfile,
         chatImagesUploadUrl: state.app.chatImagesUploadUrl
     })
 }
