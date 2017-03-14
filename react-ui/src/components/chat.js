@@ -12,6 +12,7 @@ const UserListChat = require('./user-list-chat');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
 const apikeys = require('../../../apikeys');
+const { reset } = require('redux-form');
 
 class Chat extends React.Component {
     componentDidMount() {
@@ -20,6 +21,7 @@ class Chat extends React.Component {
     _handleSubmit(values) {
         this.props.socket.emit('private-chat-message', {username: this.props.auth.user.username, friend: this.props.name, message:values.message, channelID: this.props.chatsOpen[this.props.name], image: (this.props.chatImagesUploadUrl[this.props.name]) ? (this.props.chatImagesUploadUrl[this.props.name]) : (null)})
         this.props.dispatch(actions.chatSubmit({username: this.props.auth.user.username, friend: this.props.name, message:values.message, channelID: this.props.chatsOpen[this.props.name], image: (this.props.chatImagesUploadUrl[this.props.name]) ? (this.props.chatImagesUploadUrl[this.props.name]) : (null)}))
+        this.props.dispatch(reset("MessageForm -"+this.props.name));
     }
     onImageDrop(files) {
         this.props.dispatch(actions.uploadMessageImage(files[0], this.props.name));
@@ -53,8 +55,8 @@ class Chat extends React.Component {
         return (
             <div style={chatBoxStyle}>
             {this.props.name}
-            <ChatBox name={this.props.name} profilePicture={profileImage}/>
-            <MessageForm onSubmit={this._handleSubmit.bind(this)} form="MessageForm"/>
+            <ChatBox name={this.props.name}/>
+            <MessageForm onSubmit={this._handleSubmit.bind(this)} form={"MessageForm -"+this.props.name}/>
             <Dropzone multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop an image or click to select a file to upload.</p></Dropzone>
             <img src={this.props.chatImagesUploadUrl[this.props.name]} style={imgStyle}/>
             </div>
