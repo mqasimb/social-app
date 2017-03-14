@@ -38,6 +38,7 @@ class ChatContainer extends React.Component {
         this.socket.on('private-chat-message', (data) => {
             console.log(data)
             this.props.dispatch(actions.messageReceived(data));
+            this.props.dispatch(actions.saveMessagesToProfile(data.username, data))
         })
         this.socket.on('chat-started', (chatData) => {
             this.socket.emit('join-private-chat', chatData.roomName)
@@ -46,10 +47,10 @@ class ChatContainer extends React.Component {
         this.socket.on('user-disconnected', (username) => {
             this.props.dispatch(actions.userDisconnect(username));
         })
-        this.socket.on('friend-request', (requestUsername) => {
+        this.socket.on('friend-request', (requestUsername, ProfilePicture) => {
             console.log('friend request reached back socket')
             this.handleClick()
-            this.props.dispatch(actions.receivedFriendRequest(requestUsername))
+            this.props.dispatch(actions.receivedFriendRequest(requestUsername, ProfilePicture))
         })
         this.socket.on('accept-friend-request', (requestUsername) => {
             console.log('friend request reached back socket')

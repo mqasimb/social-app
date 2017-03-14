@@ -62,7 +62,7 @@ var appReducer = function(state, action) {
 
     if(action.type === actions.RECEIVED_FRIEND_REQUEST) {
         console.log(action.username)
-        newState.mainProfile.incomingRequests.push({username: action.username});
+        newState.mainProfile.incomingRequests.push({username: action.username, ProfilePicture: action.ProfilePicture});
         newState.mainProfile.incomingRequests = newState.mainProfile.incomingRequests.slice();
         newState.mainProfile = Object.assign({}, newState.mainProfile);  
         return newState;
@@ -140,6 +140,25 @@ var appReducer = function(state, action) {
         return newState;
     }
 
+    if(action.type === actions.SAVE_MESSAGES_TO_PROFILE) {
+        var firstIndex = newState.mainProfile.messages.findIndex(function(friend) {
+            return friend.friend === action.friend
+        })
+        if(firstIndex > -1) {
+            newState.mainProfile.messages[firstIndex].messages.push(action.data);
+            newState.mainProfile.messages[firstIndex].messages = newState.mainProfile.messages[firstIndex].messages.slice();
+            newState.mainProfile.messages[firstIndex] = Object.assign({}, newState.mainProfile.messages[firstIndex]);
+            newState.mainProfile.messages = newState.mainProfile.messages.slice();
+            newState.mainProfile = Object.assign({}, newState.mainProfile);
+        }
+        else {
+            newState.mainProfile.messages.push({friend: action.friend, messages: [action.data]});
+            newState.mainProfile.messages = newState.mainProfile.messages.slice();
+            newState.mainProfile = Object.assign({}, newState.mainProfile);
+        }
+        return newState;
+    }
+
     if(action.type === actions.CHAT_SUBMIT) {
         if(newState.chatImagesUploadUrl[action.data.friend]) {
             newState.chatImagesUploadUrl[action.data.friend] = null;
@@ -173,6 +192,18 @@ var appReducer = function(state, action) {
         }
         return newState;
     }
+    
+    if(action.type === actions.LOAD_OLDER_MESSAGES) {
+        var firstIndex = newState.mainProfile.messages.findIndex(function(friend) {
+            return friend.friend === action.friend
+        })
+        if(firstIndex > -1) {
+            newState.chatMessages[action.friend] = newState.mainProfile.messages[firstIndex].messages;
+            newState.chatMessages[action.friend] = newState.chatMessages[action.friend].slice();
+            newState.chatMessages = Object.assign({}, newState.chatMessages);
+        }
+        return newState;
+    }
 
     if(action.type === actions.MESSAGE_RECEIVED) {
         newState.chatMessages[action.data.username].push(action.data);
@@ -187,7 +218,7 @@ var appReducer = function(state, action) {
     }
 
     if(action.type === actions.SEND_FRIEND_REQUEST_SUCCESFUL) {
-        newState.mainProfile.outgoingRequests.push({username: action.username});
+        newState.mainProfile.outgoingRequests.push({username: action.username, ProfilePicture: action.ProfilePicture});
         newState.mainProfile.outgoingRequests = newState.mainProfile.outgoingRequests.slice();
         newState.mainProfile = Object.assign({}, newState.mainProfile);
         return newState;

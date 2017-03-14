@@ -44,8 +44,8 @@ class Profile extends React.Component {
         this.props.dispatch(actions.changePictureModal(this.props.params.username, true))
     }
     addFriend() {
-        this.props.dispatch(actions.sendFriendRequest(this.props.params.username))
-        this.socket.emit('friend-request', this.props.params.username, this.props.mainProfile.username)
+        this.props.dispatch(actions.sendFriendRequest(this.props.params.username, this.props.loadedProfile.ProfilePicture));
+        this.socket.emit('friend-request', this.props.params.username, this.props.mainProfile.username, this.props.mainProfile.ProfilePicture)
     }
     cancelRequest() {
         this.props.dispatch(actions.cancelFriendRequest(this.props.params.username));

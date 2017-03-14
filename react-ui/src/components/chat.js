@@ -20,8 +20,9 @@ class Chat extends React.Component {
     }
     _handleSubmit(values) {
         this.props.socket.emit('private-chat-message', {username: this.props.auth.user.username, friend: this.props.name, message:values.message, channelID: this.props.chatsOpen[this.props.name], image: (this.props.chatImagesUploadUrl[this.props.name]) ? (this.props.chatImagesUploadUrl[this.props.name]) : (null)})
-        this.props.dispatch(actions.chatSubmit({username: this.props.auth.user.username, friend: this.props.name, message:values.message, channelID: this.props.chatsOpen[this.props.name], image: (this.props.chatImagesUploadUrl[this.props.name]) ? (this.props.chatImagesUploadUrl[this.props.name]) : (null)}))
         this.props.dispatch(actions.persistMessage(this.props.auth.user.username, {username: this.props.auth.user.username, friend: this.props.name, message:values.message, channelID: this.props.chatsOpen[this.props.name], image: (this.props.chatImagesUploadUrl[this.props.name]) ? (this.props.chatImagesUploadUrl[this.props.name]) : (null)}))
+        this.props.dispatch(actions.saveMessagesToProfile(this.props.name, {username: this.props.auth.user.username, friend: this.props.name, message:values.message, channelID: this.props.chatsOpen[this.props.name], image: (this.props.chatImagesUploadUrl[this.props.name]) ? (this.props.chatImagesUploadUrl[this.props.name]) : (null)}))
+        this.props.dispatch(actions.chatSubmit({username: this.props.auth.user.username, friend: this.props.name, message:values.message, channelID: this.props.chatsOpen[this.props.name], image: (this.props.chatImagesUploadUrl[this.props.name]) ? (this.props.chatImagesUploadUrl[this.props.name]) : (null)}))
         this.props.dispatch(reset("MessageForm -"+this.props.name));
     }
     onImageDrop(files) {
@@ -45,6 +46,9 @@ class Chat extends React.Component {
       }
     });
     }
+    loadMessageHistory() {
+        this.props.dispatch(actions.loadOlderMessages(this.props.name))
+    }
     render(props) {
         var chatBoxStyle = {
             width: 300,
@@ -52,10 +56,15 @@ class Chat extends React.Component {
             display: 'inline-block'
         }
         var imgStyle = {width: 75, height: 75}
+        var firstIndex = this.props.mainProfile.messages.findIndex((friend) => {
+            return friend.friend === this.props.name
+        })
+        var loadHistoryButton = (firstIndex > -1) ? ((this.props.mainProfile.messages[firstIndex].messages.length > this.props.chatMessages[this.props.name].length) ? (<Button onClick={this.loadMessageHistory.bind(this)}>Load Message History</Button>) : (null)) : (null)
         var profileImage;
         return (
             <div style={chatBoxStyle}>
             {this.props.name}
+            <Button onClick={this.loadMessageHistory.bind(this)}>Load Message History</Button>
             <ChatBox name={this.props.name}/>
             <MessageForm onSubmit={this._handleSubmit.bind(this)} form={"MessageForm -"+this.props.name}/>
             <Dropzone multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop an image or click to select a file to upload.</p></Dropzone>

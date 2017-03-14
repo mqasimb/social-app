@@ -788,8 +788,8 @@ io.on('connection', function(socket) {
      socket.on('join-private-chat', function(roomName) {
       socket.join(roomName)
      })
-     socket.on('friend-request', function(otherUsername, requestUsername) {
-     	socket.broadcast.to(otherUsername).emit('friend-request', requestUsername)
+     socket.on('friend-request', function(otherUsername, requestUsername, profilePicture) {
+     	socket.broadcast.to(otherUsername).emit('friend-request', requestUsername, profilePicture)
      })
      socket.on('accept-friend-request', function(otherUsername, requestUsername) {
      	socket.broadcast.to(otherUsername).emit('accept-friend-request', requestUsername)

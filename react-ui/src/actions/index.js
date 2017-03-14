@@ -448,12 +448,12 @@ function postProfileAboutMeSuccessful(aboutMe) {
     })
 }
 
-function sendFriendRequest(username) {
+function sendFriendRequest(username, ProfilePicture) {
     return function(dispatch) {
         return axios.post('/api/friend/add/'+username)
         .then(function(response) {
             console.log(response.data)
-            dispatch(sendFriendRequestSuccesful(username));
+            dispatch(sendFriendRequestSuccesful(username, ProfilePicture));
         })
         .catch(function(err) {
             console.log(err);
@@ -462,10 +462,11 @@ function sendFriendRequest(username) {
 }
 
 const SEND_FRIEND_REQUEST_SUCCESFUL = 'SEND_FRIEND_REQUEST_SUCCESFUL' 
-function sendFriendRequestSuccesful(username) {
+function sendFriendRequestSuccesful(username, ProfilePicture) {
     return({
         type: SEND_FRIEND_REQUEST_SUCCESFUL,
-        username: username
+        username: username,
+        ProfilePicture: ProfilePicture
     })
 }
 
@@ -550,10 +551,11 @@ function removeFriendRequestSuccesful(username) {
 }
 
 const RECEIVED_FRIEND_REQUEST = 'RECEIVED_FRIEND_REQUEST' 
-function receivedFriendRequest(username) {
+function receivedFriendRequest(username, ProfilePicture) {
     return({
         type: RECEIVED_FRIEND_REQUEST,
-        username: username
+        username: username,
+        ProfilePicture: ProfilePicture
     })
 }
 
@@ -708,7 +710,7 @@ function persistMessage(username, data) {
     return function(dispatch) {
         return axios.post('/api/message', data)
         .then(function(response) {
-            console.log('post successfil')
+            return response.data
         })
         .catch(function(err) {
             console.log(err);
@@ -716,17 +718,28 @@ function persistMessage(username, data) {
     }
 }
 
-function getMessagesFromServer(friend) {
-    return function(dispatch) {
-        return axios.get('/api/message/'+friend)
-        .then(function(response) {
-            return dispatch(getSearchUserNamesSuccess(response.data));
-        })
-        .catch(function(err) {
-            console.log(err);
-        })
-    }
+const SAVE_MESSAGES_TO_PROFILE = 'SAVE_MESSAGES_TO_PROFILE';
+function saveMessagesToProfile(friend, data) {
+    return ({
+        type: SAVE_MESSAGES_TO_PROFILE,
+        friend: friend,
+        data: data
+    })
 }
+
+const LOAD_OLDER_MESSAGES = 'LOAD_OLDER_MESSAGES';
+function loadOlderMessages(friend) {
+    return ({
+        type: LOAD_OLDER_MESSAGES,
+        friend: friend
+    })
+}
+
+exports.LOAD_OLDER_MESSAGES = LOAD_OLDER_MESSAGES;
+exports.loadOlderMessages = loadOlderMessages;
+
+exports.SAVE_MESSAGES_TO_PROFILE = SAVE_MESSAGES_TO_PROFILE;
+exports.saveMessagesToProfile = saveMessagesToProfile;
 
 exports.persistMessage = persistMessage;
 
