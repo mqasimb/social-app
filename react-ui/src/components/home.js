@@ -25,7 +25,9 @@ class Home extends React.Component {
         return (
             <div>
             <NewPost />
+            <div className='posts'>
             {arrayPosts.reverse()}
+            </div>
             </div>
             )
     }

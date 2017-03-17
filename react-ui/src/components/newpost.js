@@ -43,15 +43,18 @@ class NewPost extends React.Component {
     
     render() {
         var imgStyle = {width: 100, height: 100}
-        var dropzoneStyle = {width:100, height:100, borderStyle:'dotted', borderColor: 'black'}
+        var dropzoneStyle = {display: 'inline-block', width:150, height:150, borderStyle:'dotted', borderColor: 'black', cursor: 'pointer', color: '#06D7D4', fontFamily: 'Lato,sans-serif'}
+        var newPostStyle={
+            'backgroundColor': '#253243'
+        }
         return(
-            <div>
+            <div style={newPostStyle}>
             <form onSubmit={this.postForm.bind(this)}>
             <FormGroup controlId="formControlsTextarea">
               <ControlLabel>New Post</ControlLabel>
               <FormControl onChange={this.changeForm.bind(this)} name='content' value={this.props.newPost.content || ''} componentClass="textarea" placeholder="textarea" />
             </FormGroup>
-            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop or click to select an image to upload.</p></Dropzone>
+            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop files here to upload (or click)</p></Dropzone>
             <img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/>
             <button disabled={!this.props.newPost.content}>Post</button>
             </form>

@@ -52,10 +52,14 @@ class Post extends React.Component {
             width: 200,
             height: 200
         }
+        var postStyle={
+            backgroundColor: '#FFFFFF',
+            width: '50%',
+            margin: '0 auto'
+        }
         var image = (this.props.image) ? (<img src={this.props.image} style={imageStyle}/>) : (null)
         return (
-            <div>
-            
+            <div style={postStyle}>
             <Media>
              <Media.Left>
                 <img width={64} height={64} src={this.props.profilePicture} alt="Image"/>

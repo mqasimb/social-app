@@ -32,17 +32,20 @@ class App extends React.Component {
     }
     render(props) {
         var isLoggedIn = this.props.auth.authenticated;
+        const LinkStyle = {
+            'color': '#06D7D4'
+        }
         var loggedOutUser = <Nav pullRight>
         <LinkContainer to='/login'><NavItem eventKey={1}>Login</NavItem></LinkContainer>
         <LinkContainer to='/register'><NavItem eventKey={2}>Register</NavItem></LinkContainer>
         </Nav>;
         var loggedInUser = <Nav pullRight><LinkContainer to={'/profile/'+this.props.auth.user.username}><NavItem>{this.props.auth.user.username}</NavItem></LinkContainer>
-        <LinkContainer to='/games'><NavItem>Search Games</NavItem></LinkContainer>
+        <NavItem style={LinkStyle}>Search Games</NavItem>
         <LinkContainer to='/'><NavItem><Glyphicon glyph='globe'/></NavItem></LinkContainer>
         <LinkContainer to='/friendRequests'><NavItem>Friend Requests</NavItem></LinkContainer>
         <NavItem href='' onClick={this.userLogout.bind(this)}>Logout</NavItem></Nav>;
         var topStyle={
-            marginTop: 80
+            marginTop: 80,
         }
         var {notifications} = this.props;
         const notificationStyle = {
@@ -56,13 +59,21 @@ class App extends React.Component {
             }
           }
         };
+        const navBarStyle = {
+            'backgroundColor': '#1D2838',
+            color: '#06D7D4'
+        }
+        const backgroundStyle = {
+            'backgroundColor': '#F2F2F2',
+        }
         return (
             <div style={topStyle}>
             <Notifications
                 notifications={notifications}
                 style={notificationStyle}
               />
-            <Navbar collapseOnSelect fixedTop inverse>
+            <div className='nav-bar'>
+            <Navbar collapseOnSelect fixedTop style={navBarStyle}>
                 <Navbar.Header>
                   <Navbar.Brand>
                     <Link to='/'>Social-App</Link>
@@ -76,7 +87,10 @@ class App extends React.Component {
                     {(isLoggedIn) ? (loggedInUser) : (loggedOutUser)}
                 </Navbar.Collapse>
               </Navbar>
+              </div>
+              <div className='children' style={backgroundStyle}>
               {this.props.children}
+              </div>
               {(isLoggedIn) ? (<ChatContainer />) : (null)}
         </div>
             )
