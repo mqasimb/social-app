@@ -117,7 +117,7 @@ function postSuccesful() {
 
 function getPosts() {
     return function(dispatch) {
-        return axios.get('/api/post')
+        return axios.get('http://localhost:8080/api/post')
         .then(function(response) {
             console.log(response);
             dispatch(getMainUserProfile());

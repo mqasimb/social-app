@@ -170,7 +170,4 @@ describe('friend system related actions', () => {
     }
     expect(actions.getMainProfileSuccess(testData)).toEqual(expectedAction)
   })
-
-
-
 })
