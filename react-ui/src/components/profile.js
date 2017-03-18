@@ -64,6 +64,9 @@ class Profile extends React.Component {
         this.socket.emit('remove-friend', this.props.params.username, this.props.mainProfile.username);
     }
     render(props) {
+        var profilePicStyle = {
+            'backgroundColor': '#253243'
+        }
         var acceptFriendRequest = this.props.mainProfile.incomingRequests.findIndex((request) => {
             return request.username == this.props.params.username;
         });
@@ -82,12 +85,14 @@ class Profile extends React.Component {
         var removeFriendRequestButton = <button onClick={this.removeFriend.bind(this)}>Remove Friend</button>;
         return (
             <div>
+            <div className='profile-page-user' style={profilePicStyle}>
             <ProfilePicture img={this.props.loadedProfile.ProfilePicture} onClick={this.open.bind(this)}/>
             {(this.props.auth.user.username == this.props.params.username) ? (null) : ((acceptFriendRequest > -1) ? (<div>{acceptFriendRequestButton} {denyFriendRequestButton}</div>) : ((isFriend > -1) ? (<div>Friends {removeFriendRequestButton}</div>) : ((cancelFriendRequest > -1) ? (cancelFriendRequestButton) : (sendFriendRequestButton))))}
             {(this.props.auth.user.username == this.props.params.username) ? (<button onClick={this.open.bind(this)}>Change Profile Pic</button>) : (null)}
             <ChangePictureModal setPicture={this.changeProfilePicture.bind(this)} close={this.close.bind(this)}/>
             <AboutMe text={this.props.loadedProfile.AboutMe}/>
             {(this.props.auth.user.username == this.props.params.username) ? ((this.props.changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: this.props.loadedProfile.AboutMe}}/>) : (<button onClick={this.enableAboutMeChange.bind(this)}>Change About Me</button>)) : (null)}
+            </div>
             <ProfilePosts posts={this.props.postData}/>
             <FriendsList list={this.props.mainProfile.Friends}/>
             </div>

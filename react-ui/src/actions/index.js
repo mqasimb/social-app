@@ -815,6 +815,9 @@ exports.denyFriendRequest = denyFriendRequest;
 exports.DENY_FRIEND_REQUEST_SUCCESFUL = DENY_FRIEND_REQUEST_SUCCESFUL;
 exports.denyFriendRequestSuccesful = denyFriendRequestSuccesful;
 
+exports.postFetchSuccessful = postFetchSuccessful;
+exports.likeStatusChangeSuccessful = likeStatusChangeSuccessful;
+exports.LIKE_STATUS_CHANGE_SUCCESSFUL = LIKE_STATUS_CHANGE_SUCCESSFUL;
 
 exports.changeAboutMe = changeAboutMe;
 exports.CHANGE_ABOUT_ME = CHANGE_ABOUT_ME;
@@ -855,6 +858,7 @@ exports.TOGGLE_MODAL = TOGGLE_MODAL;
 exports.REGISTRATION_SUCCESFUL = REGISTRATION_SUCCESFUL;
 exports.registrationSuccesful = registrationSuccesful;
 
+exports.postProfilePicSuccessful = postProfilePicSuccessful;
 exports.postSuccesful = postSuccesful;
 exports.POST_SUCCESSFUL = POST_SUCCESSFUL;
 
