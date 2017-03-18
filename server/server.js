@@ -1,3 +1,4 @@
+require('dotenv').config();
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -6,7 +7,8 @@ var expressJWT = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var unless = require('express-unless');
-var cors = require('cors')
+var cors = require('cors');
+var unirest = require('unirest');
 
 var config = require('./config');
 
@@ -30,7 +32,7 @@ var opts = {}
 app.use(cors())
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // app.use(expressJWT({ secret: config.jwtSecret}).unless({path: ['/login', '/users/login', 'register', '/users/register']}));
@@ -76,6 +78,7 @@ app.get('/users/logout', function(req, res){
     req.logout();
     res.redirect('/login');
 });
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.post('/api/search/profile', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     if(req.body.search == '') {
