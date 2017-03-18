@@ -27,7 +27,7 @@ var initialState = {
         changeAboutMe: false,
         userSearchResults: [],
         friendsOnline: [],
-        chatsOpen: [],
+        chatsOpen: {},
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     };
@@ -164,6 +164,9 @@ var appReducer = function(state, action) {
             newState.chatImagesUploadUrl[action.data.friend] = null;
             newState.chatImagesUploadUrl = Object.assign({}, newState.chatImagesUploadUrl)
         }
+        if(newState.chatMessages[action.data.friend] === undefined) {
+            newState.chatMessages[action.data.friend] = [];
+        }
         newState.chatMessages[action.data.friend].push(action.data);
         newState.chatMessages = Object.assign({}, newState.chatMessages);
         return newState;
@@ -245,7 +248,7 @@ var appReducer = function(state, action) {
         })
         if(firstIndex > -1) {
             newState.mainProfile.incomingRequests.splice(firstIndex, 1);
-            newState.mainProfile.incomingRequests = newState.mainProfile.outgoingRequests.slice();
+            newState.mainProfile.incomingRequests = newState.mainProfile.incomingRequests.slice();
             newState.mainProfile.Friends.push({username: action.username});
             newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
             newState.mainProfile = Object.assign({}, newState.mainProfile);  

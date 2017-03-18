@@ -2,7 +2,7 @@ const reducer = require('../index')
 const actions = require('../../actions/index');
 const { initialState } = require('../index')
 
-describe('reducer', () => {
+describe('profile reducer', () => {
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual({
         loginInput: {username: '', password: ''},
@@ -36,7 +36,7 @@ describe('reducer', () => {
     })
   })
 
-  it('should handle DENIED_FRIEND_REQUEST', () => {
+  it('should handle GET_MAIN_PROFILE_SUCCESS', () => {
     expect(reducer({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -55,7 +55,7 @@ describe('reducer', () => {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {outgoingRequests: [{username: 'test1'}, {username: 'TestUser'}]},
+        mainProfile: {},
         chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
@@ -67,8 +67,8 @@ describe('reducer', () => {
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     }, {
-        type: actions.DENIED_FRIEND_REQUEST,
-        username: 'TestUser'
+        type: actions.GET_MAIN_PROFILE_SUCCESS,
+        data: {Friends: [{username: 'Test', onlineStatus: true}, {username: 'TestUser', onlineStatus: false}]}
     })).toEqual({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -87,21 +87,21 @@ describe('reducer', () => {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {outgoingRequests: [{username: 'test1'}]},
+        mainProfile: {Friends: [{username: 'Test', onlineStatus: true}, {username: 'TestUser', onlineStatus: false}]},
         chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
         profilePosts: [],
         changeAboutMe: false,
         userSearchResults: [],
-        friendsOnline: [],
+        friendsOnline: [{username: 'Test', onlineStatus: true}],
         chatsOpen: {},
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     })
   })
 
-  it('should handle CANCEL_FRIEND_REQUEST_SUCCESFUL', () => {
+  it('should handle POST_PROFILE_ABOUT_ME_SUCCESFUL', () => {
     expect(reducer({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -120,7 +120,7 @@ describe('reducer', () => {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {outgoingRequests: [{username: 'test1'}, {username: 'TestUser'}]},
+        mainProfile: {},
         chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
@@ -132,8 +132,138 @@ describe('reducer', () => {
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     }, {
-        type: actions.CANCEL_FRIEND_REQUEST_SUCCESFUL,
-        username: 'TestUser'
+        type: actions.POST_PROFILE_ABOUT_ME_SUCCESFUL,
+        aboutMe: {aboutMe: 'New About Me'}
+    })).toEqual({
+        loginInput: {username: '', password: ''},
+        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
+        auth: {authenticated: true, user: {username: 'TestUser'}},
+        newPost: {content: '', image: null},
+        postData: [],
+        singlePost: {},
+        postLoading: true,
+        isEdit: false,
+        editInput: {content: ''},
+        commentsInput: {},
+        uploadedFile: '',
+        uploadedFileCloudinaryUrl: '',
+        flashMessages: {},
+        showModal: {toggle: false, postID: null},
+        showPictureModal: {toggle: false, username: null},
+        editComment: {},
+        loadedProfile: {AboutMe: 'New About Me'},
+        mainProfile: {},
+        chatMessages: {},
+        uploadedProfilePic: '',
+        uploadedProfilePicCloudinaryUrl: '',
+        profilePosts: [],
+        changeAboutMe: false,
+        userSearchResults: [],
+        friendsOnline: [],
+        chatsOpen: {},
+        chatImagesUpload: {},
+        chatImagesUploadUrl: {}
+    })
+  })
+
+  it('should handle POST_PROFILE_PIC_SUCCESFUL', () => {
+    expect(reducer({
+        loginInput: {username: '', password: ''},
+        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
+        auth: {authenticated: true, user: {username: 'TestUser'}},
+        newPost: {content: '', image: null},
+        postData: [],
+        singlePost: {},
+        postLoading: true,
+        isEdit: false,
+        editInput: {content: ''},
+        commentsInput: {},
+        uploadedFile: '',
+        uploadedFileCloudinaryUrl: '',
+        flashMessages: {},
+        showModal: {toggle: false, postID: null},
+        showPictureModal: {toggle: false, username: null},
+        editComment: {},
+        loadedProfile: {},
+        mainProfile: {},
+        chatMessages: {},
+        uploadedProfilePic: '',
+        uploadedProfilePicCloudinaryUrl: 'https://cloudinary.com/img.jpg',
+        profilePosts: [],
+        changeAboutMe: false,
+        userSearchResults: [],
+        friendsOnline: [],
+        chatsOpen: {},
+        chatImagesUpload: {},
+        chatImagesUploadUrl: {}
+    }, {
+        type: actions.POST_PROFILE_PIC_SUCCESFUL,
+        aboutMe: {aboutMe: 'New About Me'}
+    })).toEqual({
+        loginInput: {username: '', password: ''},
+        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
+        auth: {authenticated: true, user: {username: 'TestUser'}},
+        newPost: {content: '', image: null},
+        postData: [],
+        singlePost: {},
+        postLoading: true,
+        isEdit: false,
+        editInput: {content: ''},
+        commentsInput: {},
+        uploadedFile: '',
+        uploadedFileCloudinaryUrl: '',
+        flashMessages: {},
+        showModal: {toggle: false, postID: null},
+        showPictureModal: {toggle: false, username: null},
+        editComment: {},
+        loadedProfile: {ProfilePicture: 'https://cloudinary.com/img.jpg'},
+        mainProfile: {},
+        chatMessages: {},
+        uploadedProfilePic: '',
+        uploadedProfilePicCloudinaryUrl: '',
+        profilePosts: [],
+        changeAboutMe: false,
+        userSearchResults: [],
+        friendsOnline: [],
+        chatsOpen: {},
+        chatImagesUpload: {},
+        chatImagesUploadUrl: {}
+    })
+  })
+
+  it('should handle UPLOAD_PROFILE_PIC', () => {
+    expect(reducer({
+        loginInput: {username: '', password: ''},
+        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
+        auth: {authenticated: true, user: {username: 'TestUser'}},
+        newPost: {content: '', image: null},
+        postData: [],
+        singlePost: {},
+        postLoading: true,
+        isEdit: false,
+        editInput: {content: ''},
+        commentsInput: {},
+        uploadedFile: '',
+        uploadedFileCloudinaryUrl: '',
+        flashMessages: {},
+        showModal: {toggle: false, postID: null},
+        showPictureModal: {toggle: false, username: null},
+        editComment: {},
+        loadedProfile: {},
+        mainProfile: {},
+        chatMessages: {},
+        uploadedProfilePic: '',
+        uploadedProfilePicCloudinaryUrl: '',
+        profilePosts: [],
+        changeAboutMe: false,
+        userSearchResults: [],
+        friendsOnline: [],
+        chatsOpen: {},
+        chatImagesUpload: {},
+        chatImagesUploadUrl: {}
+    }, {
+        type: actions.UPLOAD_PROFILE_PIC,
+        files: 'files.jpg'
     })).toEqual({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -152,9 +282,9 @@ describe('reducer', () => {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {outgoingRequests: [{username: 'test1'}]},
+        mainProfile: {},
         chatMessages: {},
-        uploadedProfilePic: '',
+        uploadedProfilePic: 'files.jpg',
         uploadedProfilePicCloudinaryUrl: '',
         profilePosts: [],
         changeAboutMe: false,
@@ -166,7 +296,7 @@ describe('reducer', () => {
     })
   })
 
-  it('should handle DENY_FRIEND_REQUEST_SUCCESFUL', () => {
+  it('should handle SET_PROFILE_PIC_CLOUDINARY_URL', () => {
     expect(reducer({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -185,7 +315,7 @@ describe('reducer', () => {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {incomingRequests: [{username: 'test1'}, {username: 'TestUser'}]},
+        mainProfile: {},
         chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
@@ -197,8 +327,8 @@ describe('reducer', () => {
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     }, {
-        type: actions.DENY_FRIEND_REQUEST_SUCCESFUL,
-        username: 'TestUser'
+        type: actions.SET_PROFILE_PIC_CLOUDINARY_URL,
+        url: 'https://cloudinary.com/img.jpg'
     })).toEqual({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -217,10 +347,10 @@ describe('reducer', () => {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {incomingRequests: [{username: 'test1'}]},
+        mainProfile: {},
         chatMessages: {},
         uploadedProfilePic: '',
-        uploadedProfilePicCloudinaryUrl: '',
+        uploadedProfilePicCloudinaryUrl: 'https://cloudinary.com/img.jpg',
         profilePosts: [],
         changeAboutMe: false,
         userSearchResults: [],
@@ -231,7 +361,7 @@ describe('reducer', () => {
     })
   })
 
-  it('should handle RECEIVED_FRIEND_REQUEST', () => {
+  it('should handle CHANGE_PICTURE_MODAL', () => {
     expect(reducer({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -250,7 +380,7 @@ describe('reducer', () => {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {incomingRequests: [{username: 'test1'}]},
+        mainProfile: {},
         chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
@@ -262,9 +392,9 @@ describe('reducer', () => {
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     }, {
-        type: actions.RECEIVED_FRIEND_REQUEST,
+        type: actions.CHANGE_PICTURE_MODAL,
         username: 'TestUser',
-        ProfilePicture: 'abc.jpg'
+        toggle: true
     })).toEqual({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -280,10 +410,10 @@ describe('reducer', () => {
         uploadedFileCloudinaryUrl: '',
         flashMessages: {},
         showModal: {toggle: false, postID: null},
-        showPictureModal: {toggle: false, username: null},
+        showPictureModal: {toggle: true, username: 'TestUser'},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {incomingRequests: [{username: 'test1'}, {username: 'TestUser', ProfilePicture: 'abc.jpg'}]},
+        mainProfile: {},
         chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
@@ -297,7 +427,7 @@ describe('reducer', () => {
     })
   })
 
-  it('should handle ACCEPTED_FRIEND_REQUEST', () => {
+  it('should handle GET_PROFILE_SUCCESS', () => {
     expect(reducer({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -316,7 +446,7 @@ describe('reducer', () => {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {Friends: [], outgoingRequests: [{username: 'test1'}, {username: 'TestUser1'}]},
+        mainProfile: {},
         chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
@@ -328,14 +458,14 @@ describe('reducer', () => {
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     }, {
-        type: actions.ACCEPTED_FRIEND_REQUEST,
-        username: 'TestUser1'
+        type: actions.GET_PROFILE_SUCCESS,
+        data: {username: 'LoadedProfile', posts: [{content: '1'}, {content: '2'}]}
     })).toEqual({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
         auth: {authenticated: true, user: {username: 'TestUser'}},
         newPost: {content: '', image: null},
-        postData: [],
+        postData: [{content: '1'}, {content: '2'}],
         singlePost: {},
         postLoading: true,
         isEdit: false,
@@ -347,8 +477,8 @@ describe('reducer', () => {
         showModal: {toggle: false, postID: null},
         showPictureModal: {toggle: false, username: null},
         editComment: {},
-        loadedProfile: {},
-        mainProfile: {Friends: [{username: 'TestUser1'}], outgoingRequests: [{username: 'test1'}]},
+        loadedProfile: {username: 'LoadedProfile', posts: [{content: '1'}, {content: '2'}]},
+        mainProfile: {},
         chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
@@ -362,7 +492,7 @@ describe('reducer', () => {
     })
   })
 
-  it('should handle CONFIRM_FRIEND_REQUEST_SUCCESFUL', () => {
+  it('should handle CHANGE_ABOUT_ME', () => {
     expect(reducer({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -381,7 +511,7 @@ describe('reducer', () => {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {Friends: [], incomingRequests: [{username: 'test1'}, {username: 'TestUser1'}]},
+        mainProfile: {},
         chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
@@ -393,8 +523,8 @@ describe('reducer', () => {
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     }, {
-        type: actions.CONFIRM_FRIEND_REQUEST_SUCCESFUL,
-        username: 'TestUser1'
+        type: actions.CHANGE_ABOUT_ME,
+        toggle: true
     })).toEqual({
         loginInput: {username: '', password: ''},
         registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
@@ -413,207 +543,12 @@ describe('reducer', () => {
         showPictureModal: {toggle: false, username: null},
         editComment: {},
         loadedProfile: {},
-        mainProfile: {Friends: [{username: 'TestUser1'}], incomingRequests: [{username: 'test1'}]},
+        mainProfile: {},
         chatMessages: {},
         uploadedProfilePic: '',
         uploadedProfilePicCloudinaryUrl: '',
         profilePosts: [],
-        changeAboutMe: false,
-        userSearchResults: [],
-        friendsOnline: [],
-        chatsOpen: {},
-        chatImagesUpload: {},
-        chatImagesUploadUrl: {}
-    })
-  })
-
-  it('should handle REMOVED_AS_FRIEND', () => {
-    expect(reducer({
-        loginInput: {username: '', password: ''},
-        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
-        auth: {authenticated: true, user: {username: 'TestUser'}},
-        newPost: {content: '', image: null},
-        postData: [],
-        singlePost: {},
-        postLoading: true,
-        isEdit: false,
-        editInput: {content: ''},
-        commentsInput: {},
-        uploadedFile: '',
-        uploadedFileCloudinaryUrl: '',
-        flashMessages: {},
-        showModal: {toggle: false, postID: null},
-        showPictureModal: {toggle: false, username: null},
-        editComment: {},
-        loadedProfile: {},
-        mainProfile: {Friends: [{username: 'test1'}, {username: 'TestUser'}]},
-        chatMessages: {},
-        uploadedProfilePic: '',
-        uploadedProfilePicCloudinaryUrl: '',
-        profilePosts: [],
-        changeAboutMe: false,
-        userSearchResults: [],
-        friendsOnline: [],
-        chatsOpen: {},
-        chatImagesUpload: {},
-        chatImagesUploadUrl: {}
-    }, {
-        type: actions.REMOVED_AS_FRIEND,
-        username: 'TestUser'
-    })).toEqual({
-        loginInput: {username: '', password: ''},
-        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
-        auth: {authenticated: true, user: {username: 'TestUser'}},
-        newPost: {content: '', image: null},
-        postData: [],
-        singlePost: {},
-        postLoading: true,
-        isEdit: false,
-        editInput: {content: ''},
-        commentsInput: {},
-        uploadedFile: '',
-        uploadedFileCloudinaryUrl: '',
-        flashMessages: {},
-        showModal: {toggle: false, postID: null},
-        showPictureModal: {toggle: false, username: null},
-        editComment: {},
-        loadedProfile: {},
-        mainProfile: {Friends: [{username: 'test1'}]},
-        chatMessages: {},
-        uploadedProfilePic: '',
-        uploadedProfilePicCloudinaryUrl: '',
-        profilePosts: [],
-        changeAboutMe: false,
-        userSearchResults: [],
-        friendsOnline: [],
-        chatsOpen: {},
-        chatImagesUpload: {},
-        chatImagesUploadUrl: {}
-    })
-  })
-
-  it('should handle REMOVE_FRIEND_REQUEST_SUCCESFUL', () => {
-    expect(reducer({
-        loginInput: {username: '', password: ''},
-        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
-        auth: {authenticated: true, user: {username: 'TestUser'}},
-        newPost: {content: '', image: null},
-        postData: [],
-        singlePost: {},
-        postLoading: true,
-        isEdit: false,
-        editInput: {content: ''},
-        commentsInput: {},
-        uploadedFile: '',
-        uploadedFileCloudinaryUrl: '',
-        flashMessages: {},
-        showModal: {toggle: false, postID: null},
-        showPictureModal: {toggle: false, username: null},
-        editComment: {},
-        loadedProfile: {},
-        mainProfile: {Friends: [{username: 'test1'}, {username: 'TestUser'}]},
-        chatMessages: {},
-        uploadedProfilePic: '',
-        uploadedProfilePicCloudinaryUrl: '',
-        profilePosts: [],
-        changeAboutMe: false,
-        userSearchResults: [],
-        friendsOnline: [],
-        chatsOpen: {},
-        chatImagesUpload: {},
-        chatImagesUploadUrl: {}
-    }, {
-        type: actions.REMOVE_FRIEND_REQUEST_SUCCESFUL,
-        username: 'TestUser'
-    })).toEqual({
-        loginInput: {username: '', password: ''},
-        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
-        auth: {authenticated: true, user: {username: 'TestUser'}},
-        newPost: {content: '', image: null},
-        postData: [],
-        singlePost: {},
-        postLoading: true,
-        isEdit: false,
-        editInput: {content: ''},
-        commentsInput: {},
-        uploadedFile: '',
-        uploadedFileCloudinaryUrl: '',
-        flashMessages: {},
-        showModal: {toggle: false, postID: null},
-        showPictureModal: {toggle: false, username: null},
-        editComment: {},
-        loadedProfile: {},
-        mainProfile: {Friends: [{username: 'test1'}]},
-        chatMessages: {},
-        uploadedProfilePic: '',
-        uploadedProfilePicCloudinaryUrl: '',
-        profilePosts: [],
-        changeAboutMe: false,
-        userSearchResults: [],
-        friendsOnline: [],
-        chatsOpen: {},
-        chatImagesUpload: {},
-        chatImagesUploadUrl: {}
-    })
-  })
-
-  it('should handle SEND_FRIEND_REQUEST_SUCCESFUL', () => {
-    expect(reducer({
-        loginInput: {username: '', password: ''},
-        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
-        auth: {authenticated: true, user: {username: 'TestUser'}},
-        newPost: {content: '', image: null},
-        postData: [],
-        singlePost: {},
-        postLoading: true,
-        isEdit: false,
-        editInput: {content: ''},
-        commentsInput: {},
-        uploadedFile: '',
-        uploadedFileCloudinaryUrl: '',
-        flashMessages: {},
-        showModal: {toggle: false, postID: null},
-        showPictureModal: {toggle: false, username: null},
-        editComment: {},
-        loadedProfile: {},
-        mainProfile: {outgoingRequests: [{username: 'test1'}]},
-        chatMessages: {},
-        uploadedProfilePic: '',
-        uploadedProfilePicCloudinaryUrl: '',
-        profilePosts: [],
-        changeAboutMe: false,
-        userSearchResults: [],
-        friendsOnline: [],
-        chatsOpen: {},
-        chatImagesUpload: {},
-        chatImagesUploadUrl: {}
-    }, {
-        type: actions.SEND_FRIEND_REQUEST_SUCCESFUL,
-        username: 'TestUser'
-    })).toEqual({
-        loginInput: {username: '', password: ''},
-        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
-        auth: {authenticated: true, user: {username: 'TestUser'}},
-        newPost: {content: '', image: null},
-        postData: [],
-        singlePost: {},
-        postLoading: true,
-        isEdit: false,
-        editInput: {content: ''},
-        commentsInput: {},
-        uploadedFile: '',
-        uploadedFileCloudinaryUrl: '',
-        flashMessages: {},
-        showModal: {toggle: false, postID: null},
-        showPictureModal: {toggle: false, username: null},
-        editComment: {},
-        loadedProfile: {},
-        mainProfile: {outgoingRequests: [{username: 'test1'}, {username: 'TestUser'}]},
-        chatMessages: {},
-        uploadedProfilePic: '',
-        uploadedProfilePicCloudinaryUrl: '',
-        profilePosts: [],
-        changeAboutMe: false,
+        changeAboutMe: true,
         userSearchResults: [],
         friendsOnline: [],
         chatsOpen: {},

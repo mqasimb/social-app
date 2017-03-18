@@ -29,7 +29,7 @@ describe('reducer', () => {
         changeAboutMe: false,
         userSearchResults: [],
         friendsOnline: [],
-        chatsOpen: [],
+        chatsOpen: {},
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     })
@@ -65,7 +65,7 @@ describe('reducer', () => {
         changeAboutMe: false,
         userSearchResults: [],
         friendsOnline: [],
-        chatsOpen: [],
+        chatsOpen: {},
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     })
@@ -101,7 +101,7 @@ describe('reducer', () => {
         changeAboutMe: false,
         userSearchResults: [],
         friendsOnline: [],
-        chatsOpen: [],
+        chatsOpen: {},
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     })
@@ -138,7 +138,7 @@ describe('reducer', () => {
         changeAboutMe: false,
         userSearchResults: [],
         friendsOnline: [],
-        chatsOpen: [],
+        chatsOpen: {},
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     })
@@ -175,7 +175,7 @@ describe('reducer', () => {
         changeAboutMe: false,
         userSearchResults: [],
         friendsOnline: [],
-        chatsOpen: [],
+        chatsOpen: {},
         chatImagesUpload: {},
         chatImagesUploadUrl: {}
     })
