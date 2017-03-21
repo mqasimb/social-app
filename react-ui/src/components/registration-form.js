@@ -3,6 +3,8 @@ const { Field, reduxForm } = require('redux-form');
 const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel, Row, Panel} = require('react-bootstrap');
 const actions = require('../actions/index');
 const { connect } = require('react-redux');
+const router = require('react-router');
+const Link = router.Link;
 
 const validate = values => {
   const errors = {}
@@ -71,6 +73,14 @@ class RegistrationForm extends React.Component {
   var textStyle = {
     textAlign: 'center'
   }
+  var bottomReminderStyle = {
+    textAlign: 'center',
+    paddingTop: '20px'
+  }
+  var linkStyle = {
+    textDecoration: 'underline',
+    fontFamily: 'UbuntuBold'
+  }
   const { handleSubmit, pristine, submitting } = this.props
   return (
     <Col xs={12} xsOffset={0} sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
@@ -119,6 +129,9 @@ class RegistrationForm extends React.Component {
               </Col>
             </FormGroup>
             </Form>
+            <div style={bottomReminderStyle}>
+            Do you already have an account? <Link style={linkStyle} to='login'>Login</Link>
+            </div>
     </div>
     </Col>
   )
