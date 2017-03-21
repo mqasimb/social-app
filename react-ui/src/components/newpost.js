@@ -4,7 +4,7 @@ const actions = require('../actions/index');
 
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
-const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button } = require('@sketchpixy/rubix');
+const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button, Col, Row } = require('react-bootstrap');
 const apikeys = require('../../../apikeys');
 
 class NewPost extends React.Component {
@@ -45,19 +45,26 @@ class NewPost extends React.Component {
         var imgStyle = {width: 100, height: 100}
         var dropzoneStyle = {display: 'inline-block', width:150, height:150, borderStyle:'dotted', borderColor: 'black', cursor: 'pointer', color: '#06D7D4', fontFamily: 'Lato,sans-serif'}
         var newPostStyle={
-            'backgroundColor': '#253243'
+            'backgroundColor': '#253243',
+            'fontFamily': 'Ubuntu, sans-serif'
+        }
+        var textAreaStyle = {
+            'backgroundColor': '#1d2838',
+            'borderColor': '#1d2838',
+            color: 'white',
+            'fontFamily': 'Ubuntu, sans-serif'
         }
         return(
             <div style={newPostStyle}>
-            <form onSubmit={this.postForm.bind(this)}>
-            <FormGroup controlId="formControlsTextarea">
+            <Row><form onSubmit={this.postForm.bind(this)}>
+            <Row><Col xs={12} md={8} lg={8} className='col-lg-offset-2 col-md-offset-2'><FormGroup controlId="formControlsTextarea">
               <ControlLabel>New Post</ControlLabel>
-              <FormControl onChange={this.changeForm.bind(this)} name='content' value={this.props.newPost.content || ''} componentClass="textarea" placeholder="textarea" />
-            </FormGroup>
-            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop files here to upload (or click)</p></Dropzone>
+              <FormControl style={textAreaStyle} onChange={this.changeForm.bind(this)} name='content' value={this.props.newPost.content || ''} componentClass="textarea" placeholder="Write a status update..." />
+            </FormGroup></Col></Row>
+            <Row><Col xs={12} md={8} lg={8} className='col-lg-offset-2 col-md-offset-2'><Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop files here to upload (or click)</p></Dropzone>
             <img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/>
-            <button disabled={!this.props.newPost.content}>Post</button>
-            </form>
+            <Button bsStyle="info" disabled={!this.props.newPost.content}>Post</Button></Col></Row>
+            </form></Row>
             </div>
             )
     }

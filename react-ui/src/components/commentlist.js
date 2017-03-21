@@ -5,7 +5,7 @@ const { Link } = require('react-router');
 const LikeBox = require('./likebox');
 const actions = require('../actions/index')
 const Comment = require('./comment');
-const { ListGroup } = require('@sketchpixy/rubix');
+const { ListGroup } = require('react-bootstrap');
 const uuid = require('uuid');
 var moment = require('moment');
 

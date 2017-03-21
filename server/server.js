@@ -32,7 +32,7 @@ var opts = {}
 app.use(cors())
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // app.use(expressJWT({ secret: config.jwtSecret}).unless({path: ['/login', '/users/login', 'register', '/users/register']}));
@@ -79,6 +79,26 @@ app.get('/users/logout', function(req, res){
     res.redirect('/login');
 });
 
+// app.post('/api/cloudinary', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+// 	console.log(req.body, 'reqb/body')
+                        
+//     let upload = request.post(process.env.CLOUDINARY_UPLOAD_URL)
+//                         .field('api_key', process.env.CLOUDINARY_API_KEY)
+//                         .field('api-secret', process.env.CLOUDINARY_API_SECRET)
+//                         .field('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET)
+//                         .field('file', file);
+
+//         upload.end((err, response) => {
+//           if (err) {
+//             console.error(err);
+//           }
+
+//           if (response.body.secure_url !== '') {
+//             res.json(response);
+//           }
+//         });
+// });
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 app.post('/api/search/profile', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     if(req.body.search == '') {
@@ -107,7 +127,7 @@ app.get('/api/profile', expressJWT({ secret: config.jwtSecret}), function(req, r
 });
 
 app.get('/api/profile/:username', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-     UserProfile.findOne({username: req.params.username}).populate({path: 'posts', populate: {path: 'profile', select:'ProfilePicture'}}).populate({path: 'Friends', select:'ProfilePicture username'}).exec(function(err, userprofile) {
+     UserProfile.findOne({username: req.params.username}).populate({path: 'posts', populate: [{path: 'profile', select:'ProfilePicture'}, {path: 'comments.profile', select:'ProfilePicture'}]}).populate({path: 'Friends', select:'ProfilePicture username'}).exec(function(err, userprofile) {
         if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'

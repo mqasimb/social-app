@@ -1,6 +1,6 @@
 const React = require('react');
 const { Field, reduxForm } = require('redux-form');
-const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel} = require('@sketchpixy/rubix');
+const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel} = require('react-bootstrap');
 const actions = require('../actions/index');
 const { connect } = require('react-redux');
 
@@ -11,21 +11,21 @@ const validate = values => {
   }
   return errors
 }
-
+var formStyle = {
+    backgroundColor: '#f0f2f5'
+  }
 const renderField = ({ input, label, name, type, controlId, placeholder, meta: { touched, error, warning } }) => (
     <div>
-    <FormControl {...input} name={name} type={type} placeholder={placeholder} />
+    <FormControl style={formStyle} {...input} name={name} type={type} placeholder={placeholder} />
     <ControlLabel>{touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}</ControlLabel>
     </div>
 )
 
 class CommentForm extends React.Component {
     submitLogin(values) {
-      console.log(values)
         this.props.dispatch(actions.registerAction(values))
     }
   render() {
-      console.log(this.props)
   const { handleSubmit, pristine, submitting } = this.props
   return (
       <div className='comment-form'>
@@ -41,7 +41,7 @@ class CommentForm extends React.Component {
             
             <FormGroup>
               <Col smOffset={2} sm={10}>
-                <Button type="submit" disabled={pristine || submitting}>Submit Comment</Button>
+                <Button bsStyle="info" type="submit" disabled={pristine || submitting}>Submit Comment</Button>
               </Col>
             </FormGroup>
             </Form>

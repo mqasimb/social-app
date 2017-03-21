@@ -8,7 +8,7 @@ const actions = require('../actions/index');
 const CommentList = require('./commentlist');
 const router = require('react-router');
 const CommentForm = require('./comment-form');
-const { Panel, Modal, Button } = require('@sketchpixy/rubix');
+const { Panel, Modal, Button } = require('react-bootstrap');
 const { reset } = require('redux-form');
 const uuid = require('uuid');
 

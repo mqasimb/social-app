@@ -4,7 +4,7 @@ const { connect } = require('react-redux');
 const actions = require('../actions/index');
 const router = require('react-router');
 const EditCommentForm = require('./edit-comment-form');
-const { ListGroupItem, Panel, Modal, Button, Media } = require('@sketchpixy/rubix');
+const { ListGroupItem, Panel, Modal, Button, Media } = require('react-bootstrap');
 
 class Comment extends React.Component {
     deleteClick(event) {

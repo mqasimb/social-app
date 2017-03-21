@@ -1,6 +1,6 @@
 const React = require('react');
 const { Field, reduxForm } = require('redux-form');
-const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel} = require('@sketchpixy/rubix');
+const { Panel, Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel, Row} = require('react-bootstrap');
 const actions = require('../actions/index');
 const { connect } = require('react-redux');
 
@@ -28,42 +28,73 @@ class LoginForm extends React.Component {
         this.props.dispatch(actions.registerAction(values))
     }
   render() {
+  var formStyle = {
+    backgroundColor: '#ffffff',
+    paddingBottom: '20px',
+    marginTop: '2.5em',
+    borderRadius: '0'
+  }
+  var buttonStyle = {
+    backgroundColor: '#1683ac',
+    color: '#ffffff',
+    fontFamily: 'UbuntuBold',
+    fontSize: '1.25em',
+    paddingTop: '10px',
+    paddingBottom: '10px',
+    paddingRight: '30px',
+    paddingLeft: '30px',
+    borderRadius: '0',
+    borderColor: '#1683ac'
+  }
+  var panelStyle = {
+    backgroundColor: '#253243',
+    color: '#00fff9',
+    textAlign: 'center',
+    fontFamily: 'Ubuntu',
+    fontSize: '1.5em',
+    borderRadius: '0'
+  }
+  var textStyle = {
+    textAlign: 'center'
+  }
   const { handleSubmit, pristine, submitting } = this.props
   return (
+    <Col xs={10} xsOffset={1} sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
       <div className='login-form'>
-            Login
-            <Form horizontal onSubmit={handleSubmit(this.props.onSubmit.bind(this))}>
+            <Form horizontal style={formStyle} onSubmit={handleSubmit(this.props.onSubmit.bind(this))}>
+            <Panel style={panelStyle}>LOGIN</Panel>
             <FormGroup controlId="formHorizontalUsername">
-              <Col componentClass={ControlLabel} sm={2}>
+              <Row><Col componentClass={ControlLabel} style={textStyle} xsOffset={3} smOffset={3} xs={6} sm={6}>
                 Username
-              </Col>
-              <Col sm={4}>
+              </Col></Row>
+              <Col xs={6} xsOffset={3} sm={6} smOffset={3}>
                 <Field controlId="formHorizontalUsername" name="username" type="text" component={renderField} label="Username" placeholder="Username"/>
               </Col>
             </FormGroup>
             
             <FormGroup controlId="formHorizontalPassword">
-              <Col componentClass={ControlLabel} sm={2}>
+              <Row><Col componentClass={ControlLabel} style={textStyle} xsOffset={4} smOffset={3} xs={4} sm={6}>
                 Password
-              </Col>
-              <Col sm={4}>
+              </Col></Row>
+              <Col xs={6} xsOffset={3} sm={6} smOffset={3}>
                 <Field controlId="formHorizontalPassword" name="password" type="password" component={renderField} label="Password" placeholder="Password"/>
               </Col>
             </FormGroup>
             
              <FormGroup>
-              <Col smOffset={2} sm={10}>
+              <Col style={textStyle} xs={6} xsOffset={3}>
                 <Checkbox>Remember me</Checkbox>
               </Col>
             </FormGroup>
             
             <FormGroup>
-              <Col smOffset={2} sm={10}>
-                <Button type="submit" disabled={pristine || submitting}>Sign in</Button>
+              <Col style={textStyle} xs={6} xsOffset={2} sm={6} smOffset={3}>
+                <Button style={buttonStyle} type="submit" disabled={pristine || submitting}>Submit</Button>
               </Col>
             </FormGroup>
             </Form>
     </div>
+    </Col>
   )
 }
 }

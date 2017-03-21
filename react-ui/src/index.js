@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 const App = require('./App');
+
 import './index.css';
 
 const { Provider } = require('react-redux');

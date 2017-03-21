@@ -1,6 +1,6 @@
 const React = require('react');
 const { Field, reduxForm } = require('redux-form');
-const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel} = require('@sketchpixy/rubix');
+const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel} = require('react-bootstrap');
 const actions = require('../actions/index');
 const { connect } = require('react-redux');
 
@@ -41,13 +41,13 @@ class EditCommentForm extends React.Component {
             
             <FormGroup>
               <Col smOffset={2} sm={10}>
-                <Button type="submit" disabled={pristine || submitting}>Submit Edit</Button>
+                <Button bsStyle="info" type="submit" disabled={pristine || submitting}>Submit Edit</Button>
               </Col>
             </FormGroup>
             
             <FormGroup>
               <Col smOffset={2} sm={10}>
-                <Button type="submit" onClick={this.props.cancel.bind(this)}>Cancel Edit</Button>
+                <Button bsStyle="info" type="submit" onClick={this.props.cancel.bind(this)}>Cancel Edit</Button>
               </Col>
             </FormGroup>
             </Form>

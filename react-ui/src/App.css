@@ -1,24 +1,63 @@
-.App {
-  text-align: center;
+@font-face {
+    font-family: Ubuntu;
+    src: url("../fonts/Ubuntu-R.woff2") format("woff2");
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+@font-face {
+    font-family: UbuntuItalic;
+    src: url("../fonts/Ubuntu-RI.woff2") format("woff2");
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+@font-face {
+    font-family: UbuntuLight;
+    src: url("../fonts/Ubuntu-L.woff2") format("woff2");
 }
 
-.App-intro {
-  font-size: large;
+@font-face {
+    font-family: UbuntuLightItalic;
+    src: url("../fonts/Ubuntu-LI.woff2") format("woff2");
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+@font-face {
+    font-family: UbuntuMedium;
+    src: url("../fonts/Ubuntu-M.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: UbuntuMediumItalic;
+    src: url("../fonts/Ubuntu-MI.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: UbuntuBold;
+    src: url("../fonts/Ubuntu-B.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: UbuntuBoldItalic;
+    src: url("../fonts/Ubuntu-BI.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: UbuntuCondensed;
+    src: url("../fonts/Ubuntu-C.woff2") format("woff2");
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Ubuntu;
+}
+
+h4 {
+  font-family: Ubuntu;
+}
+
+div.media-body > p {
+  font-color: blue;
+  font-size: 10px;
+}
+
+div.navbar-header {
+  color: '#06D7D4'
 }

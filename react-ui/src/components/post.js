@@ -7,7 +7,7 @@ const actions = require('../actions/index');
 const CommentList = require('./commentlist');
 const router = require('react-router');
 const CommentForm = require('./comment-form');
-const { Panel, Modal, Button, Media } = require('@sketchpixy/rubix');
+const { Panel, Modal, Button, Media, Col } = require('react-bootstrap');
 const { reset } = require('redux-form');
 const uuid = require('uuid');
 const DeleteModal = require('./delete-modal');
@@ -54,20 +54,21 @@ class Post extends React.Component {
         }
         var postStyle={
             backgroundColor: '#FFFFFF',
-            width: '50%',
-            margin: '0 auto'
+            maxWidth: '1000px',
+            margin: '20px auto',
+            padding: '20px'
         }
         var image = (this.props.image) ? (<img src={this.props.image} style={imageStyle}/>) : (null)
         return (
-            <div style={postStyle}>
+            <div className='singlePost' style={postStyle}>
             <Media>
              <Media.Left>
                 <img width={64} height={64} src={this.props.profilePicture} alt="Image"/>
               </Media.Left>
               <Media.Body>
-                <Media.Heading>{this.props.name}</Media.Heading>
+                <Media.Heading><Link to={'/profile/'+this.props.name}>{this.props.name}</Link></Media.Heading>
                 <p>{moment(this.props.date).format('MMMM Do YYYY, h:mm a')}</p>
-                <Link to={'/post/'+this.props.id}><Content content={this.props.content}/></Link><Link to={'/profile/'+this.props.name}>{this.props.name}</Link>
+                <Content content={this.props.content}/>
                 {image}
             <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
             <DeleteModal key={uuid.v4()} delete={this.deleteClick.bind(this)} close={this.close.bind(this)}/>
@@ -79,7 +80,6 @@ class Post extends React.Component {
                 {isEdit}{isDelete}
               </Media.Right>
             </Media>
-
             </div>
         )
     }

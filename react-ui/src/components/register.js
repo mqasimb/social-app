@@ -3,7 +3,7 @@ var { connect } = require('react-redux');
 const actions = require('../actions/index');
 var fetch = require('isomorphic-fetch');
 var axios = require('axios');
-const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel} = require('@sketchpixy/rubix');
+const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel} = require('react-bootstrap');
 const RegistrationForm = require('./registration-form');
 
 class Register extends React.Component {

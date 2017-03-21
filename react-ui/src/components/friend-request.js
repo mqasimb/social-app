@@ -1,6 +1,6 @@
 var React = require('react');
 var { connect } = require('react-redux');
-const { Panel, Modal, Button, Media } = require('@sketchpixy/rubix');
+const { Panel, Modal, Button, Media } = require('react-bootstrap');
 const actions = require('../actions/index');
 const io = require('socket.io-client');
 

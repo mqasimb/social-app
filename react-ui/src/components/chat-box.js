@@ -4,7 +4,7 @@ const Content = require('./content');
 const actions = require('../actions/index');
 const LikeBox = require('./likebox');
 const router = require('react-router');
-const { Button } = require('@sketchpixy/rubix');
+const { Button } = require('react-bootstrap');
 const Infinite = require('react-infinite');
 
 class ChatBox extends React.Component {
