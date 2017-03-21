@@ -91,7 +91,7 @@ class App extends React.Component {
                   <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Form pullLeft>
-                <AsyncSearch />
+                {(isLoggedIn) ? (<AsyncSearch />) : (null)}
                 </Navbar.Form>
                 <Navbar.Collapse>
                     {(isLoggedIn) ? (loggedInUser) : (loggedOutUser)}

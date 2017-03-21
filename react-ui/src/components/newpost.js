@@ -63,7 +63,7 @@ class NewPost extends React.Component {
             </FormGroup></Col></Row>
             <Row><Col xs={12} md={8} lg={8} className='col-lg-offset-2 col-md-offset-2'><Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop files here to upload (or click)</p></Dropzone>
             <img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/>
-            <Button bsStyle="info" disabled={!this.props.newPost.content}>Post</Button></Col></Row>
+            <Button onClick={this.postForm.bind(this)} bsStyle="info" disabled={!this.props.newPost.content}>Post</Button></Col></Row>
             </form></Row>
             </div>
             )

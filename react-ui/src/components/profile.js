@@ -6,7 +6,7 @@ const { Link } = require('react-router');
 const LikeBox = require('./likebox');
 const actions = require('../actions/index');
 const router = require('react-router');
-const { Panel, Modal, Button } = require('react-bootstrap');
+const { Panel, Modal, Button, Row, Col } = require('react-bootstrap');
 const ProfilePicture = require('./profile-picture');
 const AboutMe = require('./aboutme');
 const ProfilePosts = require('./profile-posts');
@@ -16,6 +16,7 @@ const Dropzone = require('react-dropzone');
 const request = require('superagent');
 const AboutMeForm = require('./aboutme-form');
 const io = require('socket.io-client');
+import Wallpaper from '../wallpaper.jpg'
 
 class Profile extends React.Component {
     componentDidMount() {
@@ -64,8 +65,34 @@ class Profile extends React.Component {
         this.socket.emit('remove-friend', this.props.params.username, this.props.mainProfile.username);
     }
     render(props) {
-        var profilePicStyle = {
-            'backgroundColor': '#253243'
+        var profileStyle = {
+            paddingTop: '50px',
+            backgroundImage: `url(${Wallpaper})`,
+            backgroundSize: 'cover',
+            overflow: 'hidden',
+            textAlign: 'center'
+        }
+        var buttonStyle = {
+            backgroundColor: '#253243',
+            color: '#ffffff',
+            fontFamily: 'UbuntuBold',
+            fontSize: '1.25em',
+            paddingTop: '10px',
+            paddingBottom: '10px',
+            paddingRight: '30px',
+            paddingLeft: '30px',
+            borderRadius: '0',
+            borderColor: '#00fff9'
+        }
+        var profileNameStyle = {
+            fontFamily: 'Ubuntu',
+            fontSize: '1.5em',
+            color: '#00fff9'
+        }
+        var aboutMeStyle = {
+            fontFamily: 'Ubuntu',
+            fontSize: '1em',
+            color: '#ffffff'
         }
         var acceptFriendRequest = this.props.mainProfile.incomingRequests.findIndex((request) => {
             return request.username == this.props.params.username;
@@ -77,22 +104,35 @@ class Profile extends React.Component {
         var isFriend = this.props.mainProfile.Friends.findIndex((request) => {
             return request.username == this.props.params.username;
         });
+        var rowStyle = {
+            paddingBottom: '30px'
+        }
         var sendFriendRequest = (((acceptFriendRequest > -1) || (cancelFriendRequest > -1)) && (isFriend < 0)) ? (false) : (true);
-        var acceptFriendRequestButton = <button onClick={this.acceptRequest.bind(this)}>Accept Friend Request</button>;
-        var denyFriendRequestButton = <button onClick={this.denyRequest.bind(this)}>Deny Friend Request</button>;
-        var cancelFriendRequestButton = <button onClick={this.cancelRequest.bind(this)}>Cancel Friend Request</button>;
-        var sendFriendRequestButton = <button onClick={this.addFriend.bind(this)}>Add Friend</button>;
-        var removeFriendRequestButton = <button onClick={this.removeFriend.bind(this)}>Remove Friend</button>;
+        var acceptFriendRequestButton = <Button style={buttonStyle} onClick={this.acceptRequest.bind(this)}>ACCEPT REQUEST</Button>;
+        var denyFriendRequestButton = <Button style={buttonStyle} onClick={this.denyRequest.bind(this)}>DENY REQUEST</Button>;
+        var cancelFriendRequestButton = <Button style={buttonStyle} onClick={this.cancelRequest.bind(this)}>CANCEL REQUEST</Button>;
+        var sendFriendRequestButton = <Button style={buttonStyle} onClick={this.addFriend.bind(this)}>ADD FRIEND</Button>;
+        var removeFriendRequestButton = <Button style={buttonStyle} onClick={this.removeFriend.bind(this)}>REMOVE FRIEND</Button>;
         return (
             <div>
-            <div className='profile-page-user' style={profilePicStyle}>
+            <div className='profile-page-user' style={profileStyle}>
+            <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
             <ProfilePicture img={this.props.loadedProfile.ProfilePicture} onClick={this.open.bind(this)}/>
-            {(this.props.auth.user.username == this.props.params.username) ? (null) : ((acceptFriendRequest > -1) ? (<div>{acceptFriendRequestButton} {denyFriendRequestButton}</div>) : ((isFriend > -1) ? (<div>Friends {removeFriendRequestButton}</div>) : ((cancelFriendRequest > -1) ? (cancelFriendRequestButton) : (sendFriendRequestButton))))}
-            {(this.props.auth.user.username == this.props.params.username) ? (<button onClick={this.open.bind(this)}>Change Profile Pic</button>) : (null)}
+            {(this.props.auth.user.username == this.props.params.username) ? (<Button style={buttonStyle} onClick={this.open.bind(this)}>CHANGE PICTURE</Button>) : (null)}
+            </Col></Row>
+            <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}><div style={profileNameStyle}>
+            {this.props.params.username}
+            </div></Col></Row>
+            <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
+            {(this.props.auth.user.username == this.props.params.username) ? (null) : ((acceptFriendRequest > -1) ? (<div>{acceptFriendRequestButton} {denyFriendRequestButton}</div>) : ((isFriend > -1) ? (removeFriendRequestButton) : ((cancelFriendRequest > -1) ? (cancelFriendRequestButton) : (sendFriendRequestButton))))}
+            </Col></Row>
             <ChangePictureModal setPicture={this.changeProfilePicture.bind(this)} close={this.close.bind(this)}/>
+            <Row style={rowStyle}><Col xs={10} xsOffset={1} sm={10} smOffset={1}>
             <AboutMe text={this.props.loadedProfile.AboutMe}/>
-            {(this.props.auth.user.username == this.props.params.username) ? ((this.props.changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: this.props.loadedProfile.AboutMe}}/>) : (<button onClick={this.enableAboutMeChange.bind(this)}>Change About Me</button>)) : (null)}
-            </div>
+            </Col></Row>
+            <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
+            {(this.props.auth.user.username == this.props.params.username) ? ((this.props.changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: this.props.loadedProfile.AboutMe}}/>) : (<Button style={buttonStyle} onClick={this.enableAboutMeChange.bind(this)}>EDIT ABOUT ME</Button>)) : (null)}
+            </Col></Row></div>
             <ProfilePosts posts={this.props.postData}/>
             <FriendsList list={this.props.mainProfile.Friends}/>
             </div>
