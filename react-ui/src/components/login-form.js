@@ -52,7 +52,8 @@ class LoginForm extends React.Component {
     textAlign: 'center',
     fontFamily: 'Ubuntu',
     fontSize: '1.5em',
-    borderRadius: '0'
+    borderRadius: '0',
+    borderColor: '#253243'
   }
   var textStyle = {
     textAlign: 'center'
