@@ -43,11 +43,11 @@ class App extends React.Component {
         <LinkContainer to='/friendRequests'><NavItem>Friend Requests</NavItem></LinkContainer>
         <NavItem href='' onClick={this.userLogout.bind(this)}>Logout</NavItem></Nav>;
         var topStyle={
-            marginTop: 70,
             'overflowX': 'hidden',
             fontFamily: 'Ubuntu',
             backgroundColor: '#f2f2f2',
             height: '100vh',
+            paddingTop: '140px'
         }
         var {notifications} = this.props;
         const notificationStyle = {
@@ -64,13 +64,17 @@ class App extends React.Component {
         const navBarStyle = {
             'backgroundColor': '#1D2838',
              color: '#06D7D4',
-            'borderColor': '#1D2838'
+            'borderColor': '#1D2838',
+            paddingTop: '15px',
+            paddingBottom: '15px'
         }
         const backgroundStyle = {
             'backgroundColor': '#F2F2F2',
         }
         var brandStyle = {
-            color: '#06D7D4'
+            color: '#06D7D4',
+            fontFamily: 'UbuntuLight',
+            fontSize: '1.5em'
         }
         return (
             <div style={topStyle}>
@@ -79,10 +83,10 @@ class App extends React.Component {
                 style={notificationStyle}
               />
             <div className='nav-bar'>
-            <Navbar collapseOnSelect fixedTop style={navBarStyle}>
+            <Navbar fixedTop style={navBarStyle}>
                 <Navbar.Header>
                   <Navbar.Brand>
-                    <Link to='/' style={brandStyle}>Social-App</Link>
+                    <Link to='/' style={brandStyle}>Social Gamers</Link>
                   </Navbar.Brand>
                   <Navbar.Toggle />
                 </Navbar.Header>

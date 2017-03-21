@@ -59,7 +59,7 @@ class LoginForm extends React.Component {
   }
   const { handleSubmit, pristine, submitting } = this.props
   return (
-    <Col xs={10} xsOffset={1} sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
+    <Col xs={12} xsOffset={0} sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
       <div className='login-form'>
             <Form horizontal style={formStyle} onSubmit={handleSubmit(this.props.onSubmit.bind(this))}>
             <Panel style={panelStyle}>LOGIN</Panel>
@@ -88,7 +88,7 @@ class LoginForm extends React.Component {
             </FormGroup>
             
             <FormGroup>
-              <Col style={textStyle} xs={6} xsOffset={2} sm={6} smOffset={3}>
+              <Col style={textStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
                 <Button style={buttonStyle} type="submit" disabled={pristine || submitting}>Submit</Button>
               </Col>
             </FormGroup>
