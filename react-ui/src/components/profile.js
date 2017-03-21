@@ -76,13 +76,14 @@ class Profile extends React.Component {
             backgroundColor: '#253243',
             color: '#ffffff',
             fontFamily: 'UbuntuBold',
-            fontSize: '1.25em',
+            fontSize: '1em',
             paddingTop: '10px',
             paddingBottom: '10px',
             paddingRight: '30px',
             paddingLeft: '30px',
             borderRadius: '0',
-            borderColor: '#00fff9'
+            borderColor: '#00fff9',
+            'white-space': 'normal'
         }
         var profileNameStyle = {
             fontFamily: 'Ubuntu',
