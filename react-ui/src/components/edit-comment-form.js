@@ -40,13 +40,10 @@ class EditCommentForm extends React.Component {
             </FormGroup>
             
             <FormGroup>
-              <Col smOffset={2} sm={10}>
+              <Col xsOffset={1} xs={4} smOffset={2} sm={2}>
                 <Button bsStyle="info" type="submit" disabled={pristine || submitting}>Submit Edit</Button>
               </Col>
-            </FormGroup>
-            
-            <FormGroup>
-              <Col smOffset={2} sm={10}>
+              <Col xsOffset={1} xs={4} smOffset={0} sm={2}>
                 <Button bsStyle="info" type="submit" onClick={this.props.cancel.bind(this)}>Cancel Edit</Button>
               </Col>
             </FormGroup>
