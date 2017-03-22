@@ -339,18 +339,20 @@ var appReducer = function(state, action) {
         return newState;
     }
 
-    // if(action.type === actions.EDIT_COMMENT_SUCCESSFUL) {
-    //     var firstIndex = newState.postData.findIndex(function(post) {
-    //         return post._id == action.postID;
-    //     });
-    //     if(firstIndex > -1) {
-    //         newState.postData[firstIndex].content = action.values.content;
-    //         newState.postData[firstIndex] = Object.assign({}, newState.postData[firstIndex]);
-    //         newState.postData = newState.postData.slice();
-    //         return newState;
-    //         }
-    //     return newState;
-    // }
+    if(action.type === actions.COMMENT_SUBMIT_SUCCESS) {
+        var firstIndex = newState.postData.findIndex(function(post) {
+            return post._id == action.postID;
+        });
+        var commentIndex = action.serverData.comments.length-1;
+        if(firstIndex > -1) {
+            newState.postData[firstIndex].comments.push({_id:action.serverData.comments[commentIndex]._id, comment: action.data.comment, username: newState.mainProfile.username, date: action.serverData.comments[commentIndex].date, post: action.postID, profile: newState.mainProfile})
+            newState.postData[firstIndex].comments = newState.postData[firstIndex].comments.slice();
+            newState.postData[firstIndex] = Object.assign({}, newState.postData[firstIndex]);
+            newState.postData = newState.postData.slice();
+            return newState;
+            }
+        return newState;
+    }
 
     if(action.type === actions.LIKE_STATUS_CHANGE_SUCCESSFUL) {
         var firstIndex = newState.postData.findIndex(function(post) {

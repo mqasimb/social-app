@@ -12,7 +12,7 @@ var moment = require('moment');
 class CommentList extends React.Component {
     render(props) {
         var comments = this.props.comments.map(function(comment) {
-            return <Comment post={comment.post} key={uuid.v1()} profilePicture={comment.profile.ProfilePicture} id={comment._id} username={comment.username} comment={comment.comment} date={moment(comment.date).startOf('hour').fromNow()} />;
+            return <Comment post={comment.post} key={uuid.v1()} profilePicture={comment.profile.ProfilePicture} id={comment._id} username={comment.username} comment={comment.comment} date={moment(comment.date).format('MMMM Do YYYY, h:mm a')} />;
         })
         return (
             <div>

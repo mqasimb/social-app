@@ -236,10 +236,12 @@ function commentInputChange(inputName, inputValue) {
 }
 
 const COMMENT_SUBMIT_SUCCESS = 'COMMENT_SUBMIT_SUCCESS';
-function commentSubmitSuccess(inputName) {
+function commentSubmitSuccess(postID, data, serverData) {
     return ({
         type: COMMENT_SUBMIT_SUCCESS,
-        inputName: inputName
+        postID: postID,
+        data: data,
+        serverData: serverData
     })
 }
 
@@ -257,8 +259,8 @@ function submitComment(postID, data) {
     return function(dispatch) {
         return axios.post('/api/comments/'+postID, data)
         .then(function(response) {
-            dispatch(commentSubmitSuccess(postID));
-            return dispatch(getPosts());
+            console.log(response.data)
+            dispatch(commentSubmitSuccess(postID, data, response.data));
         })
         .catch(function(err) {
             console.log(err);
@@ -271,7 +273,6 @@ function editComment(postID, commentID, data) {
         return axios.put('/api/comments/'+postID+'/'+commentID, data)
         .then(function(response) {
             dispatch(toggleEditComment(commentID, false));
-            console.log(data)
             dispatch(commentEditSuccess(postID, commentID, data));
             
         })
