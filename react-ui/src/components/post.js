@@ -1,5 +1,5 @@
-var React = require('react');
-var { connect } = require('react-redux');
+const React = require('react');
+const { connect } = require('react-redux');
 const Content = require('./content');
 const { Link } = require('react-router');
 const LikeBox = require('./likebox');
@@ -11,7 +11,10 @@ const { Panel, Modal, Button, Media, Col } = require('react-bootstrap');
 const { reset } = require('redux-form');
 const uuid = require('uuid');
 const DeleteModal = require('./delete-modal');
-var moment = require('moment');
+const moment = require('moment');
+
+import PencilEditButton from '../icons/pencil-edit-button.svg'
+import DeleteButton from '../icons/cancel.svg'
 
 class Post extends React.Component {
     likeBoxClick(event) {
@@ -43,22 +46,37 @@ class Post extends React.Component {
         this.props.dispatch(actions.toggleModal(this.props.id, true));
     }
     render(props) {
-        var deleteButton = <Button onClick={this.open.bind(this)}>Delete Post</Button>;
+        var editButtonStyle = {
+            height: '15px',
+            paddingRight: '5px'
+        }
+        var buttondivStyle = {
+            display: 'inline-block',
+            paddingLeft: '20px',
+            fontSize: '.75em'
+        }
+        var deleteButton = <div style={buttondivStyle} onClick={this.open.bind(this)}><img style={editButtonStyle} src={DeleteButton} />Delete</div>;
         var confirmDelete = <Button onClick={this.deleteClick.bind(this)}>Delete Post</Button>;
-        var editButton = <Button onClick={this.editClick.bind(this)}>Edit Post</Button>;
+        var editButton = <div style={buttondivStyle}  onClick={this.editClick.bind(this)}><img style={editButtonStyle} src={PencilEditButton} />Edit</div>;
         var isDelete = (this.props.name === this.props.auth.user.username) ? (deleteButton) : (null);
         var isEdit = (this.props.name === this.props.auth.user.username) ? (editButton) : (null);
-        var imageStyle = {
-            width: 200,
-            height: 200
-        }
+
         var postStyle={
             backgroundColor: '#FFFFFF',
             maxWidth: '1000px',
             margin: '20px auto',
             padding: '20px'
         }
-        var image = (this.props.image) ? (<img src={this.props.image} style={imageStyle}/>) : (null)
+        var postImageStyle = {
+            paddingTop: '20px',
+            maxWidth: '500px',
+            width: '100%',
+            padding: '1px',
+            borderStyle: 'solid',
+            borderColor: '#00fff9',
+            borderWidth: '1px'
+        }
+        var image = (this.props.image) ? (<img style={postImageStyle} src={this.props.image}/>) : (null)
         return (
             <div className='singlePost' style={postStyle}>
             <Media>
@@ -66,19 +84,19 @@ class Post extends React.Component {
                 <img width={64} height={64} src={this.props.profilePicture} alt="Image"/>
               </Media.Left>
               <Media.Body>
-                <Media.Heading><Link to={'/profile/'+this.props.name}>{this.props.name}</Link></Media.Heading>
+                <Media.Heading><Link to={'/profile/'+this.props.name}>{this.props.name}</Link>
+                {isEdit}
+                {isDelete}
+              </Media.Heading>
                 <p>{moment(this.props.date).format('MMMM Do YYYY, h:mm a')}</p>
                 <Content content={this.props.content}/>
                 {image}
             <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
             <DeleteModal key={uuid.v4()} delete={this.deleteClick.bind(this)} close={this.close.bind(this)}/>
             <CommentForm onSubmit={this.submitComment.bind(this)} form={this.props.id}/>
-            <h2>Comments</h2>
+            {(this.props.comments.length > 0) ? (<h2>Comments</h2>) : (null)}
             <CommentList comments={this.props.comments}/>
               </Media.Body>
-              <Media.Right>
-                {isEdit}{isDelete}
-              </Media.Right>
             </Media>
             </div>
         )

@@ -2,6 +2,10 @@ span.nav-text, .create-post-span {
     color: #ffffff;
 }
 
+.comment-date {
+    font-size: '.75em';
+}
+
 @font-face {
     font-family: Ubuntu;
     src: url("../fonts/Ubuntu-R.woff2") format("woff2");

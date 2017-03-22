@@ -1,10 +1,13 @@
-var React = require('react');
-var moment = require('moment');
+const React = require('react');
+const moment = require('moment');
 const { connect } = require('react-redux');
 const actions = require('../actions/index');
 const router = require('react-router');
 const EditCommentForm = require('./edit-comment-form');
 const { ListGroupItem, Panel, Modal, Button, Media } = require('react-bootstrap');
+
+import PencilEditButton from '../icons/pencil-edit-button.svg'
+import DeleteButton from '../icons/cancel.svg'
 
 class Comment extends React.Component {
     deleteClick(event) {
@@ -30,8 +33,19 @@ class Comment extends React.Component {
         this.props.dispatch(actions.toggleEditComment(this.props.id, true));
     }
     render(props) {
-      var deleteButton = <Button bsStyle="info" onClick={this.deleteClick.bind(this)}>Delete Comment</Button>;
-      var editButton = <Button bsStyle="info" onClick={this.enableEdit.bind(this)}>Edit Comment</Button>;
+      var editButtonStyle = {
+            height: '10px',
+            paddingRight: '5px'
+      }
+      var buttondivStyle = {
+            display: 'inline-block',
+            fontSize: '.85em'
+      }
+      var dateStyle = {
+            fontSize: '0.85em'
+      }
+      var deleteButton = <div style={buttondivStyle} onClick={this.deleteClick.bind(this)}><img style={editButtonStyle} src={DeleteButton} />Delete</div>;
+      var editButton = <div style={buttondivStyle} onClick={this.enableEdit.bind(this)}><img style={editButtonStyle} src={PencilEditButton} />Edit</div>;
       var isDelete = (this.props.username === this.props.auth.user.username) ? (deleteButton) : (null);
       var isEdit = (this.props.username === this.props.auth.user.username) ? (editButton) : (null);
       var notEdit = <ListGroupItem>{this.props.username}: {this.props.comment}  -{this.props.date} {isEdit} {isDelete}</ListGroupItem>;
@@ -44,9 +58,9 @@ class Comment extends React.Component {
               </Media.Left>
               <Media.Body>
                 <Media.Heading>{this.props.username}</Media.Heading>
-                {isEdit} {isDelete}
+                <span style={dateStyle}>{this.props.date}</span><br/>
+                <span className="comment-buttons">{isEdit} {isDelete}</span>
                 <p>{this.props.comment}</p>
-                <p>{this.props.date}</p>
               </Media.Body>
             </Media>)}
             </div>
