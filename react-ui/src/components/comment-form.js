@@ -26,21 +26,22 @@ class CommentForm extends React.Component {
         this.props.dispatch(actions.registerAction(values))
     }
   render() {
+  var formStyle = {
+    paddingTop: '30px',
+    textAlign: 'center'
+  }
   const { handleSubmit, pristine, submitting } = this.props
   return (
       <div className='comment-form'>
-            <Form horizontal onSubmit={handleSubmit(this.props.onSubmit.bind(this))}>
+            <Form style={formStyle} horizontal onSubmit={handleSubmit(this.props.onSubmit.bind(this))}>
             <FormGroup controlId="formHorizontalComment">
-              <Col componentClass={ControlLabel} sm={2}>
-                Comment
-              </Col>
-              <Col sm={4}>
+              <Col xs={12} sm={6} smOffset={3} md={6} lg={6}>
                 <Field controlId="formHorizontalComment" name="comment" type="text" component={renderField} label="Comment" placeholder="Write a comment..."/>
               </Col>
             </FormGroup>
             
             <FormGroup>
-              <Col smOffset={2} sm={10}>
+              <Col>
                 <Button bsStyle="info" type="submit" disabled={pristine || submitting}>Submit Comment</Button>
               </Col>
             </FormGroup>
