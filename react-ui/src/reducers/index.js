@@ -339,6 +339,43 @@ var appReducer = function(state, action) {
         return newState;
     }
 
+    // if(action.type === actions.EDIT_COMMENT_SUCCESSFUL) {
+    //     var firstIndex = newState.postData.findIndex(function(post) {
+    //         return post._id == action.postID;
+    //     });
+    //     if(firstIndex > -1) {
+    //         newState.postData[firstIndex].content = action.values.content;
+    //         newState.postData[firstIndex] = Object.assign({}, newState.postData[firstIndex]);
+    //         newState.postData = newState.postData.slice();
+    //         return newState;
+    //         }
+    //     return newState;
+    // }
+
+    if(action.type === actions.LIKE_STATUS_CHANGE_SUCCESSFUL) {
+        var firstIndex = newState.postData.findIndex(function(post) {
+            return post._id == action.postID;
+        });
+        if(firstIndex > -1) {
+            var returnIndex = newState.postData[firstIndex].likes.findIndex(function(user) { 
+                return user.username == action.userID;
+            })
+            if(returnIndex > -1) {
+                //remove like
+                newState.postData[firstIndex].likes.splice(returnIndex, 1);
+            }
+            else {
+                //add like
+                newState.postData[firstIndex].likes.push({username: action.userID, like: true})
+            }
+            newState.postData[firstIndex].likes = newState.postData[firstIndex].likes.slice();
+            newState.postData[firstIndex] = Object.assign({}, newState.postData[firstIndex]);
+            newState.postData = newState.postData.slice();
+            return newState;
+            }
+        return newState;
+    }
+
     if(action.type === actions.TOGGLE_EDIT_POST) {
         newState.editPost[action.postID] = action.toggle;
         newState.editPost = Object.assign({}, newState.editPost)

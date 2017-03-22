@@ -205,11 +205,11 @@ function editPostDisable() {
     })
 }
 
-function updateLikeStatus(postID) {
+function updateLikeStatus(postID, userID) {
     return function(dispatch) {
         return axios.post('/api/likes/'+postID)
         .then(function(response) {
-            return dispatch(getPosts());
+            return dispatch(likeStatusChangeSuccessful(postID, userID));
         })
         .catch(function(err) {
             console.log(err);
@@ -218,10 +218,11 @@ function updateLikeStatus(postID) {
 }
 
 const LIKE_STATUS_CHANGE_SUCCESSFUL = 'LIKE_STATUS_CHANGE_SUCCESSFUL';
-function likeStatusChangeSuccessful(data) {
+function likeStatusChangeSuccessful(postID, userID) {
     return ({
         type: LIKE_STATUS_CHANGE_SUCCESSFUL,
-        data: data
+        postID: postID,
+        userID: userID
     })
 }
 

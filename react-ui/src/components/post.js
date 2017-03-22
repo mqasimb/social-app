@@ -20,7 +20,7 @@ import DeleteButton from '../icons/cancel.svg'
 class Post extends React.Component {
     likeBoxClick(event) {
         event.preventDefault();
-        this.props.dispatch(actions.updateLikeStatus(this.props.id));
+        this.props.dispatch(actions.updateLikeStatus(this.props.id, this.props.auth.user._id));
     }
     deleteClick(event) {
         event.preventDefault();
