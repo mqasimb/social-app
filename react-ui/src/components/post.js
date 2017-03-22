@@ -7,11 +7,12 @@ const actions = require('../actions/index');
 const CommentList = require('./commentlist');
 const router = require('react-router');
 const CommentForm = require('./comment-form');
-const { Panel, Modal, Button, Media, Col } = require('react-bootstrap');
+const { Panel, Modal, Button, Media, Col, ListGroupItem } = require('react-bootstrap');
 const { reset } = require('redux-form');
 const uuid = require('uuid');
 const DeleteModal = require('./delete-modal');
 const moment = require('moment');
+const EditPostForm = require('./edit-post-form');
 
 import PencilEditButton from '../icons/pencil-edit-button.svg'
 import DeleteButton from '../icons/cancel.svg'
@@ -27,10 +28,19 @@ class Post extends React.Component {
         this.props.dispatch(actions.deletePost(this.props.showModal.postID));
         this.props.dispatch(actions.toggleModal(null, false));
     }
-    editClick(event) {
+    cancelEdit(event) {
         event.preventDefault();
-        this.props.dispatch(actions.editPostEnable());
-        router.browserHistory.push('/post/'+this.props.id);
+        this.props.dispatch(actions.toggleEditPost(this.props.id, false));
+    }
+    enableEdit(event) {
+        event.preventDefault();
+        this.props.dispatch(actions.toggleEditPost(this.props.id, true));
+    }
+    editPost(values) {
+        this.props.dispatch(actions.submitEdittedPost(this.props.id, values)).then((response)  =>{
+            this.props.dispatch(actions.toggleEditPost(this.props.id, false));
+            this.props.dispatch(actions.editPostSuccessful(this.props.id, values));
+        })
     }
     commentInput(event) {
         this.props.dispatch(actions.commentInputChange(event.target.name, event.target.value))
@@ -57,9 +67,10 @@ class Post extends React.Component {
         }
         var deleteButton = <div style={buttondivStyle} onClick={this.open.bind(this)}><img style={editButtonStyle} src={DeleteButton} />Delete</div>;
         var confirmDelete = <Button onClick={this.deleteClick.bind(this)}>Delete Post</Button>;
-        var editButton = <div style={buttondivStyle}  onClick={this.editClick.bind(this)}><img style={editButtonStyle} src={PencilEditButton} />Edit</div>;
+        var editButton = <div style={buttondivStyle}  onClick={this.enableEdit.bind(this)}><img style={editButtonStyle} src={PencilEditButton} />Edit</div>;
         var isDelete = (this.props.name === this.props.auth.user.username) ? (deleteButton) : (null);
         var isEdit = (this.props.name === this.props.auth.user.username) ? (editButton) : (null);
+        var editOn = <ListGroupItem><EditPostForm form={this.props.id} onSubmit={this.editPost.bind(this)} cancel={this.cancelEdit.bind(this)} initialValues={{content: this.props.content}} /></ListGroupItem>;
 
         var postStyle={
             backgroundColor: '#FFFFFF',
@@ -79,7 +90,7 @@ class Post extends React.Component {
         var image = (this.props.image) ? (<img style={postImageStyle} src={this.props.image}/>) : (null)
         return (
             <div className='singlePost' style={postStyle}>
-            <Media>
+            {(this.props.editPost[this.props.id]) ? (editOn) : (<Media>
              <Media.Left>
                 <img width={64} height={64} src={this.props.profilePicture} alt="Image"/>
               </Media.Left>
@@ -97,7 +108,7 @@ class Post extends React.Component {
             {(this.props.comments.length > 0) ? (<h2>Comments</h2>) : (null)}
             <CommentList comments={this.props.comments}/>
               </Media.Body>
-            </Media>
+            </Media>)}
             </div>
         )
     }
@@ -108,7 +119,8 @@ function mapStateToProps(state, props) {
         auth: state.app.auth,
         isEdit: state.app.isEdit,
         commentsInput: state.app.commentsInput,
-        showModal: state.app.showModal
+        showModal: state.app.showModal,
+        editPost: state.app.editPost
     })
 }
 var Container = connect(mapStateToProps)(Post);

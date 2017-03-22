@@ -18,6 +18,7 @@ var initialState = {
         showModal: {toggle: false, postID: null},
         showPictureModal: {toggle: false, username: null},
         editComment: {},
+        editPost: {},
         loadedProfile: {},
         mainProfile: {},
         chatMessages: {},
@@ -335,6 +336,25 @@ var appReducer = function(state, action) {
     if(action.type === actions.TOGGLE_EDIT_COMMENT) {
         newState.editComment[action.commentID] = action.toggle;
         newState.editComment = Object.assign({}, newState.editComment)
+        return newState;
+    }
+
+    if(action.type === actions.TOGGLE_EDIT_POST) {
+        newState.editPost[action.postID] = action.toggle;
+        newState.editPost = Object.assign({}, newState.editPost)
+        return newState;
+    }
+
+    if(action.type === actions.EDIT_POST_SUCCESSFUL) {
+        var firstIndex = newState.postData.findIndex(function(post) {
+            return post._id == action.postID;
+        });
+        if(firstIndex > -1) {
+            newState.postData[firstIndex].content = action.values.content;
+            newState.postData[firstIndex] = Object.assign({}, newState.postData[firstIndex]);
+            newState.postData = newState.postData.slice();
+            return newState;
+            }
         return newState;
     }
     

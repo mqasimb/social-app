@@ -17,13 +17,6 @@ class Comment extends React.Component {
     editComment(values) {
         this.props.dispatch(actions.editComment(this.props.post, this.props.id, values));
     }
-    submitEdit(event) {
-        event.preventDefault();
-        this.props.dispatch(actions.submitEdittedPost(this.props.params.id, this.props.editInput)).then((response)  =>{
-            this.props.dispatch(actions.getSinglePost(this.props.params.id));
-            this.props.dispatch(actions.editPostDisable());
-        })
-    }
     cancelEdit(event) {
         event.preventDefault();
         this.props.dispatch(actions.toggleEditComment(this.props.id, false));

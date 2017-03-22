@@ -289,6 +289,15 @@ function toggleEditComment(commentID, toggle) {
     })
 }
 
+const TOGGLE_EDIT_POST = 'TOGGLE_EDIT_POST';
+function toggleEditPost(postID, toggle) {
+    return ({
+        type: TOGGLE_EDIT_POST,
+        postID: postID,
+        toggle: toggle
+    })
+}
+
 function deleteComment(postID, commentID) {
     return function(dispatch) {
         return axios.delete('/api/comments/'+postID+'/'+commentID)
@@ -329,6 +338,15 @@ function submitEdittedPost(postID, data) {
             console.log(err);
         })
     }
+}
+
+const EDIT_POST_SUCCESSFUL = 'EDIT_POST_SUCCESSFUL';
+function editPostSuccessful(postID, values) {
+    return ({
+        type: EDIT_POST_SUCCESSFUL,
+        postID: postID,
+        values: values
+    })
 }
 
 const SET_UPLOAD_FILE_CLOUDINARY_URL = 'SET_UPLOAD_FILE_CLOUDINARY_URL';
@@ -734,6 +752,12 @@ function loadOlderMessages(friend) {
         friend: friend
     })
 }
+
+exports.EDIT_POST_SUCCESSFUL = EDIT_POST_SUCCESSFUL;
+exports.editPostSuccessful = editPostSuccessful;
+
+exports.TOGGLE_EDIT_POST = TOGGLE_EDIT_POST;
+exports.toggleEditPost = toggleEditPost;
 
 exports.LOAD_OLDER_MESSAGES = LOAD_OLDER_MESSAGES;
 exports.loadOlderMessages = loadOlderMessages;
