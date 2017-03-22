@@ -46,7 +46,7 @@ class NewPost extends React.Component {
     
     render() {
         var imgStyle = {width: 100, height: 100}
-        var dropzoneStyle = {display: 'inline-block', width:150, height:150, borderStyle:'dotted', borderColor: 'black', cursor: 'pointer', color: '#06D7D4', fontFamily: 'Lato,sans-serif'}
+        var dropzoneStyle = {textAlign: 'center', display: 'inline-block', width:150, height:150, borderStyle:'solid', borderColor: '#1d2838', backgroundColor: '#1d2838', cursor: 'pointer', color: '#06D7D4', fontFamily: 'Lato,sans-serif'}
         var newPostStyle={
             'backgroundColor': '#253243',
             'fontFamily': 'Ubuntu, sans-serif',
@@ -66,15 +66,18 @@ class NewPost extends React.Component {
             color: '#ffffff',
             fontFamily: 'UbuntuBold',
             fontSize: '1em',
-            paddingTop: '10px',
-            paddingBottom: '10px',
-            paddingRight: '20px',
-            paddingLeft: '20px',
+            paddingTop: '5px',
+            paddingBottom: '5px',
+            paddingRight: '10px',
+            paddingLeft: '10px',
             borderRadius: '0',
             borderColor: '#1683ac'
         }
         var buttonCenter = {
             textAlign: 'center'
+        }
+        var rowStylePadding = {
+            paddingBottom: '30px'
         }
         return(
             <div style={newPostStyle}>
@@ -86,11 +89,14 @@ class NewPost extends React.Component {
               <ControlLabel>New Post</ControlLabel>
               <FormControl style={textAreaStyle} onChange={this.changeForm.bind(this)} name='content' value={this.props.newPost.content || ''} componentClass="textarea" placeholder="Write a status update..." />
             </FormGroup></Col></Row>
-            <Row><Col style={buttonCenter} xs={4} xsOffset={7} smOffset={7} mdOffset={7} md={4} lg={4}>
+            <Row style={rowStylePadding}>
+            <Col xs={2} xsOffset={1} md={2} mdOffset={2} lg={2}>
+            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}>{(this.props.uploadedFileCloudinaryUrl) ? (<div><img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/><p>Drop files here to upload (or click)</p></div>) : (<p>Drop files here to upload (or click)</p>)}</Dropzone>
+            </Col>
+            <Col style={buttonCenter} xs={2} xsOffset={5} smOffset={5} mdOffset={4} md={2} lg={2}>
             <Button style={buttonStyle} onClick={this.postForm.bind(this)} bsStyle="info" disabled={!this.props.newPost.content}>Post</Button>
-            </Col></Row>
-            <Row><Col xs={12} md={8} lg={8}><Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop files here to upload (or click)</p></Dropzone>
-            <img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/></Col></Row>
+            </Col>
+            </Row>
             </form>
             </div>
             )
