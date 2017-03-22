@@ -7,6 +7,9 @@ const request = require('superagent');
 const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button, Col, Row } = require('react-bootstrap');
 const apikeys = require('../../../apikeys');
 
+import CheckboxPen from '../icons/checkbox-pen-outline.svg'
+
+
 class NewPost extends React.Component {
     postForm(event) {
         event.preventDefault();
@@ -46,7 +49,8 @@ class NewPost extends React.Component {
         var dropzoneStyle = {display: 'inline-block', width:150, height:150, borderStyle:'dotted', borderColor: 'black', cursor: 'pointer', color: '#06D7D4', fontFamily: 'Lato,sans-serif'}
         var newPostStyle={
             'backgroundColor': '#253243',
-            'fontFamily': 'Ubuntu, sans-serif'
+            'fontFamily': 'Ubuntu, sans-serif',
+            paddingTop: '30px'
         }
         var textAreaStyle = {
             'backgroundColor': '#1d2838',
@@ -54,17 +58,40 @@ class NewPost extends React.Component {
             color: 'white',
             'fontFamily': 'Ubuntu, sans-serif'
         }
+        var svgStyle = {
+            height: '30px'
+        }
+        var buttonStyle = {
+            backgroundColor: '#1683ac',
+            color: '#ffffff',
+            fontFamily: 'UbuntuBold',
+            fontSize: '1em',
+            paddingTop: '10px',
+            paddingBottom: '10px',
+            paddingRight: '20px',
+            paddingLeft: '20px',
+            borderRadius: '0',
+            borderColor: '#1683ac'
+        }
+        var buttonCenter = {
+            textAlign: 'center'
+        }
         return(
             <div style={newPostStyle}>
-            <Row><form onSubmit={this.postForm.bind(this)}>
-            <Row><Col xs={12} md={8} lg={8} className='col-lg-offset-2 col-md-offset-2'><FormGroup controlId="formControlsTextarea">
+            <Row><Col componentClass={ControlLabel} xsOffset={1} smOffset={1} mdOffset={2} xs={6} sm={6}>
+            <img style={svgStyle} src={CheckboxPen} /><span className="create-post-span">Create Post</span>
+            </Col></Row>
+            <form onSubmit={this.postForm.bind(this)}>
+            <Row><Col xs={10} xsOffset={1} md={10} mdOffset={1} md={8} mdOffset={2} lg={8}><FormGroup controlId="formControlsTextarea">
               <ControlLabel>New Post</ControlLabel>
               <FormControl style={textAreaStyle} onChange={this.changeForm.bind(this)} name='content' value={this.props.newPost.content || ''} componentClass="textarea" placeholder="Write a status update..." />
             </FormGroup></Col></Row>
-            <Row><Col xs={12} md={8} lg={8} className='col-lg-offset-2 col-md-offset-2'><Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop files here to upload (or click)</p></Dropzone>
-            <img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/>
-            <Button onClick={this.postForm.bind(this)} bsStyle="info" disabled={!this.props.newPost.content}>Post</Button></Col></Row>
-            </form></Row>
+            <Row><Col style={buttonCenter} xs={4} xsOffset={7} smOffset={7} mdOffset={7} md={4} lg={4}>
+            <Button style={buttonStyle} onClick={this.postForm.bind(this)} bsStyle="info" disabled={!this.props.newPost.content}>Post</Button>
+            </Col></Row>
+            <Row><Col xs={12} md={8} lg={8}><Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop files here to upload (or click)</p></Dropzone>
+            <img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/></Col></Row>
+            </form>
             </div>
             )
     }

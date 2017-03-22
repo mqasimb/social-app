@@ -24,6 +24,7 @@
     "path": "^0.12.7",
     "request": "^2.81.0",
     "superagent": "^3.5.0",
+    "svg-react-loader": "^0.3.7",
     "unirest": "^0.5.1",
     "url-loader": "^0.5.8"
   },

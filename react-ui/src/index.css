@@ -1,3 +1,7 @@
+span.nav-text, .create-post-span {
+    color: #ffffff;
+}
+
 @font-face {
     font-family: Ubuntu;
     src: url("../fonts/Ubuntu-R.woff2") format("woff2");
