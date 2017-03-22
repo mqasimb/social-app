@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import LogOutIcon from './icons/opened-door-aperture.svg'
+import AddFriendIcon from './icons/add-friend.svg'
+import GamepadIcon from './icons/gamepad-controller.svg'
+import UserIcon from './icons/man-user.svg'
+
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem, FormGroup, FormControl, Button, Select, Glyphicon } from 'react-bootstrap';
 
 const router = require('react-router');
@@ -31,17 +35,27 @@ class App extends React.Component {
     render(props) {
         var isLoggedIn = this.props.auth.authenticated;
         const LinkStyle = {
-            'color': '#06D7D4'
+            'color': '#06D7D4',
+            textAlign: 'center'
+        }
+        var iconSize = {
+            height: '20px',
+            fill: '#01b8c5'
+        }
+        var navButtonStyle = {
+            textAlign: 'center'
+        }
+        var textStyle = {
+            fontColor: '#01b8c5'
         }
         var loggedOutUser = <Nav pullRight>
         <LinkContainer to='/login'><NavItem eventKey={1}>Login</NavItem></LinkContainer>
         <LinkContainer to='/register'><NavItem eventKey={2}>Register</NavItem></LinkContainer>
         </Nav>;
-        var loggedInUser = <Nav pullRight><LinkContainer to={'/profile/'+this.props.auth.user.username}><NavItem>{this.props.auth.user.username}</NavItem></LinkContainer>
-        <NavItem style={LinkStyle}>Search Games</NavItem>
-        <LinkContainer to='/'><NavItem><Glyphicon glyph='globe'/></NavItem></LinkContainer>
-        <LinkContainer to='/friendRequests'><NavItem>Friend Requests</NavItem></LinkContainer>
-        <NavItem href='' onClick={this.userLogout.bind(this)}>Logout</NavItem></Nav>;
+        var loggedInUser = <Nav pullRight><LinkContainer to={'/profile/'+this.props.auth.user.username}><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={UserIcon}/></div><span style={textStyle}>{this.props.auth.user.username}</span></NavItem></LinkContainer>
+        <NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={GamepadIcon}/></div>Search Games</NavItem>
+        <LinkContainer to='/friendRequests'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={AddFriendIcon}/></div>Friend Requests</NavItem></LinkContainer>
+        <NavItem style={LinkStyle} href='' onClick={this.userLogout.bind(this)}><div style={navButtonStyle}><img style={iconSize} src={LogOutIcon}/></div>Logout</NavItem></Nav>;
         var topStyle={
             'overflowX': 'hidden',
             fontFamily: 'Ubuntu',

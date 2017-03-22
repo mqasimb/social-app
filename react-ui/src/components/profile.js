@@ -1,6 +1,6 @@
-var React = require('react');
+const React = require('react');
 const ReactDOM = require('react-dom');
-var { connect } = require('react-redux');
+const { connect } = require('react-redux');
 const Content = require('./content');
 const { Link } = require('react-router');
 const LikeBox = require('./likebox');
@@ -83,7 +83,7 @@ class Profile extends React.Component {
             paddingLeft: '30px',
             borderRadius: '0',
             borderColor: '#00fff9',
-            'white-space': 'normal'
+            whiteSpace: 'normal'
         }
         var profileNameStyle = {
             fontFamily: 'Ubuntu',
@@ -106,7 +106,7 @@ class Profile extends React.Component {
             return request.username == this.props.params.username;
         });
         var rowStyle = {
-            paddingBottom: '30px'
+            paddingBottom: '10px'
         }
         var sendFriendRequest = (((acceptFriendRequest > -1) || (cancelFriendRequest > -1)) && (isFriend < 0)) ? (false) : (true);
         var acceptFriendRequestButton = <Button style={buttonStyle} onClick={this.acceptRequest.bind(this)}>ACCEPT REQUEST</Button>;
