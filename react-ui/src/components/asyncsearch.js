@@ -3,6 +3,7 @@ const React = require('react');
 const axios = require('axios');
 const router = require('react-router');
 const Link = router.Link;
+const { LinkContainer } = require('react-router-bootstrap');
 
 class AsyncSearch extends React.Component{
   constructor(props) {
@@ -19,6 +20,9 @@ class AsyncSearch extends React.Component{
       .then(json => {console.log(json.data)
         return this.setState({options: json.data})});
   }
+  clickLink(username) {
+      router.browserHistory.push('/profile/'+username);
+  }
 
   render() {
     return (
@@ -28,8 +32,7 @@ class AsyncSearch extends React.Component{
         options={this.state.options}
         placeholder="Search for user..."
         renderMenuItemChildren={(option, props, index) => (
-          <Link to={'/profile/'+option.username}>
-          <div>
+          <div onClick={this.clickLink.bind(this, option.username)}>
             <img
               src={option.ProfilePicture}
               style={{
@@ -40,7 +43,6 @@ class AsyncSearch extends React.Component{
             />
             <span>{option.username}</span>
           </div>
-          </Link>
         )}
       />
     )

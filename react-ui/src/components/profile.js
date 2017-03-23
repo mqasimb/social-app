@@ -36,6 +36,12 @@ class Profile extends React.Component {
     aboutMeCancelEdit() {
         this.props.dispatch(actions.changeAboutMe(false));   
     }
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps, this.props)
+        if(this.props.params.username !== nextProps.params.username) {
+            this.props.dispatch(actions.getProfile(nextProps.params.username))
+        }
+    }
     close() {
         this.props.dispatch(actions.changePictureModal(null, false));
         this.props.dispatch(actions.setProfilePicCloudinaryURL(''));
@@ -108,6 +114,9 @@ class Profile extends React.Component {
         var rowStyle = {
             paddingBottom: '10px'
         }
+        var friendListStyle = {
+            paddingTop: '20px'
+        }
         var sendFriendRequest = (((acceptFriendRequest > -1) || (cancelFriendRequest > -1)) && (isFriend < 0)) ? (false) : (true);
         var acceptFriendRequestButton = <Button style={buttonStyle} onClick={this.acceptRequest.bind(this)}>ACCEPT REQUEST</Button>;
         var denyFriendRequestButton = <Button style={buttonStyle} onClick={this.denyRequest.bind(this)}>DENY REQUEST</Button>;
@@ -134,8 +143,8 @@ class Profile extends React.Component {
             <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
             {(this.props.auth.user.username == this.props.params.username) ? ((this.props.changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: this.props.loadedProfile.AboutMe}}/>) : (<Button style={buttonStyle} onClick={this.enableAboutMeChange.bind(this)}>EDIT ABOUT ME</Button>)) : (null)}
             </Col></Row></div>
-            <ProfilePosts posts={this.props.postData}/>
-            <FriendsList list={this.props.mainProfile.Friends}/>
+            <Col xs={6} xsOffset={1} sm={6} smOffset={1}><ProfilePosts posts={this.props.postData}/></Col>
+            {(this.props.loadedProfile.Friends != undefined) ? (<Col xs={4} xsOffset={0} sm={4} smOffset={0}><div style={friendListStyle}><FriendsList list={this.props.loadedProfile.Friends}/></div></Col>) : (null)}
             </div>
         )
     }

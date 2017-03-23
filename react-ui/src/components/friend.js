@@ -1,8 +1,7 @@
 var React = require('react');
-const Friend = require('./friend');
 const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel, Row, Panel} = require('react-bootstrap');
 
-class FriendsList extends React.Component {
+class Friend extends React.Component {
     render(props) {
         var panelStyle = {
             backgroundColor: '#253243',
@@ -13,7 +12,7 @@ class FriendsList extends React.Component {
             borderRadius: '0',
             borderColor: '#253243'
         }
-        var friends = this.props.list.map((friend, index) => {
+        var friends = this.props.list.map(function(friend, index) {
                 return <li key={index}>{friend.username}</li>;
             })
         return (
@@ -25,4 +24,4 @@ class FriendsList extends React.Component {
     }
 }
 
-module.exports = FriendsList;
+module.exports = Friend;
