@@ -15,9 +15,23 @@ class UserListChat extends React.Component {
             this.props.dispatch(actions.openChat({friend: this.props.friend, username: this.props.auth.user.username, roomName: roomName}))
         }
     render(props) {
+        var imageStyle = {
+            width: '40px',
+            height: '40px'
+        }
+        var fontStyle = {
+            color: '#ffffff',
+            paddingLeft: '10px'
+        }
+        var divStyle = {
+            backgroundColor: '#253243',
+            paddingLeft: '30px',
+            paddingTop: '10px',
+            paddingBottom: '10px'
+        }
         return (
-            <div onClick={this.openChat.bind(this)}>
-            {this.props.friend}
+            <div style={divStyle} onClick={this.openChat.bind(this)}>
+            <img style={imageStyle} src={this.props.picture} /> <span style={fontStyle}>{this.props.friend}</span>
             </div>
         )
     }

@@ -4,7 +4,7 @@ const Content = require('./content');
 const actions = require('../actions/index');
 const LikeBox = require('./likebox');
 const router = require('react-router');
-const { Button } = require('react-bootstrap');
+const { Button, Panel } = require('react-bootstrap');
 const ChatBox = require('./chat-box');
 const io = require('socket.io-client');
 const MessageForm = require('./message-form');
@@ -25,6 +25,18 @@ const friendRequestReceived = {
 };
 
 class ChatContainer extends React.Component {
+    constructor(props) {
+    super(props);
+    this.state = {chatOpen: false}
+        }
+    openChat() {
+        if(this.state.chatOpen === true) {
+            this.setState({chatOpen: false})
+        }
+        else {
+            this.setState({chatOpen: true})
+        }
+    }
     handleClick() {
             console.log('handle click ran');
             this.props.dispatch(Notifications.success(friendRequestReceived));
@@ -82,13 +94,24 @@ class ChatContainer extends React.Component {
         var friendListStyle = {
             position: 'fixed',
             bottom:0,
-            right:0
+            right: '15px'
+        }
+        var panelStyle = {
+          backgroundColor: '#253243',
+          color: '#00fff9',
+          textAlign: 'center',
+          fontFamily: 'Ubuntu',
+          fontSize: '1em',
+          borderRadius: '0',
+          borderColor: '#253243',
+          marginBottom: '0px',
+          width: '200px'
         }
         var chats = Object.keys(this.props.chatsOpen).map((key, index) => {
             return <Chat key={index} name={key} socket={this.socket}/>
         });
         var onlineFriendsList = this.props.friendsOnline.map((friend, index) => {
-            return <UserListChat key={index} socket={this.socket} friend={friend.username} />
+            return <UserListChat key={index} socket={this.socket} picture={friend.ProfilePicture} friend={friend.username} />
         })
         return (
             <div>
@@ -96,8 +119,8 @@ class ChatContainer extends React.Component {
             {chats}
             </div>
             <div className='friend-list' style={friendListStyle}>
-            Online Users
-            {onlineFriendsList}
+            <Panel style={panelStyle} onClick={this.openChat.bind(this)}>Online Friends: {this.props.friendsOnline.length}</Panel>
+            {(this.state.chatOpen) ? (onlineFriendsList) : (null)}
             </div>
             </div>
         )
