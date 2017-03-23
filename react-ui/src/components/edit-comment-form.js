@@ -20,10 +20,6 @@ const renderField = ({ input, label, name, type, controlId, placeholder, meta: {
 )
 
 class EditCommentForm extends React.Component {
-    submitLogin(values) {
-      console.log(values)
-        this.props.dispatch(actions.registerAction(values))
-    }
   render() {
       console.log(this.props)
   const { handleSubmit, pristine, submitting } = this.props

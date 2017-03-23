@@ -53,7 +53,7 @@ class App extends React.Component {
         <LinkContainer to='/register'><NavItem eventKey={2}>Register</NavItem></LinkContainer>
         </Nav>;
         var loggedInUser = <Nav pullRight><LinkContainer to={'/profile/'+this.props.auth.user.username}><NavItem style={LinkStyle}><div style={navButtonStyle}><img className style={iconSize} src={UserIcon}/></div><span className='nav-text'>{this.props.auth.user.username}</span></NavItem></LinkContainer>
-        <NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={GamepadIcon}/></div><span className='nav-text'>Search Games</span></NavItem>
+        <LinkContainer to='/gamesearch'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={GamepadIcon}/></div><span className='nav-text'>Search Games</span></NavItem></LinkContainer>
         <LinkContainer to='/friendRequests'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={AddFriendIcon}/></div><span className='nav-text'>Friend Requests</span></NavItem></LinkContainer>
         <NavItem style={LinkStyle} href='' onClick={this.userLogout.bind(this)}><div style={navButtonStyle}><img style={iconSize} src={LogOutIcon}/></div><span className='nav-text'>Logout</span></NavItem></Nav>;
         var topStyle={

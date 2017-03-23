@@ -44,44 +44,44 @@ class RegistrationForm extends React.Component {
         this.props.dispatch(actions.registerAction(values));
     }
   render() {
-  var formStyle = {
-    backgroundColor: '#ffffff',
-    paddingBottom: '20px',
-    marginTop: '2.5em',
-    borderRadius: '0'
-  }
-  var buttonStyle = {
-    backgroundColor: '#1683ac',
-    color: '#ffffff',
-    fontFamily: 'UbuntuBold',
-    fontSize: '1.25em',
-    paddingTop: '10px',
-    paddingBottom: '10px',
-    paddingRight: '30px',
-    paddingLeft: '30px',
-    borderRadius: '0',
-    borderColor: '#1683ac'
-  }
-  var panelStyle = {
-    backgroundColor: '#253243',
-    color: '#00fff9',
-    textAlign: 'center',
-    fontFamily: 'Ubuntu',
-    fontSize: '1.5em',
-    borderRadius: '0',
-    borderColor: '#253243'
-  }
-  var textStyle = {
-    textAlign: 'center'
-  }
-  var bottomReminderStyle = {
-    textAlign: 'center',
-    paddingTop: '20px'
-  }
-  var linkStyle = {
-    textDecoration: 'underline',
-    fontFamily: 'UbuntuBold'
-  }
+    var formStyle = {
+      backgroundColor: '#ffffff',
+      paddingBottom: '20px',
+      marginTop: '2.5em',
+      borderRadius: '0'
+    }
+    var buttonStyle = {
+      backgroundColor: '#1683ac',
+      color: '#ffffff',
+      fontFamily: 'UbuntuBold',
+      fontSize: '1.25em',
+      paddingTop: '10px',
+      paddingBottom: '10px',
+      paddingRight: '30px',
+      paddingLeft: '30px',
+      borderRadius: '0',
+      borderColor: '#1683ac'
+    }
+    var panelStyle = {
+      backgroundColor: '#253243',
+      color: '#00fff9',
+      textAlign: 'center',
+      fontFamily: 'Ubuntu',
+      fontSize: '1.5em',
+      borderRadius: '0',
+      borderColor: '#253243'
+    }
+    var textStyle = {
+      textAlign: 'center'
+    }
+    var bottomReminderStyle = {
+      textAlign: 'center',
+      paddingTop: '20px'
+    }
+    var linkStyle = {
+      textDecoration: 'underline',
+      fontFamily: 'UbuntuBold'
+    }
   const { handleSubmit, pristine, submitting } = this.props
   return (
     <Col xs={12} xsOffset={0} sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
