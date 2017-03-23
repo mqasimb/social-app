@@ -115,7 +115,10 @@ class Profile extends React.Component {
             paddingBottom: '10px'
         }
         var friendListStyle = {
-            paddingTop: '20px'
+            paddingTop: '20px',
+            minWidth: '290px',
+            maxWidth: '400px',
+            backgroundColor: '#ffffff'
         }
         var sendFriendRequest = (((acceptFriendRequest > -1) || (cancelFriendRequest > -1)) && (isFriend < 0)) ? (false) : (true);
         var acceptFriendRequestButton = <Button style={buttonStyle} onClick={this.acceptRequest.bind(this)}>ACCEPT REQUEST</Button>;
@@ -143,8 +146,8 @@ class Profile extends React.Component {
             <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
             {(this.props.auth.user.username == this.props.params.username) ? ((this.props.changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: this.props.loadedProfile.AboutMe}}/>) : (<Button style={buttonStyle} onClick={this.enableAboutMeChange.bind(this)}>EDIT ABOUT ME</Button>)) : (null)}
             </Col></Row></div>
-            <Col xs={6} xsOffset={1} sm={6} smOffset={1}><ProfilePosts posts={this.props.postData}/></Col>
-            {(this.props.loadedProfile.Friends != undefined) ? (<Col xs={4} xsOffset={0} sm={4} smOffset={0}><div style={friendListStyle}><FriendsList list={this.props.loadedProfile.Friends}/></div></Col>) : (null)}
+            <Col xs={12} xsOffset={0} sm={12} smOffset={0} md={12} mdOffset={0} lg={8} lgOffset={0}><ProfilePosts posts={this.props.postData}/></Col>
+            {(this.props.loadedProfile.Friends != undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><FriendsList list={this.props.loadedProfile.Friends}/></div></Col>) : (null)}
             </div>
         )
     }

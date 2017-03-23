@@ -13,13 +13,23 @@ class FriendsList extends React.Component {
             borderRadius: '0',
             borderColor: '#253243'
         }
+        var backgroundStyle = {
+            backgroundColor: '#ffffff'
+        }
+        var paddingStyle = {
+            paddingLeft: '40px',
+            paddingBottom: '40px',
+            paddingTop: '20px'
+        }
         var friends = this.props.list.map((friend, index) => {
-                return <li key={index}>{friend.username}</li>;
+                return <Friend key={index} username={friend.username} ProfilePicture={friend.ProfilePicture}/>;
             })
         return (
-            <div>
+            <div className='friend-list'>
             <Panel style={panelStyle}>Friends {this.props.list.length}</Panel>
+            <div style={paddingStyle}>
             {friends}
+            </div>
             </div>
         )
     }
