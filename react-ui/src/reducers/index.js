@@ -37,6 +37,14 @@ var appReducer = function(state, action) {
     state = state || initialState;
     var newState = Object.assign({}, state);
 
+    if(action.type === actions.LIKE_GAME) {
+        console.log(action.data)
+        newState.mainProfile.favoriteGames = action.data.favoriteGames;
+        newState.mainProfile.favoriteGames = newState.mainProfile.favoriteGames.slice();
+        newState.mainProfile = Object.assign({}, newState.mainProfile);  
+        return newState;
+    }
+
     if(action.type === actions.DENIED_FRIEND_REQUEST) {
         var firstIndex = newState.mainProfile.outgoingRequests.findIndex(function(request) {
             return request.username == action.username;

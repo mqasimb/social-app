@@ -1,14 +1,14 @@
 var React = require('react');
-const GameSearch = require('./game-search');
+const Game = require('./game-search');
 
-class Games extends React.Component {
+class Game extends React.Component {
     render() {
         return(
             <div>
-            <GameSearch />
+            
             </div>
             )
     }
 }
 
-module.exports = Games;
+module.exports = Game;

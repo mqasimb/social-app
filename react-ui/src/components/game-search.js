@@ -4,11 +4,10 @@ const axios = require('axios');
 const router = require('react-router');
 const Link = router.Link;
 const apikeys = require('../../../apikeys');
+const actions = require('../actions/index');
 const GameSearchForm = require('./game-search-form');
-const Dropzone = require('react-dropzone');
-const request = require('superagent');
 const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button, Col, Row } = require('react-bootstrap');
-
+const { connect } = require('react-redux');
 
 class GameSearch extends React.Component{
   constructor(props) {
@@ -22,6 +21,14 @@ class GameSearch extends React.Component{
       .then(resp => resp)
       .then(json => {console.log(json.data)
         return this.setState({options: json.data})})
+  }
+  likeGame(name, id, cover) {
+    console.log(name, id, cover)
+    axios.post('/api/games/like', {name: name, id: id, cover: cover})
+    .then(resp => resp)
+    .then(json => {console.log(json.data)
+        this.props.dispatch(actions.likeGame(json.data));
+      })
   }
   render() {
     var listStyle = {
@@ -41,7 +48,10 @@ class GameSearch extends React.Component{
     }
     var imgStyle = {width: 100, height: 100}
     var games = this.state.options.map((game, index) => {
-      return <div style={listStyle} key={index}><img width={64} height={64} src={game.cover.url}/><Link><span style={textStyle}>{game.name}</span></Link></div>
+      var data = this.props.mainProfile.favoriteGames.find((favoriteGame) => { 
+          return favoriteGame.id === game.id;
+      });
+      return <div style={listStyle} key={index}><img width={64} height={64} src={game.cover.url}/><Link><span style={textStyle}>{game.name}</span></Link>{(data) ? (<Button onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Liked</Button>) : (<Button onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Like</Button>)}</div>
     }
   )
     return (
@@ -57,4 +67,12 @@ class GameSearch extends React.Component{
   }
 }
 
-module.exports = GameSearch;
+function mapStateToProps(state, props) {
+  return({
+      mainProfile: state.app.mainProfile
+  })
+}
+
+var Container = connect(mapStateToProps)(GameSearch);
+
+module.exports = Container;

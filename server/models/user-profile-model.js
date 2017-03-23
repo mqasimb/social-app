@@ -5,6 +5,12 @@ var messagesSchema = new mongoose.Schema({
 	messages: []
  })
 
+var favoriteGameSchema = new mongoose.Schema({
+	name: String,
+	id: Number,
+	cover: String
+ })
+
 var UserProfileSchema = new mongoose.Schema({
     username: String,
     Name: String,
@@ -15,7 +21,8 @@ var UserProfileSchema = new mongoose.Schema({
     outgoingRequests: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true}],
     posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
     onlineStatus: {type: Boolean, default: false, required: true},
-    messages:[messagesSchema]
+    messages:[messagesSchema],
+    favoriteGames: [favoriteGameSchema]
 });
 
 var UserProfile = mongoose.model('UserProfile', UserProfileSchema);

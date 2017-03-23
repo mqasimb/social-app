@@ -638,6 +638,37 @@ app.put('/api/likes/:id', expressJWT({ secret: config.jwtSecret}), function(req,
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+app.post('/api/games/like', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+	console.log(req.body)
+    UserProfile.findOne({username: req.user.username}, function(err, userprofile) {
+        if(err) {
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+     console.log(userprofile, 'userprofile')
+    var returnIndex = userprofile.favoriteGames.findIndex(function(game) { 
+        return req.body.name == game.name;
+    });
+    if(returnIndex > -1) {
+        userprofile.favoriteGames.splice(returnIndex, 1);
+    }
+    else {
+        userprofile.favoriteGames.push(req.body)
+    }
+    userprofile.save(function(err) {
+        if(err) return res.send(err);
+        console.log('profilesaved')
+        res.json(userprofile);
+    });
+});
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var strategy = new LocalStrategy(function(username, password, callback) {
     User.findOne({

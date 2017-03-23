@@ -756,6 +756,17 @@ function loadOlderMessages(friend) {
     })
 }
 
+const LIKE_GAME = 'LIKE_GAME';
+function likeGame(data) {
+    return ({
+        type: LIKE_GAME,
+        data: data
+    })
+}
+
+exports.LIKE_GAME = LIKE_GAME;
+exports.likeGame = likeGame;
+
 exports.EDIT_POST_SUCCESSFUL = EDIT_POST_SUCCESSFUL;
 exports.editPostSuccessful = editPostSuccessful;
 
