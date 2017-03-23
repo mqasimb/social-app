@@ -1,8 +1,8 @@
 var React = require('react');
-const Friend = require('./friend');
+const Game = require('./game');
 const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel, Row, Panel} = require('react-bootstrap');
 
-class FriendsList extends React.Component {
+class GamesList extends React.Component {
     render(props) {
         var panelStyle = {
             backgroundColor: '#253243',
@@ -21,18 +21,18 @@ class FriendsList extends React.Component {
             paddingBottom: '40px',
             paddingTop: '20px'
         }
-        var friends = this.props.list.map((friend, index) => {
-                return <Friend key={index} username={friend.username} ProfilePicture={friend.ProfilePicture}/>;
+        var games = this.props.list.map((game, index) => {
+                return <Game key={index} id={game.id} name={game.name} cover={game.cover}/>;
             })
         return (
-            <div className='friend-list'>
-            <Panel style={panelStyle}>Friends - {this.props.list.length}</Panel>
+            <div className='game-list'>
+            <Panel style={panelStyle}>Games - {this.props.list.length}</Panel>
             <div style={paddingStyle}>
-            {friends}
+            {games}
             </div>
             </div>
         )
     }
 }
 
-module.exports = FriendsList;
+module.exports = GamesList;
