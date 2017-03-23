@@ -46,12 +46,33 @@ class GameSearch extends React.Component{
     var textStyle = {
       paddingLeft: '5px'
     }
+    var blueButtonStyle = {
+      backgroundColor: '#1683ac',
+      color: '#ffffff',
+      fontFamily: 'UbuntuBold',
+      fontSize: '1em',
+      borderRadius: '0',
+      width: '62px',
+      borderColor: '#1683ac'
+    }
+    var whiteButtonStyle = {
+      backgroundColor: '#ffffff',
+      color: '#1683ac',
+      fontFamily: 'UbuntuBold',
+      fontSize: '1em',
+      borderRadius: '0',
+      width: '62px',
+      borderColor: '#1683ac'
+    }
+    var imageStyle = {
+      paddingLeft: '20px'
+    }
     var imgStyle = {width: 100, height: 100}
     var games = this.state.options.map((game, index) => {
       var data = this.props.mainProfile.favoriteGames.find((favoriteGame) => { 
           return favoriteGame.id === game.id;
       });
-      return <div style={listStyle} key={index}><img width={64} height={64} src={game.cover.url}/><Link><span style={textStyle}>{game.name}</span></Link>{(data) ? (<Button onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Liked</Button>) : (<Button onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Like</Button>)}</div>
+      return <div style={listStyle} key={index}>{(data) ? (<Button style={blueButtonStyle} onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Liked</Button>) : (<Button style={whiteButtonStyle} onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Like</Button>)}<img style={imageStyle} width={64} height={64} src={game.cover.url}/><Link><span style={textStyle}>{game.name}</span></Link></div>
     }
   )
     return (
