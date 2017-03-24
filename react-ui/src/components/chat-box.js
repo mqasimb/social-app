@@ -10,8 +10,8 @@ const Infinite = require('react-infinite');
 class ChatBox extends React.Component {
     render(props) {
         var imageStyle={
-            width: 50,
-            height: 50
+            width: 40,
+            height: 40
         }
         var profilePic;
         var messagesList = this.props.chatMessages[this.props.name].map((message, index) => {
@@ -26,11 +26,11 @@ class ChatBox extends React.Component {
                     profilePic = this.props.mainProfile.Friends[firstIndex].ProfilePicture;
                 }  
                 }
-            return <div key={index}><div><img width={40} height={40} src={profilePic} alt="Image"/>{message.username}: {message.message}</div>{(message.image) ? (<div><img style={imageStyle} src={message.image}/></div>) : (null)}</div>
+            return <div key={index}><div><img width={40} height={40} src={profilePic} alt="Image"/>{message.username}: {message.message}</div>{(message.image) ? (<img style={imageStyle} src={message.image}/>) : (null)}</div>
         })
         return (
             <div>
-            <Infinite containerHeight={200} elementHeight={24}
+            <Infinite containerHeight={200} elementHeight={40}
           displayBottomUpwards>
             {messagesList}
             </Infinite>

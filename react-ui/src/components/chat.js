@@ -4,7 +4,7 @@ const Content = require('./content');
 const actions = require('../actions/index');
 const LikeBox = require('./likebox');
 const router = require('react-router');
-const { Button } = require('react-bootstrap');
+const { Button, Glyphicon } = require('react-bootstrap');
 const ChatBox = require('./chat-box');
 const io = require('socket.io-client');
 const MessageForm = require('./message-form');
@@ -50,12 +50,15 @@ class Chat extends React.Component {
         this.props.dispatch(actions.loadOlderMessages(this.props.name))
     }
     render(props) {
-        var dropzoneStyle = {position: 'absolute', bottom: '25', right: '85', zIndex: '1', textAlign: 'center', display: 'inline-block', width:20, height:20, borderStyle:'solid', borderColor: '#1d2838', backgroundColor: '#1d2838', cursor: 'pointer', color: '#06D7D4', fontFamily: 'Lato,sans-serif'}
+        var dropzoneStyle = {position: 'absolute', bottom: '25', right: '85', zIndex: '1', textAlign: 'center', display: 'inline-block', width:20, height:20, cursor: 'pointer', color: '#1d2838'}
         var chatBoxStyle = {
             width: 300,
             height: 300,
             display: 'inline-block',
-            backgroundColor: '#f2f2f2'
+            backgroundColor: '#f2f2f2',
+            borderWith: '1px',
+            borderColor: '#ffffff',
+            borderStyle: 'solid'
         }
         var chatHeaderStyle = {
             paddingTop: '10px',
@@ -77,7 +80,7 @@ class Chat extends React.Component {
             <ChatBox name={this.props.name}/>
             <div style={chatBottomStyle}>
             <MessageForm onSubmit={this._handleSubmit.bind(this)} form={"MessageForm -"+this.props.name}/>
-            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Add</p></Dropzone>
+            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}><Glyphicon glyph="picture"/></Dropzone>
             </div>
             </div>
         )
