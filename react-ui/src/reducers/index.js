@@ -106,6 +106,13 @@ var appReducer = function(state, action) {
             newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
             newState.mainProfile = Object.assign({}, newState.mainProfile);  
         }
+        var friendOnlineIndex = newState.friendsOnline.findIndex(function(friend) {
+            return friend.username == action.username;
+        })
+        if(friendOnlineIndex > -1) {
+            newState.friendsOnline.splice(friendOnlineIndex, 1);
+            newState.friendsOnline = newState.friendsOnline.slice(); 
+        }
         return newState;
     }
 
@@ -279,6 +286,13 @@ var appReducer = function(state, action) {
             newState.mainProfile.Friends.splice(firstIndex, 1);
             newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
             newState.mainProfile = Object.assign({}, newState.mainProfile);  
+        }
+        var friendOnlineIndex = newState.friendsOnline.findIndex(function(friend) {
+            return friend.username == action.username;
+        })
+        if(friendOnlineIndex > -1) {
+            newState.friendsOnline.splice(friendOnlineIndex, 1);
+            newState.friendsOnline = newState.friendsOnline.slice(); 
         }
         return newState;
     }
