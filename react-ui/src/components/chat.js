@@ -29,9 +29,9 @@ class Chat extends React.Component {
         this.handleImageUpload(files[0]);
     }
     handleImageUpload(file) {
-    let upload = request.post(process.env.CLOUDINARY_UPLOAD_URL)
-                        .field('api_key', process.env.CLOUDINARY_API_KEY)
-                        .field('api-secret', process.env.CLOUDINARY_API_SECRET)
+    let upload = request.post('https://api.cloudinary.com/v1_1/mqasimb/image/upload')
+                        .field('api_key', '875199226668767')
+                        .field('api-secret', 'pRC9jsjqVMw7QALtFXyb4__Wj0w')
                         .field('upload_preset', 'khh5rnsu')
                         .field('file', file);
 

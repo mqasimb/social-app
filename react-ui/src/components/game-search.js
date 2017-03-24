@@ -3,7 +3,6 @@ const React = require('react');
 const axios = require('axios');
 const router = require('react-router');
 const Link = router.Link;
-const apikeys = require('../../../apikeys');
 const actions = require('../actions/index');
 const GameSearchForm = require('./game-search-form');
 const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button, Col, Row } = require('react-bootstrap');
