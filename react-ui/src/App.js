@@ -61,7 +61,6 @@ class App extends React.Component {
             fontFamily: 'Ubuntu',
             backgroundColor: '#f2f2f2',
             height: '100vh',
-            paddingTop: '140px'
         }
         var {notifications} = this.props;
         const notificationStyle = {
@@ -90,8 +89,13 @@ class App extends React.Component {
             fontFamily: 'UbuntuLight',
             fontSize: '1.5em'
         }
+        var containerStyle = {
+            position: 'fixed',
+            bottom:0,
+            right: '15px'
+        }
         return (
-            <div style={topStyle}>
+            <div className="top-nav" style={topStyle}>
             <Notifications
                 notifications={notifications}
                 style={notificationStyle}

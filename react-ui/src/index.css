@@ -2,6 +2,60 @@ span.nav-text, .create-post-span {
     color: #ffffff;
 }
 
+@media only screen and (max-width : 768px){
+        .top-nav {
+            padding-top: 145px;
+        }
+        .chat-container {
+            width: 350px;
+        }
+        .friend-list {
+            position: static;
+        }
+    }
+
+@media only screen and (min-width : 768px){
+        .top-nav {
+            padding-top: 145px;
+        }
+        .chat-container {
+            width: 750px;
+        }
+        .friend-list {
+            position: fixed;
+            bottom: 0;
+            right: 150px;
+        }
+    }
+
+@media only screen and (min-width : 970px){
+        .top-nav {
+                padding-top: 100px;
+        }
+        .chat-container {
+            width: 970px;
+        }
+        .friend-list {
+            position: fixed;
+            bottom: 0;
+            right: 100px;
+        }
+}
+
+@media only screen and (min-width : 1170px){
+        .top-nav {
+                padding-top: 100px;
+        }
+        .chat-container {
+            width: 970px;
+        }
+        .friend-list {
+            position: fixed;
+            bottom: 0;
+            right: 100px;
+        }
+}
+
 @font-face {
     font-family: Ubuntu;
     src: url("../fonts/Ubuntu-R.woff2") format("woff2");

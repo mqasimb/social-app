@@ -26,7 +26,7 @@ class ChatBox extends React.Component {
                     profilePic = this.props.mainProfile.Friends[firstIndex].ProfilePicture;
                 }  
                 }
-            return <div key={index}><div><img width={64} height={64} src={profilePic} alt="Image"/>{message.username}: {message.message}</div>{(message.image) ? (<div><img style={imageStyle} src={message.image}/></div>) : (null)}</div>
+            return <div key={index}><div><img width={40} height={40} src={profilePic} alt="Image"/>{message.username}: {message.message}</div>{(message.image) ? (<div><img style={imageStyle} src={message.image}/></div>) : (null)}</div>
         })
         return (
             <div>

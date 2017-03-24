@@ -25,9 +25,10 @@ class UserListChat extends React.Component {
         }
         var divStyle = {
             backgroundColor: '#253243',
-            paddingLeft: '30px',
+            paddingLeft: '10px',
             paddingTop: '10px',
-            paddingBottom: '10px'
+            paddingBottom: '10px',
+            width: '200px'
         }
         return (
             <div style={divStyle} onClick={this.openChat.bind(this)}>

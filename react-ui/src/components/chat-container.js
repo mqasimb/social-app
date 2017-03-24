@@ -4,7 +4,7 @@ const Content = require('./content');
 const actions = require('../actions/index');
 const LikeBox = require('./likebox');
 const router = require('react-router');
-const { Button, Panel } = require('react-bootstrap');
+const { Button, Panel, Col, Row } = require('react-bootstrap');
 const ChatBox = require('./chat-box');
 const io = require('socket.io-client');
 const MessageForm = require('./message-form');
@@ -88,13 +88,10 @@ class ChatContainer extends React.Component {
 
     render(props) {
         var chatBoxStyle = {
-            width: 300,
-            height: 500
+            maxWidth: 300,
+            maxHeight: 500
         }
         var friendListStyle = {
-            position: 'fixed',
-            bottom:0,
-            right: '15px'
         }
         var panelStyle = {
           backgroundColor: '#253243',
@@ -105,7 +102,15 @@ class ChatContainer extends React.Component {
           borderRadius: '0',
           borderColor: '#253243',
           marginBottom: '0px',
-          width: '200px'
+          width: '200px',
+        }
+        var chatStyle = {
+          
+        }
+        var containerStyle = {
+            position: 'fixed',
+            bottom:0,
+            right: '15px'
         }
         var chats = Object.keys(this.props.chatsOpen).map((key, index) => {
             return <Chat key={index} name={key} socket={this.socket}/>
@@ -114,14 +119,18 @@ class ChatContainer extends React.Component {
             return <UserListChat key={index} socket={this.socket} picture={friend.ProfilePicture} friend={friend.username} />
         })
         return (
-            <div>
-            <div className='chat-messages'>
-            {chats}
+            <div className="chat-container" style={containerStyle}>
+            <Col xs={12} xsOffset={0} md={12} mdOffset={0} lg={12}>
+            <div style={chatStyle}>
+            <Col xs={10} xsOffset={1} sm={10} smOffset={2} md={10} mdOffset={2} lg={10} lgOffset={1}>{chats}</Col>
             </div>
-            <div className='friend-list' style={friendListStyle}>
+            <div style={friendListStyle}>
+            <Col className="friend-list" xs={10} xsOffset={1} sm={2} smOffset={0} md={2} mdOffset={0} lg={2} lgOffset={4}>
             <Panel style={panelStyle} onClick={this.openChat.bind(this)}>Online Friends: {this.props.friendsOnline.length}</Panel>
             {(this.state.chatOpen) ? (onlineFriendsList) : (null)}
+            </Col>
             </div>
+            </Col>
             </div>
         )
     }

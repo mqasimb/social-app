@@ -46,7 +46,7 @@ class NewPost extends React.Component {
     
     render() {
         var imgStyle = {width: 100, height: 100}
-        var dropzoneStyle = {textAlign: 'center', display: 'inline-block', width:150, height:150, borderStyle:'solid', borderColor: '#1d2838', backgroundColor: '#1d2838', cursor: 'pointer', color: '#06D7D4', fontFamily: 'Lato,sans-serif'}
+        var dropzoneStyle = {textAlign: 'center', display: 'inline-block', width:150, height:150, borderStyle:'solid', borderColor: '#1d2838', backgroundColor: '#1d2838', cursor: 'pointer', color: '#06D7D4'}
         var newPostStyle={
             'backgroundColor': '#253243',
             'fontFamily': 'Ubuntu, sans-serif',

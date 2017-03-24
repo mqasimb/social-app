@@ -50,12 +50,22 @@ class Chat extends React.Component {
         this.props.dispatch(actions.loadOlderMessages(this.props.name))
     }
     render(props) {
+        var dropzoneStyle = {position: 'absolute', bottom: '25', right: '85', zIndex: '1', textAlign: 'center', display: 'inline-block', width:20, height:20, borderStyle:'solid', borderColor: '#1d2838', backgroundColor: '#1d2838', cursor: 'pointer', color: '#06D7D4', fontFamily: 'Lato,sans-serif'}
         var chatBoxStyle = {
             width: 300,
             height: 300,
-            display: 'inline-block'
+            display: 'inline-block',
+            backgroundColor: '#f2f2f2'
         }
-        var imgStyle = {width: 75, height: 75}
+        var chatHeaderStyle = {
+            paddingTop: '10px',
+            paddingBottom: '10px',
+            paddingLeft: '20px'
+        }
+        var chatBottomStyle = {
+            position: 'relative'
+        }
+        var imgStyle = {width: 40, height: 40}
         var firstIndex = this.props.mainProfile.messages.findIndex((friend) => {
             return friend.friend === this.props.name
         })
@@ -63,12 +73,12 @@ class Chat extends React.Component {
         var profileImage;
         return (
             <div style={chatBoxStyle}>
-            {this.props.name}
-            {loadHistoryButton}
+            <div style={chatHeaderStyle}>{this.props.name} {loadHistoryButton}</div>
             <ChatBox name={this.props.name}/>
+            <div style={chatBottomStyle}>
             <MessageForm onSubmit={this._handleSubmit.bind(this)} form={"MessageForm -"+this.props.name}/>
-            <Dropzone multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop an image or click to select a file to upload.</p></Dropzone>
-            <img src={this.props.chatImagesUploadUrl[this.props.name]} style={imgStyle}/>
+            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Add</p></Dropzone>
+            </div>
             </div>
         )
     }
