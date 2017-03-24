@@ -73,6 +73,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "sass": "node-sass --include-path ./node_modules --include-path ./public sass/main.scss src/main.css && blessc -f src/main.css"
-  },
-  "proxy": "http://localhost:8080"
+  }
 }
