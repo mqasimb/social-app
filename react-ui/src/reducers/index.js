@@ -45,6 +45,12 @@ var appReducer = function(state, action) {
         return newState;
     }
 
+    if(action.type === actions.CLOSE_CHAT) {
+        delete newState.chatsOpen[action.username];
+        newState.chatsOpen = Object.assign({}, newState.chatsOpen);
+        return newState;
+    }
+
     if(action.type === actions.DENIED_FRIEND_REQUEST) {
         var firstIndex = newState.mainProfile.outgoingRequests.findIndex(function(request) {
             return request.username == action.username;

@@ -677,6 +677,14 @@ function openChat(data) {
     })
 }
 
+const CLOSE_CHAT = 'CLOSE_CHAT';
+function closeChat(username) {
+    return ({
+        type: CLOSE_CHAT,
+        username: username
+    })
+}
+
 const OPEN_CHAT_WITH_SOCKET = 'OPEN_CHAT_WITH_SOCKET';
 function openChatWithSocket(data) {
     return ({
@@ -763,6 +771,9 @@ function likeGame(data) {
         data: data
     })
 }
+
+exports.closeChat = closeChat;
+exports.CLOSE_CHAT = CLOSE_CHAT;
 
 exports.LIKE_GAME = LIKE_GAME;
 exports.likeGame = likeGame;

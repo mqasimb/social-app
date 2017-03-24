@@ -49,6 +49,9 @@ class Chat extends React.Component {
     loadMessageHistory() {
         this.props.dispatch(actions.loadOlderMessages(this.props.name))
     }
+    closeChat() {
+        this.props.dispatch(actions.closeChat(this.props.name))
+    }
     render(props) {
         var dropzoneStyle = {position: 'absolute', bottom: '25', right: '85', zIndex: '1', textAlign: 'center', display: 'inline-block', width:20, height:20, cursor: 'pointer', color: '#1d2838'}
         var chatBoxStyle = {
@@ -58,15 +61,21 @@ class Chat extends React.Component {
             backgroundColor: '#f2f2f2',
             borderWith: '1px',
             borderColor: '#ffffff',
-            borderStyle: 'solid'
+            borderStyle: 'solid',
         }
         var chatHeaderStyle = {
             paddingTop: '10px',
             paddingBottom: '10px',
-            paddingLeft: '20px'
+            paddingLeft: '20px',
+            position: 'relative'
         }
         var chatBottomStyle = {
             position: 'relative'
+        }
+        var glyphStyle = {
+            position: 'absolute',
+            right: '0',
+            top: '0'
         }
         var imgStyle = {width: 40, height: 40}
         var firstIndex = this.props.mainProfile.messages.findIndex((friend) => {
@@ -76,7 +85,7 @@ class Chat extends React.Component {
         var profileImage;
         return (
             <div style={chatBoxStyle}>
-            <div style={chatHeaderStyle}>{this.props.name} {loadHistoryButton}</div>
+            <div style={chatHeaderStyle}>{this.props.name} {loadHistoryButton}<Glyphicon style={glyphStyle} onClick={this.closeChat.bind(this)} glyph="remove"/></div>
             <ChatBox name={this.props.name}/>
             <div style={chatBottomStyle}>
             <MessageForm onSubmit={this._handleSubmit.bind(this)} form={"MessageForm -"+this.props.name}/>
