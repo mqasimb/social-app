@@ -65,23 +65,15 @@ class ChatContainer extends React.Component {
             this.props.dispatch(actions.receivedFriendRequest(requestUsername, ProfilePicture))
         })
         this.socket.on('accept-friend-request', (requestUsername) => {
-            console.log('friend request reached back socket')
-            this.handleClick()
             this.props.dispatch(actions.acceptedFriendRequest(requestUsername))
         })
         this.socket.on('cancel-friend-request', (requestUsername) => {
-            console.log('friend request reached back socket')
-            this.handleClick()
             this.props.dispatch(actions.cancelledFriendRequest(requestUsername))
         })
         this.socket.on('deny-friend-request', (requestUsername) => {
-            console.log('friend request reached back socket')
-            this.handleClick()
             this.props.dispatch(actions.deniedFriendRequest(requestUsername))
         })
         this.socket.on('remove-friend', (requestUsername) => {
-            console.log('friend request reached back socket')
-            this.handleClick()
             this.props.dispatch(actions.removedAsFriend(requestUsername))
         })
         this.socket.on('user-logout', () => {
