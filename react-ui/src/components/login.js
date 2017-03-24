@@ -14,6 +14,14 @@ class Login extends React.Component {
            } 
         });
     }
+    submitLoginDemoAccount() {
+          this.props.dispatch(actions.loginAction({username:'DemoAccount', password:'123456789'})).then(function(bool) {
+           if(bool) {
+               //If user logs in succesfully redirect to the home page
+               router.browserHistory.push('/');
+           } 
+        });
+    }
     inputChange(event) {
         this.props.dispatch(actions.updateLoginInput(event.target.name, event.target.value))
     }
@@ -22,7 +30,7 @@ class Login extends React.Component {
       backgroundColor:
         return (
             <div>
-            <LoginForm onSubmit={this.submitLogin}/>
+            <LoginForm demoButtonAction={this.submitLoginDemoAccount.bind(this)} onSubmit={this.submitLogin}/>
             </div>
             )
     }

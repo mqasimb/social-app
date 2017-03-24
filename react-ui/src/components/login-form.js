@@ -46,6 +46,20 @@ class LoginForm extends React.Component {
     borderRadius: '0',
     borderColor: '#1683ac'
   }
+  var demoButtonStyle = {
+    backgroundColor: '#1683ac',
+    color: '#ffffff',
+    fontFamily: 'Ubuntu',
+    fontSize: '1em',
+    paddingTop: '5px',
+    paddingBottom: '5px',
+    paddingRight: '10px',
+    paddingLeft: '10px',
+    borderRadius: '0',
+    borderColor: '#1683ac',
+    marginTop: '10px',
+    whiteSpace: 'normal'
+  }
   var panelStyle = {
     backgroundColor: '#253243',
     color: '#00fff9',
@@ -58,12 +72,26 @@ class LoginForm extends React.Component {
   var textStyle = {
     textAlign: 'center'
   }
+  var demoReminderStyle = {
+      textAlign: 'center',
+      paddingTop: '20px'
+    }
   const { handleSubmit, pristine, submitting } = this.props
   return (
     <Col xs={12} xsOffset={0} sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
       <div className='login-form'>
             <Form horizontal style={formStyle} onSubmit={handleSubmit(this.props.onSubmit.bind(this))}>
             <Panel style={panelStyle}>LOGIN</Panel>
+
+            <div style={demoReminderStyle}>
+            Click to access the demo account
+            </div>
+            <FormGroup>
+              <Col style={textStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
+                <Button onClick={this.props.demoButtonAction} style={demoButtonStyle}>Demo Account / Login</Button>
+              </Col>
+            </FormGroup>
+
             <FormGroup controlId="formHorizontalUsername">
               <Row><Col componentClass={ControlLabel} style={textStyle} xsOffset={3} smOffset={3} xs={6} sm={6}>
                 Username
