@@ -12,6 +12,6 @@ deploy:
   provider: heroku
   api_key: 
     secure: 08d1a138-b01c-455b-9d92-73e0ef738d0f
-  app: social-app-reviewers
+  app: social-app-gamers
   on:
     repo: mqasimb/social-app
