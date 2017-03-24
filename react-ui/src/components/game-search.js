@@ -2,8 +2,6 @@ const AsyncTypeahead = require('react-bootstrap-typeahead').AsyncTypeahead;
 const React = require('react');
 const axios = require('axios');
 const router = require('react-router');
-const Link = router.Link;
-const apikeys = require('../../../apikeys');
 const actions = require('../actions/index');
 const GameSearchForm = require('./game-search-form');
 const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button, Col, Row } = require('react-bootstrap');
@@ -16,7 +14,7 @@ class GameSearch extends React.Component{
   }
   _handleSearch(values) {
     axios.get(`https://igdbcom-internet-game-database-v1.p.mashape.com/games/?fields=*&limit=50&offset=0&search=${values.search}&filter[cover.url][exists]`,
-      {headers: {'X-Mashape-Key': apikeys.IGDB_API_KEY, 'Accept': 'application/json'}}
+      {headers: {'X-Mashape-Key': IGDB_API_KEY, 'Accept': 'application/json'}}
       )
       .then(resp => resp)
       .then(json => {console.log(json.data)

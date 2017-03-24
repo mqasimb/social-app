@@ -5,7 +5,6 @@ const actions = require('../actions/index');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
 const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button, Col, Row } = require('react-bootstrap');
-const apikeys = require('../../../apikeys');
 
 import CheckboxPen from '../icons/checkbox-pen-outline.svg'
 
@@ -27,10 +26,10 @@ class NewPost extends React.Component {
         this.handleImageUpload(files[0]);
     }
     handleImageUpload(file) {
-    let upload = request.post(apikeys.CLOUDINARY_UPLOAD_URL)
-                        .field('api_key', apikeys.CLOUDINARY_API_KEY)
-                        .field('api-secret', apikeys.CLOUDINARY_API_SECRET)
-                        .field('upload_preset', apikeys.CLOUDINARY_UPLOAD_PRESET)
+    let upload = request.post(CLOUDINARY_UPLOAD_URL)
+                        .field('api_key', CLOUDINARY_API_KEY)
+                        .field('api-secret', CLOUDINARY_API_SECRET)
+                        .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
                         .field('file', file);
 
     upload.end((err, response) => {

@@ -11,7 +11,6 @@ const MessageForm = require('./message-form');
 const UserListChat = require('./user-list-chat');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
-const apikeys = require('../../../apikeys');
 const { reset } = require('redux-form');
 
 class Chat extends React.Component {
@@ -30,10 +29,10 @@ class Chat extends React.Component {
         this.handleImageUpload(files[0]);
     }
     handleImageUpload(file) {
-    let upload = request.post(apikeys.CLOUDINARY_UPLOAD_URL)
-                        .field('api_key', apikeys.CLOUDINARY_API_KEY)
-                        .field('api-secret', apikeys.CLOUDINARY_API_SECRET)
-                        .field('upload_preset', apikeys.CLOUDINARY_UPLOAD_PRESET)
+    let upload = request.post(CLOUDINARY_UPLOAD_URL)
+                        .field('api_key', CLOUDINARY_API_KEY)
+                        .field('api-secret', CLOUDINARY_API_SECRET)
+                        .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
                         .field('file', file);
 
     upload.end((err, response) => {
