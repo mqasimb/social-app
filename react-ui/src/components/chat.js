@@ -29,10 +29,10 @@ class Chat extends React.Component {
         this.handleImageUpload(files[0]);
     }
     handleImageUpload(file) {
-    let upload = request.post(CLOUDINARY_UPLOAD_URL)
-                        .field('api_key', CLOUDINARY_API_KEY)
-                        .field('api-secret', CLOUDINARY_API_SECRET)
-                        .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+    let upload = request.post(process.env.CLOUDINARY_UPLOAD_URL)
+                        .field('api_key', process.env.CLOUDINARY_API_KEY)
+                        .field('api-secret', process.env.CLOUDINARY_API_SECRET)
+                        .field('upload_preset', 'khh5rnsu')
                         .field('file', file);
 
     upload.end((err, response) => {
