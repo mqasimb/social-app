@@ -16,12 +16,12 @@ span.nav-text, .create-post-span {
 
 @media only screen and (min-width : 768px){
         .top-nav {
-            padding-top: 145px;
+            padding-top: 135px;
         }
         .chat-container {
             width: 750px;
         }
-        .friend-list {
+        .friend-list-chat {
             position: fixed;
             bottom: 0;
             right: 150px;
@@ -30,12 +30,12 @@ span.nav-text, .create-post-span {
 
 @media only screen and (min-width : 970px){
         .top-nav {
-                padding-top: 100px;
+            padding-top: 95px;
         }
         .chat-container {
             width: 970px;
         }
-        .friend-list {
+        .friend-list-chat {
             position: fixed;
             bottom: 0;
             right: 100px;
@@ -44,12 +44,12 @@ span.nav-text, .create-post-span {
 
 @media only screen and (min-width : 1170px){
         .top-nav {
-                padding-top: 100px;
+                padding-top: 95px;
         }
         .chat-container {
             width: 970px;
         }
-        .friend-list {
+        .friend-list-chat {
             position: fixed;
             bottom: 0;
             right: 100px;

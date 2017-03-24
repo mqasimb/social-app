@@ -542,10 +542,8 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.USER_LOGGED_OUT) {
-        var newChange = {};
-        newChange.authenticated = false;
-        newChange.user = {};
-        newState.auth = Object.assign({}, newChange);
+        newState = Object.assign({}, initialState)
+        newState.chatsOpen = Object.assign({});
         return newState;
     }
     

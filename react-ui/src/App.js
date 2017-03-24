@@ -15,7 +15,7 @@ const ChatContainer = require('./components/chat-container');
 const axios = require('axios');
 const Notifications = require('react-notification-system-redux');
 const { LinkContainer } = require('react-router-bootstrap');
-
+const io = require('socket.io-client');
 const AsyncSearch = require('./components/asyncsearch')
 
 class App extends React.Component {
@@ -52,10 +52,10 @@ class App extends React.Component {
         <LinkContainer to='/login'><NavItem eventKey={1}>Login</NavItem></LinkContainer>
         <LinkContainer to='/register'><NavItem eventKey={2}>Register</NavItem></LinkContainer>
         </Nav>;
-        var loggedInUser = <Nav pullRight><LinkContainer to={'/profile/'+this.props.auth.user.username}><NavItem style={LinkStyle}><div style={navButtonStyle}><img className style={iconSize} src={UserIcon}/></div><span className='nav-text'>{this.props.auth.user.username}</span></NavItem></LinkContainer>
-        <LinkContainer to='/gamesearch'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={GamepadIcon}/></div><span className='nav-text'>Search Games</span></NavItem></LinkContainer>
-        <LinkContainer to='/friendRequests'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={AddFriendIcon}/></div><span className='nav-text'>Friend Requests</span></NavItem></LinkContainer>
-        <NavItem style={LinkStyle} href='' onClick={this.userLogout.bind(this)}><div style={navButtonStyle}><img style={iconSize} src={LogOutIcon}/></div><span className='nav-text'>Logout</span></NavItem></Nav>;
+        var loggedInUser = <Nav pullRight><LinkContainer className="nav-text-container" to={'/profile/'+this.props.auth.user.username}><NavItem style={LinkStyle}><div style={navButtonStyle}><img className style={iconSize} src={UserIcon}/></div><span className='nav-text'>{this.props.auth.user.username}</span></NavItem></LinkContainer>
+        <LinkContainer className="nav-text-container" to='/gamesearch'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={GamepadIcon}/></div><span className='nav-text'>Search Games</span></NavItem></LinkContainer>
+        <LinkContainer className="nav-text-container" to='/friendRequests'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={AddFriendIcon}/></div><span className='nav-text'>Friend Requests</span></NavItem></LinkContainer>
+        <NavItem className="nav-text-container" style={LinkStyle} href='' onClick={this.userLogout.bind(this)}><div style={navButtonStyle}><img style={iconSize} src={LogOutIcon}/></div><span className='nav-text'>Logout</span></NavItem></Nav>;
         var topStyle={
             'overflowX': 'hidden',
             fontFamily: 'Ubuntu',
@@ -101,7 +101,7 @@ class App extends React.Component {
                 style={notificationStyle}
               />
             <div className='nav-bar'>
-            <Navbar fixedTop style={navBarStyle}>
+            <Navbar className="fixed-top-nav" fixedTop style={navBarStyle}>
                 <Navbar.Header>
                   <Navbar.Brand>
                     <Link to='/' style={brandStyle}>Social Gamers</Link>
@@ -119,7 +119,7 @@ class App extends React.Component {
               <div className='children' style={backgroundStyle}>
               {this.props.children}
               </div>
-              {(isLoggedIn) ? (<ChatContainer />) : (null)}
+              {(isLoggedIn) ? (<ChatContainer socket={this.socket}/>) : (null)}
         </div>
             )
     }
@@ -129,7 +129,8 @@ function mapStateToProps(state, props) {
     return ({
         auth: state.app.auth,
         userSearchResults: state.app.userSearchResults,
-        notifications: state.notifications
+        notifications: state.notifications,
+        mainProfile: state.app.mainProfile
     })
 }
 

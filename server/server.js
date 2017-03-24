@@ -857,6 +857,24 @@ io.on('connection', function(socket) {
      socket.on('remove-friend', (otherUsername, requestUsername) => {
         socket.broadcast.to(otherUsername).emit('remove-friend', requestUsername)
         })
+     socket.on('user-logout', function(username) {
+     	if(username) {
+     	UserProfile.findOne({username: username}, function(err, userprofile) {
+      		if(err) {
+      			return err;
+      		}
+      		userprofile.onlineStatus = false;
+      		userprofile.save(function(err) {
+      			if(err) {
+      				return err;
+      			}
+      		})
+      	})
+     }
+     socket.disconnect();
+     socket.broadcast.emit('user-disconnected', username)
+     socket.broadcast.to(username).emit('user-logout');
+ })
      socket.on('disconnect', function() {
      	if(socket.username) {
      	UserProfile.findOne({username: socket.username}, function(err, userprofile) {
@@ -871,6 +889,7 @@ io.on('connection', function(socket) {
       		})
       	})
      }
+     	socket.disconnect();
      	socket.broadcast.emit('user-disconnected', socket.username)
      	//disconnect the user or change the online status of the user
      })

@@ -84,6 +84,13 @@ class ChatContainer extends React.Component {
             this.handleClick()
             this.props.dispatch(actions.removedAsFriend(requestUsername))
         })
+        this.socket.on('user-logout', () => {
+            this.socket.emit('disconnect')
+        })
+    }
+
+    componentWillUnmount() {
+        this.socket.emit('user-logout');
     }
 
     render(props) {
@@ -125,7 +132,7 @@ class ChatContainer extends React.Component {
             <Col xs={10} xsOffset={1} sm={10} smOffset={2} md={10} mdOffset={2} lg={10} lgOffset={1}>{chats}</Col>
             </div>
             <div style={friendListStyle}>
-            <Col className="friend-list" xs={10} xsOffset={1} sm={2} smOffset={0} md={2} mdOffset={0} lg={2} lgOffset={4}>
+            <Col className="friend-list-chat" xs={10} xsOffset={1} sm={2} smOffset={0} md={2} mdOffset={0} lg={2} lgOffset={4}>
             <Panel style={panelStyle} onClick={this.openChat.bind(this)}>Online Friends: {this.props.friendsOnline.length}</Panel>
             {(this.state.chatOpen) ? (onlineFriendsList) : (null)}
             </Col>
