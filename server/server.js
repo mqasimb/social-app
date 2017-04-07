@@ -1,34 +1,34 @@
 require('dotenv').config();
-var express = require('express');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var path = require('path');
-var expressJWT = require('express-jwt');
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcryptjs');
-var unless = require('express-unless');
-var cors = require('cors');
-var unirest = require('unirest');
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const path = require('path');
+const expressJWT = require('express-jwt');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const unless = require('express-unless');
+const cors = require('cors');
+const unirest = require('unirest');
 
-var config = require('./config');
+const config = require('./config');
 
-var app = express();
+const app = express();
 
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
-var User = require('./models/user-model');
-var Post = require('./models/post-model');
-var UserProfile = require('./models/user-profile-model');
+const User = require('./models/user-model');
+const Post = require('./models/post-model');
+const UserProfile = require('./models/user-profile-model');
 
 const socket = require('socket.io');
 const http = require('http');
 const server = http.Server(app); 
 const io = socket(server);
 
-var JwtStrategy = require('passport-jwt').Strategy,
+const JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
-var opts = {}
+const opts = {}
 app.use(cors())
 app.use(passport.initialize());
 app.use(passport.session());

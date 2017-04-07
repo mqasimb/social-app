@@ -119,7 +119,7 @@ class App extends React.Component {
               <div className='children' style={backgroundStyle}>
               {this.props.children}
               </div>
-              {(isLoggedIn) ? (<ChatContainer socket={this.socket}/>) : (null)}
+              {(isLoggedIn) ? (<ChatContainer/>) : (null)}
         </div>
             )
     }
