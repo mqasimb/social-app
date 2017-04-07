@@ -49,8 +49,8 @@ class App extends React.Component {
             fontColor: '#01b8c5'
         }
         var loggedOutUser = <Nav pullRight>
-        <LinkContainer to='/login'><NavItem eventKey={1}>Login</NavItem></LinkContainer>
-        <LinkContainer to='/register'><NavItem eventKey={2}>Register</NavItem></LinkContainer>
+        <LinkContainer to='/login'><NavItem eventKey={1}><span className='nav-text'>Login</span></NavItem></LinkContainer>
+        <LinkContainer to='/register'><NavItem eventKey={2}><span className='nav-text'>Register</span></NavItem></LinkContainer>
         </Nav>;
         var loggedInUser = <Nav pullRight><LinkContainer className="nav-text-container" to={'/profile/'+this.props.auth.user.username}><NavItem style={LinkStyle}><div style={navButtonStyle}><img className style={iconSize} src={UserIcon}/></div><span className='nav-text'>{this.props.auth.user.username}</span></NavItem></LinkContainer>
         <LinkContainer className="nav-text-container" to='/gamesearch'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={GamepadIcon}/></div><span className='nav-text'>Search Games</span></NavItem></LinkContainer>
