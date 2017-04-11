@@ -1,7 +1,4 @@
 const React = require('react');
-const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel, Row, Panel} = require('react-bootstrap');
-const router = require('react-router');
-const { Link } = require('react-router');
 
 class Game extends React.Component {
     render(props) {
@@ -22,7 +19,7 @@ class Game extends React.Component {
         }
         return (
             <div style={paddingStyle}>
-            <img style={imageStyle} width={64} height={64} src={this.props.cover} /><span style={fontStyle}>{this.props.name}</span>
+            <img style={imageStyle} width={64} height={64} role="presentation" src={this.props.cover} /><span style={fontStyle}>{this.props.name}</span>
             </div>
         )
     }

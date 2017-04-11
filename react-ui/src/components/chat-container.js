@@ -1,19 +1,14 @@
-var React = require('react');
-var { connect } = require('react-redux');
-const Content = require('./content');
+const React = require('react');
+const { connect } = require('react-redux');
 const actions = require('../actions/index');
-const LikeBox = require('./likebox');
 const router = require('react-router');
-const { Button, Panel, Col, Row } = require('react-bootstrap');
-const ChatBox = require('./chat-box');
+const { Panel, Col } = require('react-bootstrap');
 const io = require('socket.io-client');
-const MessageForm = require('./message-form');
 const UserListChat = require('./user-list-chat');
 const Chat = require('./chat');
 const Notifications = require('react-notification-system-redux');
 
 const friendRequestReceived = {
-  // uid: 'once-please', // you can specify your own uid if required 
   title: 'Friend Request',
   message: 'New Friend Request Received',
   position: 'tr',
@@ -86,10 +81,6 @@ class ChatContainer extends React.Component {
     }
 
     render(props) {
-        var chatBoxStyle = {
-            maxWidth: 300,
-            maxHeight: 500
-        }
         var friendListStyle = {
         }
         var panelStyle = {
@@ -102,9 +93,6 @@ class ChatContainer extends React.Component {
           borderColor: '#253243',
           marginBottom: '0px',
           width: '200px',
-        }
-        var chatStyle = {
-          
         }
         var containerStyle = {
             position: 'fixed',
@@ -120,7 +108,7 @@ class ChatContainer extends React.Component {
         return (
             <div className="chat-container" style={containerStyle}>
             <Col xs={12} xsOffset={0} md={12} mdOffset={0} lg={12}>
-            <div style={chatStyle}>
+            <div>
             <Col xs={10} xsOffset={1} sm={10} smOffset={2} md={10} mdOffset={2} lg={10} lgOffset={1}>{chats}</Col>
             </div>
             <div style={friendListStyle}>

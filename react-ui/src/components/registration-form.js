@@ -1,6 +1,6 @@
 const React = require('react');
 const { Field, reduxForm } = require('redux-form');
-const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel, Row, Panel} = require('react-bootstrap');
+const { Form, FormControl, FormGroup, Button, Col, ControlLabel, Row, Panel} = require('react-bootstrap');
 const actions = require('../actions/index');
 const { connect } = require('react-redux');
 const router = require('react-router');
@@ -25,7 +25,7 @@ const validate = values => {
   }
   if (!values['confirm-password'] && values.password) {
     errors['confirm-password'] = 'Please confirm your password'
-  } else if (values['confirm-password'] != values.password) {
+  } else if (values['confirm-password'] !== values.password) {
       errors['confirm-password'] = 'Your passwords do not match'
   }
   return errors

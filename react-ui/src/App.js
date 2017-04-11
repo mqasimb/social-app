@@ -1,20 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import LogOutIcon from './icons/opened-door-aperture.svg'
 import AddFriendIcon from './icons/add-friend.svg'
 import GamepadIcon from './icons/gamepad-controller.svg'
 import UserIcon from './icons/man-user.svg'
 
-const { Navbar, Nav, NavItem, NavDropdown, MenuItem, FormGroup, FormControl, Button, Select, Glyphicon } = require('react-bootstrap');
+const { Navbar, Nav, NavItem } = require('react-bootstrap');
 const router = require('react-router');
 const Link = router.Link;
 const actions = require('./actions/index');
 const { connect } = require('react-redux');
-const AsyncTypeahead = require('react-bootstrap-typeahead').AsyncTypeahead;
 const ChatContainer = require('./components/chat-container');
-const axios = require('axios');
 const Notifications = require('react-notification-system-redux');
 const { LinkContainer } = require('react-router-bootstrap');
-const io = require('socket.io-client');
 const AsyncSearch = require('./components/asyncsearch')
 
 class App extends React.Component {
@@ -44,17 +41,14 @@ class App extends React.Component {
         var navButtonStyle = {
             textAlign: 'center'
         }
-        var textStyle = {
-            fontColor: '#01b8c5'
-        }
         var loggedOutUser = <Nav pullRight>
         <LinkContainer to='/login'><NavItem eventKey={1}><span className='nav-text'>Login</span></NavItem></LinkContainer>
         <LinkContainer to='/register'><NavItem eventKey={2}><span className='nav-text'>Register</span></NavItem></LinkContainer>
         </Nav>;
-        var loggedInUser = <Nav pullRight><LinkContainer className="nav-text-container" to={'/profile/'+this.props.auth.user.username}><NavItem style={LinkStyle}><div style={navButtonStyle}><img className style={iconSize} src={UserIcon}/></div><span className='nav-text'>{this.props.auth.user.username}</span></NavItem></LinkContainer>
-        <LinkContainer className="nav-text-container" to='/gamesearch'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={GamepadIcon}/></div><span className='nav-text'>Search Games</span></NavItem></LinkContainer>
-        <LinkContainer className="nav-text-container" to='/friendRequests'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} src={AddFriendIcon}/></div><span className='nav-text'>Friend Requests</span></NavItem></LinkContainer>
-        <NavItem className="nav-text-container" style={LinkStyle} href='' onClick={this.userLogout.bind(this)}><div style={navButtonStyle}><img style={iconSize} src={LogOutIcon}/></div><span className='nav-text'>Logout</span></NavItem></Nav>;
+        var loggedInUser = <Nav pullRight><LinkContainer className="nav-text-container" to={'/profile/'+this.props.auth.user.username}><NavItem style={LinkStyle}><div style={navButtonStyle}><img className style={iconSize} role="presentation" src={UserIcon}/></div><span className='nav-text'>{this.props.auth.user.username}</span></NavItem></LinkContainer>
+        <LinkContainer className="nav-text-container" to='/gamesearch'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} role="presentation" src={GamepadIcon}/></div><span className='nav-text'>Search Games</span></NavItem></LinkContainer>
+        <LinkContainer className="nav-text-container" to='/friendRequests'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} role="presentation" src={AddFriendIcon}/></div><span className='nav-text'>Friend Requests</span></NavItem></LinkContainer>
+        <NavItem className="nav-text-container" style={LinkStyle} href='' onClick={this.userLogout.bind(this)}><div style={navButtonStyle}><img style={iconSize} role="presentation" src={LogOutIcon}/></div><span className='nav-text'>Logout</span></NavItem></Nav>;
         var topStyle={
             'overflowX': 'hidden',
             fontFamily: 'Ubuntu',
@@ -87,11 +81,6 @@ class App extends React.Component {
             color: '#06D7D4',
             fontFamily: 'UbuntuLight',
             fontSize: '1.5em'
-        }
-        var containerStyle = {
-            position: 'fixed',
-            bottom:0,
-            right: '15px'
         }
         return (
             <div className="top-nav" style={topStyle}>

@@ -1,11 +1,10 @@
-const AsyncTypeahead = require('react-bootstrap-typeahead').AsyncTypeahead;
 const React = require('react');
 const axios = require('axios');
 const router = require('react-router');
 const Link = router.Link;
 const actions = require('../actions/index');
 const GameSearchForm = require('./game-search-form');
-const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button, Col, Row } = require('react-bootstrap');
+const { ControlLabel, Button, Col, Row } = require('react-bootstrap');
 const { connect } = require('react-redux');
 
 class GameSearch extends React.Component{
@@ -66,12 +65,11 @@ class GameSearch extends React.Component{
     var imageStyle = {
       paddingLeft: '20px'
     }
-    var imgStyle = {width: 100, height: 100}
     var games = this.state.options.map((game, index) => {
       var data = this.props.mainProfile.favoriteGames.find((favoriteGame) => { 
           return favoriteGame.id === game.id;
       });
-      return <div style={listStyle} key={index}>{(data) ? (<Button style={blueButtonStyle} onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Liked</Button>) : (<Button style={whiteButtonStyle} onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Like</Button>)}<img style={imageStyle} width={64} height={64} src={game.cover.url}/><Link><span style={textStyle}>{game.name}</span></Link></div>
+      return <div style={listStyle} key={index}>{(data) ? (<Button style={blueButtonStyle} onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Liked</Button>) : (<Button style={whiteButtonStyle} onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Like</Button>)}<img style={imageStyle} width={64} height={64} role="presentation" src={game.cover.url}/><Link><span style={textStyle}>{game.name}</span></Link></div>
     }
   )
     return (

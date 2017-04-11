@@ -1,13 +1,11 @@
-var React = require('react');
+const React = require('react');
 const { connect } = require('react-redux');
 const actions = require('../actions/index');
 
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
-const { FormGroup, FormControl, ControlLabel, Panel, Modal, Button, Col, Row } = require('react-bootstrap');
-const CLOUDINARY_UPLOAD_URL = require('../')
+const { FormGroup, FormControl, ControlLabel, Button, Col, Row } = require('react-bootstrap');
 import CheckboxPen from '../icons/checkbox-pen-outline.svg'
-
 
 class NewPost extends React.Component {
     postForm(event) {
@@ -81,16 +79,16 @@ class NewPost extends React.Component {
         return(
             <div style={newPostStyle}>
             <Row><Col componentClass={ControlLabel} xsOffset={1} smOffset={1} mdOffset={2} xs={6} sm={6}>
-            <img style={svgStyle} src={CheckboxPen} /><span className="create-post-span">Create Post</span>
+            <img style={svgStyle} role="presentation" src={CheckboxPen} /><span className="create-post-span">Create Post</span>
             </Col></Row>
             <form onSubmit={this.postForm.bind(this)}>
-            <Row><Col xs={10} xsOffset={1} md={10} mdOffset={1} md={8} mdOffset={2} lg={8}><FormGroup controlId="formControlsTextarea">
+            <Row><Col xs={10} xsOffset={1} md={8} mdOffset={2} lg={8}><FormGroup controlId="formControlsTextarea">
               <ControlLabel>New Post</ControlLabel>
               <FormControl style={textAreaStyle} onChange={this.changeForm.bind(this)} name='content' value={this.props.newPost.content || ''} componentClass="textarea" placeholder="Write a status update..." />
             </FormGroup></Col></Row>
             <Row style={rowStylePadding}>
             <Col xs={2} xsOffset={1} md={2} mdOffset={2} lg={2}>
-            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}>{(this.props.uploadedFileCloudinaryUrl) ? (<div><img src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/><p>Drop files here to upload (or click)</p></div>) : (<p>Drop files here to upload (or click)</p>)}</Dropzone>
+            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}>{(this.props.uploadedFileCloudinaryUrl) ? (<div><img role="presentation" src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/><p>Drop files here to upload (or click)</p></div>) : (<p>Drop files here to upload (or click)</p>)}</Dropzone>
             </Col>
             <Col style={buttonCenter} xs={2} xsOffset={5} smOffset={5} mdOffset={4} md={2} lg={2}>
             <Button style={buttonStyle} onClick={this.postForm.bind(this)} bsStyle="info" disabled={!this.props.newPost.content}>Post</Button>

@@ -1,16 +1,7 @@
-var React = require('react');
-const ReactDOM = require('react-dom');
-var { connect } = require('react-redux');
-const Content = require('./content');
-const { Link } = require('react-router');
-const LikeBox = require('./likebox');
+const React = require('react');
+const { connect } = require('react-redux');
 const actions = require('../actions/index');
-const CommentList = require('./commentlist');
-const router = require('react-router');
-const CommentForm = require('./comment-form');
-const { Panel, Modal, Button } = require('react-bootstrap');
-const { reset } = require('redux-form');
-const uuid = require('uuid');
+const { Modal, Button } = require('react-bootstrap');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
 
@@ -48,10 +39,10 @@ class ChangePictureModal extends React.Component {
           <Modal.Body>
             <p>Please upload new picture.</p>
             <Dropzone multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}> <p>Drop an image or click to select a file to upload.</p></Dropzone>
-            <img src={this.props.uploadedProfilePicCloudinaryUrl} style={imgStyle}/>
+            <img role="presentation" src={this.props.uploadedProfilePicCloudinaryUrl} style={imgStyle}/>
           </Modal.Body>
           <Modal.Footer>
-            {(this.props.uploadedProfilePicCloudinaryUrl != '') ? (setPicture) : (null)}
+            {(this.props.uploadedProfilePicCloudinaryUrl !== '') ? (setPicture) : (null)}
             <Button onClick={this.props.close.bind(this)}>Close</Button>
           </Modal.Footer>
         </Modal>

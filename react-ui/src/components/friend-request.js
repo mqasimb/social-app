@@ -1,6 +1,6 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const { Panel, Modal, Button, Media, Col, Row } = require('react-bootstrap');
+const { Button, Col, Row } = require('react-bootstrap');
 const actions = require('../actions/index');
 const io = require('socket.io-client');
 const router = require('react-router');
@@ -68,7 +68,7 @@ class FriendRequest extends React.Component {
             <div style={divSyle}>
             <Row>
             <Col xs={6} xsOffset={0} sm={4} smOffset={0}>
-            <img style={imageStyle} width={64} height={64} src={this.props.picture} alt="Image"/> <Link style={fontStyle} to={'/'+this.props.username}>{this.props.username}</Link>
+            <img style={imageStyle} width={64} height={64} role="presentation" src={this.props.picture} /> <Link style={fontStyle} to={'/'+this.props.username}>{this.props.username}</Link>
             </Col>
             <Col style={colStyle} xs={6} xsOffset={0} sm={4} smOffset={4}>
             {(this.props.type === 'incoming') ? (<div>{acceptFriendRequestButton} {denyFriendRequestButton}</div>) : (cancelFriendRequestButton)}

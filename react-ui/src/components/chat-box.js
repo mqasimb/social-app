@@ -1,10 +1,5 @@
-var React = require('react');
-var { connect } = require('react-redux');
-const Content = require('./content');
-const actions = require('../actions/index');
-const LikeBox = require('./likebox');
-const router = require('react-router');
-const { Button } = require('react-bootstrap');
+const React = require('react');
+const { connect } = require('react-redux');
 const Infinite = require('react-infinite');
 
 class ChatBox extends React.Component {
@@ -26,7 +21,7 @@ class ChatBox extends React.Component {
                     profilePic = this.props.mainProfile.Friends[firstIndex].ProfilePicture;
                 }  
                 }
-            return <div key={index}><div><img width={40} height={40} src={profilePic} alt="Image"/>{message.username}: {message.message}</div>{(message.image) ? (<img style={imageStyle} src={message.image}/>) : (null)}</div>
+            return <div key={index}><div><img width={40} height={40} role="presentation" src={profilePic}/>{message.username}: {message.message}</div>{(message.image) ? (<img style={imageStyle} role="presentation" src={message.image}/>) : (null)}</div>
         })
         return (
             <div>

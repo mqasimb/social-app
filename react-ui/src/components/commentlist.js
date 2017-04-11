@@ -1,9 +1,5 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const Content = require('./content');
-const { Link } = require('react-router');
-const LikeBox = require('./likebox');
-const actions = require('../actions/index')
 const Comment = require('./comment');
 const { ListGroup } = require('react-bootstrap');
 const uuid = require('uuid');

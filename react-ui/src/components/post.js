@@ -5,9 +5,8 @@ const { Link } = require('react-router');
 const LikeBox = require('./likebox');
 const actions = require('../actions/index');
 const CommentList = require('./commentlist');
-const router = require('react-router');
 const CommentForm = require('./comment-form');
-const { Panel, Modal, Button, Media, Col, ListGroupItem } = require('react-bootstrap');
+const { Media, ListGroupItem } = require('react-bootstrap');
 const { reset } = require('redux-form');
 const uuid = require('uuid');
 const DeleteModal = require('./delete-modal');
@@ -65,9 +64,8 @@ class Post extends React.Component {
             paddingLeft: '20px',
             fontSize: '.75em'
         }
-        var deleteButton = <div style={buttondivStyle} onClick={this.open.bind(this)}><img style={editButtonStyle} src={DeleteButton} />Delete</div>;
-        var confirmDelete = <Button onClick={this.deleteClick.bind(this)}>Delete Post</Button>;
-        var editButton = <div style={buttondivStyle}  onClick={this.enableEdit.bind(this)}><img style={editButtonStyle} src={PencilEditButton} />Edit</div>;
+        var deleteButton = <div style={buttondivStyle} onClick={this.open.bind(this)}><img style={editButtonStyle} role="presentation" src={DeleteButton} />Delete</div>;
+        var editButton = <div style={buttondivStyle}  onClick={this.enableEdit.bind(this)}><img style={editButtonStyle} role="presentation" src={PencilEditButton} />Edit</div>;
         var isDelete = (this.props.name === this.props.auth.user.username) ? (deleteButton) : (null);
         var isEdit = (this.props.name === this.props.auth.user.username) ? (editButton) : (null);
         var editOn = <ListGroupItem><EditPostForm form={this.props.id} onSubmit={this.editPost.bind(this)} cancel={this.cancelEdit.bind(this)} initialValues={{content: this.props.content}} /></ListGroupItem>;
@@ -87,12 +85,12 @@ class Post extends React.Component {
             borderColor: '#00fff9',
             borderWidth: '1px'
         }
-        var image = (this.props.image) ? (<img style={postImageStyle} src={this.props.image}/>) : (null)
+        var image = (this.props.image) ? (<img style={postImageStyle} role="presentation" src={this.props.image}/>) : (null)
         return (
             <div className='singlePost' style={postStyle}>
             {(this.props.editPost[this.props.id]) ? (editOn) : (<Media>
              <Media.Left>
-                <img width={64} height={64} src={this.props.profilePicture} alt="Image"/>
+                <img width={64} height={64} role="presentation" src={this.props.profilePicture}/>
               </Media.Left>
               <Media.Body>
                 <Media.Heading><Link to={'/profile/'+this.props.name}>{this.props.name}</Link>

@@ -2,7 +2,6 @@ var React = require('react');
 const router = require('react-router');
 var { connect } = require('react-redux');
 const actions = require('../actions/index');
-const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel} = require('react-bootstrap');
 const LoginForm = require('./login-form');
 
 class Login extends React.Component {
@@ -27,7 +26,6 @@ class Login extends React.Component {
     }
     
     render(props) {
-      backgroundColor:
         return (
             <div>
             <LoginForm demoButtonAction={this.submitLoginDemoAccount.bind(this)} onSubmit={this.submitLogin}/>

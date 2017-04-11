@@ -1,7 +1,5 @@
-var React = require('react');
+const React = require('react');
 const uuid = require('uuid');
-const { connect } = require('react-redux');
-const actions = require('../actions/index');
 const Post = require('./post');
 
 class ProfilePosts extends React.Component {

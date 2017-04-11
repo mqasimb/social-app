@@ -1,6 +1,6 @@
 var React = require('react');
 const Friend = require('./friend');
-const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel, Row, Panel} = require('react-bootstrap');
+const { Panel } = require('react-bootstrap');
 
 class FriendsList extends React.Component {
     render(props) {
@@ -12,9 +12,6 @@ class FriendsList extends React.Component {
             fontSize: '1.5em',
             borderRadius: '0',
             borderColor: '#253243'
-        }
-        var backgroundStyle = {
-            backgroundColor: '#ffffff'
         }
         var paddingStyle = {
             paddingLeft: '40px',

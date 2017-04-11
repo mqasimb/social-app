@@ -1,7 +1,7 @@
 const React = require('react');
 const FriendRequest = require('./friend-request');
 const { connect } = require('react-redux');
-const { Panel, Modal, Button, Media, Col } = require('react-bootstrap');
+const { Panel, Col } = require('react-bootstrap');
 
 class FriendRequestsContainer extends React.Component {
     render(props) {

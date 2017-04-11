@@ -1,9 +1,7 @@
-var AsyncTypeahead = require('react-bootstrap-typeahead').AsyncTypeahead;
+const AsyncTypeahead = require('react-bootstrap-typeahead').AsyncTypeahead;
 const React = require('react');
 const axios = require('axios');
 const router = require('react-router');
-const Link = router.Link;
-const { LinkContainer } = require('react-router-bootstrap');
 
 class AsyncSearch extends React.Component{
   constructor(props) {
@@ -35,6 +33,7 @@ class AsyncSearch extends React.Component{
           <div onClick={this.clickLink.bind(this, option.username)}>
             <img
               src={option.ProfilePicture}
+              role="presentation"
               style={{
                 height: '24px',
                 marginRight: '10px',

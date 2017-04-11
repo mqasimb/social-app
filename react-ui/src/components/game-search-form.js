@@ -1,8 +1,6 @@
 const React = require('react');
 const { Field, reduxForm } = require('redux-form');
-const { Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel, Row} = require('react-bootstrap');
-const actions = require('../actions/index');
-const { connect } = require('react-redux');
+const { Form, FormControl, FormGroup, Button, Col, ControlLabel, Row} = require('react-bootstrap');
 
 const validate = values => {
   const errors = {}
@@ -55,15 +53,6 @@ class GameSearchForm extends React.Component {
   }
   var textStyle = {
     textAlign: 'center'
-  }
-  var panelStyle = {
-    backgroundColor: '#253243',
-    color: '#00fff9',
-    textAlign: 'center',
-    fontFamily: 'Ubuntu',
-    fontSize: '1.5em',
-    borderRadius: '0',
-    borderColor: '#253243'
   }
   return (
     <Col>

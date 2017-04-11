@@ -1,20 +1,13 @@
 const React = require('react');
-const ReactDOM = require('react-dom');
 const { connect } = require('react-redux');
-const Content = require('./content');
-const { Link } = require('react-router');
-const LikeBox = require('./likebox');
 const actions = require('../actions/index');
-const router = require('react-router');
-const { Panel, Modal, Button, Row, Col } = require('react-bootstrap');
+const { Button, Row, Col } = require('react-bootstrap');
 const ProfilePicture = require('./profile-picture');
 const AboutMe = require('./aboutme');
 const ProfilePosts = require('./profile-posts');
 const FriendsList = require('./friends-list');
 const GamesList = require('./games-list');
 const ChangePictureModal = require('./change-picture-modal');
-const Dropzone = require('react-dropzone');
-const request = require('superagent');
 const AboutMeForm = require('./aboutme-form');
 const io = require('socket.io-client');
 import Wallpaper from '../wallpaper.jpg'
@@ -38,7 +31,6 @@ class Profile extends React.Component {
         this.props.dispatch(actions.changeAboutMe(false));   
     }
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps, this.props)
         if(this.props.params.username !== nextProps.params.username) {
             this.props.dispatch(actions.getProfile(nextProps.params.username))
         }
@@ -97,11 +89,6 @@ class Profile extends React.Component {
             fontSize: '1.5em',
             color: '#00fff9'
         }
-        var aboutMeStyle = {
-            fontFamily: 'Ubuntu',
-            fontSize: '1em',
-            color: '#ffffff'
-        }
         var rowStyle = {
             paddingBottom: '10px'
         }
@@ -115,14 +102,12 @@ class Profile extends React.Component {
         var acceptFriendRequest = this.props.mainProfile.incomingRequests.findIndex((request) => {
             return request.username == this.props.params.username;
         });
-        var denyFriendRequest = acceptFriendRequest;
         var cancelFriendRequest = this.props.mainProfile.outgoingRequests.findIndex((request) => {
             return request.username == this.props.params.username;
         });
         var isFriend = this.props.mainProfile.Friends.findIndex((request) => {
             return request.username == this.props.params.username;
         });
-        var sendFriendRequest = (((acceptFriendRequest > -1) || (cancelFriendRequest > -1)) && (isFriend < 0)) ? (false) : (true);
         var acceptFriendRequestButton = <Button style={buttonStyle} onClick={this.acceptRequest.bind(this)}>ACCEPT REQUEST</Button>;
         var denyFriendRequestButton = <Button style={buttonStyle} onClick={this.denyRequest.bind(this)}>DENY REQUEST</Button>;
         var cancelFriendRequestButton = <Button style={buttonStyle} onClick={this.cancelRequest.bind(this)}>CANCEL REQUEST</Button>;
@@ -149,8 +134,8 @@ class Profile extends React.Component {
             {(this.props.auth.user.username == this.props.params.username) ? ((this.props.changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: this.props.loadedProfile.AboutMe}}/>) : (<Button style={buttonStyle} onClick={this.enableAboutMeChange.bind(this)}>EDIT ABOUT ME</Button>)) : (null)}
             </Col></Row></div>
             <Col xs={12} xsOffset={0} sm={12} smOffset={0} md={12} mdOffset={0} lg={8} lgOffset={0}><ProfilePosts posts={this.props.postData}/></Col>
-            {(this.props.loadedProfile.Friends != undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><FriendsList list={this.props.loadedProfile.Friends}/></div></Col>) : (null)}
-            {(this.props.loadedProfile.favoriteGames != undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><GamesList list={this.props.loadedProfile.favoriteGames}/></div></Col>) : (null)}
+            {(this.props.loadedProfile.Friends !== undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><FriendsList list={this.props.loadedProfile.Friends}/></div></Col>) : (null)}
+            {(this.props.loadedProfile.favoriteGames !== undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><GamesList list={this.props.loadedProfile.favoriteGames}/></div></Col>) : (null)}
             </div>
         )
     }

@@ -1,14 +1,9 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const Content = require('./content');
 const actions = require('../actions/index');
-const LikeBox = require('./likebox');
-const router = require('react-router');
 const { Button, Glyphicon } = require('react-bootstrap');
 const ChatBox = require('./chat-box');
-const io = require('socket.io-client');
 const MessageForm = require('./message-form');
-const UserListChat = require('./user-list-chat');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
 const { reset } = require('redux-form');
@@ -76,12 +71,10 @@ class Chat extends React.Component {
             right: '0',
             top: '0'
         }
-        var imgStyle = {width: 40, height: 40}
         var firstIndex = this.props.mainProfile.messages.findIndex((friend) => {
             return friend.friend === this.props.name
         })
         var loadHistoryButton = (firstIndex > -1) ? ((this.props.mainProfile.messages[firstIndex].messages.length > this.props.chatMessages[this.props.name].length) ? (<Button onClick={this.loadMessageHistory.bind(this)}>Load Message History</Button>) : (null)) : (null)
-        var profileImage;
         return (
             <div style={chatBoxStyle}>
             <div style={chatHeaderStyle}>{this.props.name} {loadHistoryButton}<Glyphicon style={glyphStyle} onClick={this.closeChat.bind(this)} glyph="remove"/></div>

@@ -1,10 +1,8 @@
 const React = require('react');
-const moment = require('moment');
 const { connect } = require('react-redux');
 const actions = require('../actions/index');
-const router = require('react-router');
 const EditCommentForm = require('./edit-comment-form');
-const { ListGroupItem, Panel, Modal, Button, Media } = require('react-bootstrap');
+const { ListGroupItem, Media } = require('react-bootstrap');
 
 import PencilEditButton from '../icons/pencil-edit-button.svg'
 import DeleteButton from '../icons/cancel.svg'
@@ -37,17 +35,16 @@ class Comment extends React.Component {
       var dateStyle = {
             fontSize: '0.85em'
       }
-      var deleteButton = <div style={buttondivStyle} onClick={this.deleteClick.bind(this)}><img style={editButtonStyle} src={DeleteButton} />Delete</div>;
-      var editButton = <div style={buttondivStyle} onClick={this.enableEdit.bind(this)}><img style={editButtonStyle} src={PencilEditButton} />Edit</div>;
+      var deleteButton = <div style={buttondivStyle} onClick={this.deleteClick.bind(this)}><img style={editButtonStyle} role="presentation" src={DeleteButton} />Delete</div>;
+      var editButton = <div style={buttondivStyle} onClick={this.enableEdit.bind(this)}><img style={editButtonStyle} role="presentation" src={PencilEditButton} />Edit</div>;
       var isDelete = (this.props.username === this.props.auth.user.username) ? (deleteButton) : (null);
       var isEdit = (this.props.username === this.props.auth.user.username) ? (editButton) : (null);
-      var notEdit = <ListGroupItem>{this.props.username}: {this.props.comment}  -{this.props.date} {isEdit} {isDelete}</ListGroupItem>;
       var editOn = <ListGroupItem><EditCommentForm form={this.props.id} onSubmit={this.editComment.bind(this)} cancel={this.cancelEdit.bind(this)} initialValues={{comment: this.props.comment}} /></ListGroupItem>;
         return (
             <div>
             {(this.props.editComment[this.props.id]) ? (editOn) : (<Media>
              <Media.Left>
-                <img width={64} height={64} src={this.props.profilePicture} alt="Image"/>
+                <img width={64} height={64} role="presentation" src={this.props.profilePicture}/>
               </Media.Left>
               <Media.Body>
                 <Media.Heading>{this.props.username}</Media.Heading>

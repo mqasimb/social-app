@@ -1,10 +1,6 @@
-var React = require('react');
-var { connect } = require('react-redux');
-const Content = require('./content');
+const React = require('react');
+const { connect } = require('react-redux');
 const actions = require('../actions/index');
-const LikeBox = require('./likebox');
-const router = require('react-router');
-const { Button } = require('react-bootstrap');
 
 class UserListChat extends React.Component {
     openChat() {
@@ -32,7 +28,7 @@ class UserListChat extends React.Component {
         }
         return (
             <div style={divStyle} onClick={this.openChat.bind(this)}>
-            <img style={imageStyle} src={this.props.picture} /> <span style={fontStyle}>{this.props.friend}</span>
+            <img style={imageStyle} role="presentation" src={this.props.picture} /> <span style={fontStyle}>{this.props.friend}</span>
             </div>
         )
     }
