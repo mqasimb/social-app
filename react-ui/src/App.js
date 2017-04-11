@@ -4,8 +4,7 @@ import AddFriendIcon from './icons/add-friend.svg'
 import GamepadIcon from './icons/gamepad-controller.svg'
 import UserIcon from './icons/man-user.svg'
 
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem, FormGroup, FormControl, Button, Select, Glyphicon } from 'react-bootstrap';
-
+const { Navbar, Nav, NavItem, NavDropdown, MenuItem, FormGroup, FormControl, Button, Select, Glyphicon } = require('react-bootstrap');
 const router = require('react-router');
 const Link = router.Link;
 const actions = require('./actions/index');

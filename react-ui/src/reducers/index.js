@@ -2,15 +2,12 @@ const react = require('react');
 const actions = require('../actions/index');
 
 var initialState = {
-        loginInput: {username: '', password: ''},
-        registerInput: {username: '', email: '', password: '', 'confirm-password': ''},
         auth: {authenticated: false, user: {}},
         newPost: {content: '', image: null},
         postData: [],
         singlePost: {},
         postLoading: true,
         isEdit: false,
-        editInput: {content: ''},
         commentsInput: {},
         uploadedFile: '',
         uploadedFileCloudinaryUrl: '',
@@ -38,7 +35,6 @@ var appReducer = function(state, action) {
     var newState = Object.assign({}, state);
 
     if(action.type === actions.LIKE_GAME) {
-        console.log(action.data)
         newState.mainProfile.favoriteGames = action.data.favoriteGames;
         newState.mainProfile.favoriteGames = newState.mainProfile.favoriteGames.slice();
         newState.mainProfile = Object.assign({}, newState.mainProfile);  
@@ -76,7 +72,6 @@ var appReducer = function(state, action) {
     }
 
     if(action.type === actions.RECEIVED_FRIEND_REQUEST) {
-        console.log(action.username)
         newState.mainProfile.incomingRequests.push({username: action.username, ProfilePicture: action.ProfilePicture});
         newState.mainProfile.incomingRequests = newState.mainProfile.incomingRequests.slice();
         newState.mainProfile = Object.assign({}, newState.mainProfile);  
@@ -444,7 +439,6 @@ var appReducer = function(state, action) {
     if(action.type === actions.COMMENT_EDIT_SUCCESS) {
         var newChange = [];
         var returnIndex = newState.postData.findIndex(function(post) {
-            console.log(post._id, 'postid', action.postID)
             return post._id == action.postID;
         });
         if(returnIndex > -1) {
@@ -467,7 +461,6 @@ var appReducer = function(state, action) {
     if(action.type === actions.COMMENT_DELETE_SUCCESS) {
         var newChange = [];
         var returnIndex = newState.postData.findIndex(function(post) {
-            console.log(post._id, 'postid', action.postID)
             return post._id == action.postID;
         });
         if(returnIndex > -1) {
