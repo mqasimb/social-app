@@ -7,6 +7,7 @@ const MessageForm = require('./message-form');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
 const { reset } = require('redux-form');
+const axios = require('axios');
 
 class Chat extends React.Component {
     componentDidMount() {
@@ -24,21 +25,24 @@ class Chat extends React.Component {
         this.handleImageUpload(files[0]);
     }
     handleImageUpload(file) {
-    let upload = request.post('https://api.cloudinary.com/v1_1/mqasimb/image/upload')
-                        .field('api_key', '875199226668767')
-                        .field('api-secret', 'pRC9jsjqVMw7QALtFXyb4__Wj0w')
-                        .field('upload_preset', 'khh5rnsu')
+        axios.get('/api/cloudinary')
+            .then(resp => resp.data)
+            .then(json => {
+                let upload = request.post(json.cloudinaryURL)
+                        .field('api_key', json.apiKey)
+                        .field('api-secret', json.apiSecret)
+                        .field('upload_preset', json.uploadPreset)
                         .field('file', file);
 
-    upload.end((err, response) => {
-      if (err) {
-        console.error(err);
-      }
-
-      if (response.body.secure_url !== '') {
-        this.props.dispatch(actions.setMessageImageCloudinaryURL(response.body.secure_url, this.props.name));
-      }
-    });
+                upload.end((err, response) => {
+                  if (err) {
+                    console.error(err);
+                  }
+                  if (response.body.secure_url !== '') {
+                    this.props.dispatch(actions.setMessageImageCloudinaryURL(response.body.secure_url, this.props.name));
+                  }
+                });
+            })
     }
     loadMessageHistory() {
         this.props.dispatch(actions.loadOlderMessages(this.props.name))

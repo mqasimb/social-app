@@ -5,7 +5,7 @@ const { Form, FormControl, FormGroup, Button, Col, ControlLabel} = require('reac
 const validate = values => {
   const errors = {}
   if (!values.aboutMe) {
-    errors.username = 'Please enter some details about yourself'
+    errors.aboutMe = 'Please enter some details about yourself'
   }
   return errors
 }
@@ -19,7 +19,6 @@ const renderField = ({ input, label, name, type, controlId, placeholder, meta: {
 
 class AboutMeForm extends React.Component {
   render() {
-      console.log(this.props)
   const { handleSubmit, pristine, submitting } = this.props
   return (
       <div className='edit-aboutme-form'>
@@ -47,11 +46,11 @@ class AboutMeForm extends React.Component {
             </Form>
     </div>
   )
-}
+  }
 }
 
-AboutMeForm = reduxForm({  // a unique identifier for this form
-  validate               // <--- validation function given to redux-form
+AboutMeForm = reduxForm({
+  validate
 })(AboutMeForm);
 
 module.exports = AboutMeForm;

@@ -1,7 +1,7 @@
 const React = require('react');
 const { connect } = require('react-redux');
 const actions = require('../actions/index');
-
+const axios = require('axios');
 const Dropzone = require('react-dropzone');
 const request = require('superagent');
 const { FormGroup, FormControl, ControlLabel, Button, Col, Row } = require('react-bootstrap');
@@ -21,25 +21,29 @@ class NewPost extends React.Component {
     
     onImageDrop(files) {
         this.props.dispatch(actions.uploadFile(files[0]));
+        console.log('file', files[0])
         this.handleImageUpload(files[0]);
     }
     handleImageUpload(file) {
-    let upload = request.post('https://api.cloudinary.com/v1_1/mqasimb/image/upload')
-                        .field('api_key', '875199226668767')
-                        .field('api-secret', 'pRC9jsjqVMw7QALtFXyb4__Wj0w')
-                        .field('upload_preset', 'khh5rnsu')
+        axios.get('/api/cloudinary')
+            .then(resp => resp.data)
+            .then(json => {
+                let upload = request.post(json.cloudinaryURL)
+                        .field('api_key', json.apiKey)
+                        .field('api-secret', json.apiSecret)
+                        .field('upload_preset', json.uploadPreset)
                         .field('file', file);
 
-    upload.end((err, response) => {
-      if (err) {
-        console.error(err);
-      }
-
-      if (response.body.secure_url !== '') {
-        this.props.dispatch(actions.setCloudinaryURL(response.body.secure_url));
-      }
-    });
-  }
+                upload.end((err, response) => {
+                  if (err) {
+                    console.error(err);
+                  }
+                  if (response.body.secure_url !== '') {
+                    this.props.dispatch(actions.setCloudinaryURL(response.body.secure_url));
+                  }
+                });
+            })
+    }
     
     render() {
         var imgStyle = {width: 100, height: 100}

@@ -15,7 +15,7 @@ class AsyncSearch extends React.Component{
 
     axios.post(`/api/search/profile`, {search:query})
       .then(resp => resp)
-      .then(json => {console.log(json.data)
+      .then(json => {
         return this.setState({options: json.data})});
   }
   clickLink(username) {

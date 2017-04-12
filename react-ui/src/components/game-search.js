@@ -13,15 +13,12 @@ class GameSearch extends React.Component{
     this.state = {options: []}
   }
   _handleSearch(values) {
-    axios.get(`https://igdbcom-internet-game-database-v1.p.mashape.com/games/?fields=*&limit=50&offset=0&search=${values.search}&filter[cover.url][exists]`,
-      {headers: {'X-Mashape-Key': 'HC8T8HETmAmshdO9t82fgitALRI0p1MyAuhjsnHtXU0ZA8e9kP', 'Accept': 'application/json'}}
-      )
+    axios.get(`/api/game/search/${values.search}`)
       .then(resp => resp)
-      .then(json => {console.log(json.data)
+      .then(json => {
         return this.setState({options: json.data})})
   }
   likeGame(name, id, cover) {
-    console.log(name, id, cover)
     axios.post('/api/games/like', {name: name, id: id, cover: cover})
     .then(resp => resp)
     .then(json => {console.log(json.data)

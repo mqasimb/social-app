@@ -8,9 +8,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-
+const unirest = require('unirest');
 const cors = require('cors');
-
 const config = require('./config');
 
 const User = require('./models/user-model');
@@ -63,25 +62,13 @@ app.get('/users/logout', function(req, res){
     res.redirect('/login');
 });
 
-// app.post('/api/cloudinary', expressJWT({ secret: config.jwtSecret}), function(req, res) {
-// 	console.log(req.body, 'reqb/body')
-                        
-//     let upload = request.post(process.env.CLOUDINARY_UPLOAD_URL)
-//                         .field('api_key', process.env.CLOUDINARY_API_KEY)
-//                         .field('api-secret', process.env.CLOUDINARY_API_SECRET)
-//                         .field('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET)
-//                         .field('file', file);
-
-//         upload.end((err, response) => {
-//           if (err) {
-//             console.error(err);
-//           }
-
-//           if (response.body.secure_url !== '') {
-//             res.json(response);
-//           }
-//         });
-// });
+app.get('/api/cloudinary', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    res.json({cloudinaryURL: process.env.CLOUDINARY_UPLOAD_URL,
+              apiKey: process.env.CLOUDINARY_API_KEY,
+              apiSecret: process.env.CLOUDINARY_API_SECRET,
+              uploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+              });
+});
 
 app.post('/api/search/profile', expressJWT({ secret: config.jwtSecret}), function(req, res) {
     if(req.body.search == '') {
@@ -692,6 +679,14 @@ app.post('/api/games/like', expressJWT({ secret: config.jwtSecret}), function(re
             res.json(userprofile);
         })
     })
+})
+
+app.get('/api/game/search/:value', expressJWT({ secret: config.jwtSecret}), function(req, res) {
+    unirest.get('https://igdbcom-internet-game-database-v1.p.mashape.com/games/?fields=*&limit=50&offset=0&search='+req.params.value+'&filter[cover.url][exists]')
+        .headers({'Accept': 'application/json', 'X-Mashape-Key': process.env.IGDB_API_KEY})
+        .end(function (response) {
+            res.json(response.body);
+    });
 })
 
 var strategy = new LocalStrategy(function(username, password, callback) {
