@@ -53,7 +53,7 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.CANCELLED_FRIEND_REQUEST) {
-        var firstIndex = newState.mainProfile.incomingRequests.findIndex((request) => request.username == action.username)
+        var firstIndex = state.mainProfile.incomingRequests.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
             return {...state, 
                 mainProfile: {...state.mainProfile, 
@@ -68,23 +68,17 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.ACCEPTED_FRIEND_REQUEST) {
-        var firstIndex = newState.mainProfile.outgoingRequests.findIndex(function(request) {
-            return request.username == action.username;
-        })
+        var firstIndex = state.mainProfile.outgoingRequests.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
-            newState.mainProfile.outgoingRequests.splice(firstIndex, 1);
-            newState.mainProfile.outgoingRequests = newState.mainProfile.outgoingRequests.slice();
-            newState.mainProfile.Friends.push({username: action.username});
-            newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+            return {...state, 
+                mainProfile: {...state.mainProfile, 
+                    outgoingRequests: [...state.mainProfile.outgoingRequests.slice(0, firstIndex), ...state.mainProfile.outgoingRequests.slice(firstIndex + 1)], 
+                    Friends: [...state.mainProfile.Friends, {username: action.username}]}}
         }
-        return newState;
     }
 
     if(action.type === actions.REMOVED_AS_FRIEND) {
-        var firstIndex = newState.mainProfile.Friends.findIndex(function(request) {
-            return request.username == action.username;
-        })
+        var firstIndex = newState.mainProfile.Friends.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
             newState.mainProfile.Friends.splice(firstIndex, 1);
             newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
@@ -101,55 +95,41 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.USER_CONNECT) {
-        var firstIndex = newState.mainProfile.Friends.findIndex(function(friend) {
-            return friend.username == action.username;
-        })
+        var firstIndex = state.mainProfile.Friends.findIndex((friend) => friend.username == action.username)
         if(firstIndex > -1) {
-            newState.mainProfile.Friends[firstIndex].onlineStatus = true;
-            newState.mainProfile.Friends[firstIndex] = Object.assign({}, newState.mainProfile.Friends[firstIndex]);
-            newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+            state = {...state, 
+                mainProfile: {...state.mainProfile, 
+                    Friends: [...state.mainProfile.Friends.slice(0, firstIndex), 
+                        {...state.mainProfile.Friends[firstIndex], onlineStatus: true}, 
+                        ...state.mainProfile.Friends.slice(firstIndex + 1)]}}
+            return {...state, 
+                friendsOnline: state.mainProfile.Friends.filter((friend) => friend.onlineStatus == true)}
         }
-        newState.friendsOnline = newState.mainProfile.Friends.filter(function(friend) {
-            return friend.onlineStatus == true;
-        })
-        newState.friendsOnline = newState.friendsOnline.slice();
-        return newState;
     }
 
     if(action.type === actions.USER_DISCONNECT) {
-        var firstIndex = newState.mainProfile.Friends.findIndex(function(friend) {
-            return friend.username == action.username;
-        })
+        var firstIndex = newState.mainProfile.Friends.findIndex((friend) => friend.username == action.username)
         if(firstIndex > -1) {
-            newState.mainProfile.Friends[firstIndex].onlineStatus = false;
-            newState.mainProfile.Friends[firstIndex] = Object.assign({}, newState.mainProfile.Friends[firstIndex]);
-            newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+            state = {...state, 
+                mainProfile: {...state.mainProfile, 
+                    Friends: [...state.mainProfile.Friends.slice(0, firstIndex), 
+                        {...state.mainProfile.Friends[firstIndex], onlineStatus: false}, 
+                        ...state.mainProfile.Friends.slice(firstIndex + 1)]}}
+            return {...state, 
+                friendsOnline: state.mainProfile.Friends.filter((friend) => friend.onlineStatus == true)}
         }
-        newState.friendsOnline = newState.mainProfile.Friends.filter(function(friend) {
-            return friend.onlineStatus == true;
-        })
-        newState.friendsOnline = newState.friendsOnline.slice();
-        return newState;
     }
 
     if(action.type === actions.UPLOAD_MESSAGE_IMAGE) {
-        newState.chatImagesUpload[action.friendUsername] = action.files;
-        newState.chatImagesUpload = Object.assign({}, newState.chatImagesUpload);
-        return newState;
+        return {...state, chatImagesUpload: {...state.chatImagesUpload, [action.friendUsername]: action.files}}
     }
     
     if(action.type === actions.SET_MESSAGE_IMAGE_CLOUDINARY_URL) {
-        newState.chatImagesUploadUrl[action.friendUsername] = action.url;
-        newState.chatImagesUploadUrl = Object.assign({}, newState.chatImagesUploadUrl);
-        return newState;
+        return {...state, chatImagesUploadUrl: {...state.chatImagesUploadUrl, [action.friendUsername]: action.url}}
     }
 
     if(action.type === actions.SAVE_MESSAGES_TO_PROFILE) {
-        var firstIndex = newState.mainProfile.messages.findIndex(function(friend) {
-            return friend.friend === action.friend
-        })
+        var firstIndex = newState.mainProfile.messages.findIndex((friend) => friend.friend === action.friend)
         if(firstIndex > -1) {
             newState.mainProfile.messages[firstIndex].messages.push(action.data);
             newState.mainProfile.messages[firstIndex].messages = newState.mainProfile.messages[firstIndex].messages.slice();
@@ -203,24 +183,19 @@ var appReducer = function(state = initialState, action) {
     }
     
     if(action.type === actions.LOAD_OLDER_MESSAGES) {
-        var firstIndex = newState.mainProfile.messages.findIndex(function(friend) {
-            return friend.friend === action.friend
-        })
+        var firstIndex = state.mainProfile.messages.findIndex((friend) => friend.friend === action.friend)
         if(firstIndex > -1) {
-            newState.chatMessages[action.friend] = newState.mainProfile.messages[firstIndex].messages;
-            newState.chatMessages[action.friend] = newState.chatMessages[action.friend].slice();
-            newState.chatMessages = Object.assign({}, newState.chatMessages);
+            return {...state, 
+                chatMessages: {...state.chatMessages, 
+                    [action.friend]: [...state.mainProfile.messages[firstIndex].messages]}}
         }
-        return newState;
     }
 
     if(action.type === actions.MESSAGE_RECEIVED) {
-        if(newState.chatMessages[action.data.username] === undefined) {
-            newState.chatMessages[action.data.username] = [];
+        if(state.chatMessages[action.data.username] === undefined) {
+            state = {...state, chatMessages: {...state.chatMessages, [action.data.username]: []}}
         }
-        newState.chatMessages[action.data.username].push(action.data);
-        newState.chatMessages = Object.assign({}, newState.chatMessages);
-        return newState;
+        return {...state, chatMessages: {...state.chatMessages, [action.data.username]: [...state.chatMessages[action.data.username], action.data]}}
     }
 
     if(action.type === actions.GET_SEARCH_USERNAMES_SUCCESS) {
