@@ -30,15 +30,11 @@ var initialState = {
         chatImagesUploadUrl: {}
     };
 
-var appReducer = function(state, action) {
-    state = state || initialState;
+var appReducer = function(state = initialState, action) {
     var newState = Object.assign({}, state);
 
     if(action.type === actions.LIKE_GAME) {
-        newState.mainProfile.favoriteGames = action.data.favoriteGames;
-        newState.mainProfile.favoriteGames = newState.mainProfile.favoriteGames.slice();
-        newState.mainProfile = Object.assign({}, newState.mainProfile);  
-        return newState;
+        return {...state, mainProfile: {...state.mainProfile, favoriteGames: [...action.data.favoriteGames]}}
     }
 
     if(action.type === actions.CLOSE_CHAT) {
@@ -48,34 +44,27 @@ var appReducer = function(state, action) {
     }
 
     if(action.type === actions.DENIED_FRIEND_REQUEST) {
-        var firstIndex = newState.mainProfile.outgoingRequests.findIndex(function(request) {
-            return request.username == action.username;
-        })
+        var firstIndex = state.mainProfile.outgoingRequests.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
-            newState.mainProfile.outgoingRequests.splice(firstIndex, 1);
-            newState.mainProfile.outgoingRequests = newState.mainProfile.outgoingRequests.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+            return {...state, 
+                mainProfile: {...state.mainProfile, 
+                    outgoingRequests: [...state.mainProfile.outgoingRequests.slice(0, firstIndex), ...state.mainProfile.outgoingRequests.slice(firstIndex + 1)]}}
         }
-        return newState;
     }
 
     if(action.type === actions.CANCELLED_FRIEND_REQUEST) {
-        var firstIndex = newState.mainProfile.incomingRequests.findIndex(function(request) {
-            return request.username == action.username;
-        })
+        var firstIndex = newState.mainProfile.incomingRequests.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
-            newState.mainProfile.incomingRequests.splice(firstIndex, 1);
-            newState.mainProfile.incomingRequests = newState.mainProfile.incomingRequests.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+            return {...state, 
+                mainProfile: {...state.mainProfile, 
+                    incomingRequests: [...state.mainProfile.incomingRequests.slice(0, firstIndex), ...state.mainProfile.incomingRequests.slice(firstIndex + 1)]}}
         }
-        return newState;
     }
 
     if(action.type === actions.RECEIVED_FRIEND_REQUEST) {
-        newState.mainProfile.incomingRequests.push({username: action.username, ProfilePicture: action.ProfilePicture});
-        newState.mainProfile.incomingRequests = newState.mainProfile.incomingRequests.slice();
-        newState.mainProfile = Object.assign({}, newState.mainProfile);  
-        return newState;
+        return {...state, 
+            mainProfile: {...state.mainProfile, 
+                incomingRequests: [...state.mainProfile.incomingRequests, {username: action.username, ProfilePicture: action.ProfilePicture}]}}
     }
 
     if(action.type === actions.ACCEPTED_FRIEND_REQUEST) {
@@ -412,9 +401,9 @@ var appReducer = function(state, action) {
             return post._id == action.postID;
         });
         if(firstIndex > -1) {
-            newState.postData[firstIndex].content = action.values.content;
-            newState.postData[firstIndex] = Object.assign({}, newState.postData[firstIndex]);
             newState.postData = newState.postData.slice();
+            newState.postData[firstIndex] = Object.assign({}, newState.postData[firstIndex]);
+            newState.postData[firstIndex].content = action.values.content;
             return newState;
             }
         return newState;
@@ -478,21 +467,16 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.SET_UPLOAD_FILE_CLOUDINARY_URL) {
+        newState.newPost = Object.assign({}, newState.newPost);
         newState.uploadedFileCloudinaryUrl = action.url;
         newState.newPost.image = action.url;
-        newState.newPost = Object.assign({}, newState.newPost);
         return newState;
     }
     
     if(action.type === actions.EDIT_INPUT) {
-        newState.editInput[action.inputName] = action.inputValue;
-        newState.editInput = Object.assign({}, newState.editInput);
-        return newState;
-    }
-    
-    if(action.type === actions.COMMENT_INPUT_CHANGE) {
-        newState.commentsInput[action.inputName] = action.inputValue;
-        newState.commentsInput = Object.assign({}, newState.commentsInput);
+        newChange = {};
+        newChange[action.inputName] = action.inputValue;
+        newState.editInput = Object.assign({}, newChange);
         return newState;
     }
     
@@ -521,40 +505,27 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.POST_FETCH_SUCCESSFUL) {
-        newState.postData = action.data.data.slice();
+        var newChange = action.data.data;
+        newState.postData = newChange.slice();
         return newState;
     }
     
     if(action.type === actions.UPDATE_POST_INPUT) {
-        newState.newPost[action.inputName] = action.inputValue;
         newState.newPost = Object.assign({}, newState.newPost);
+        newState.newPost[action.inputName] = action.inputValue;
         return newState;
     }
     
     if(action.type === actions.USER_LOGGED_IN) {
-        newState.auth.authenticated = true;
-        newState.auth.user = action.user;
         newState.auth = Object.assign({}, newState.auth);
+        newState.auth.authenticated = true;
+        newState.auth.user = Object.assign({}, action.user);
         return newState;
     }
     
     if(action.type === actions.USER_LOGGED_OUT) {
         newState = Object.assign({}, initialState)
         newState.chatsOpen = Object.assign({});
-        return newState;
-    }
-    
-    if(action.type === actions.UPDATE_REGISTRATION_INPUT) {
-        var newChange = {};
-        newChange[action.inputName] = action.inputValue;
-        newState.registerInput = Object.assign({}, newState.registerInput, newChange);
-        return newState;
-    }
-    
-    if(action.type === actions.UPDATE_LOGIN_INPUT) {
-        var newChange = {};
-        newChange[action.inputName] = action.inputValue;
-        newState.loginInput = Object.assign({}, newState.loginInput, newChange);
         return newState;
     }
     

@@ -45,6 +45,7 @@ class SinglePost extends React.Component {
         router.browserHistory.push('/');
     }
     render(props) {
+        const { postLoading, isEdit } = this.props;
         var content = <Content content={this.props.singlePost.content}/>;
         var username = this.props.singlePost.name;
         var likeBox = <LikeBox likes={this.props.singlePost.likes} onClick={this.likeBoxClick.bind(this)}/>;
@@ -54,12 +55,12 @@ class SinglePost extends React.Component {
         return (
             <div>
             <button onClick={this.returnHome.bind(this)}>Return Home</button>
-            {(!this.props.postLoading) ? (content) : (null)}
-            {(!this.props.postLoading) ? (username) : (null)}
-            {(!this.props.postLoading) ? (likeBox) : (null)}
-            {(!this.props.postLoading && this.props.isEdit) ? (<Button onClick={this.submitEdit.bind(this)}>Submit Edit</Button>) : (null)}
-            {(!this.props.postLoading && this.props.isEdit) ? (<Button onClick={this.cancelEdit.bind(this)}>Cancel Edit</Button>) : (null)}
-            {(!this.props.postLoading && !this.props.isEdit) ? (<Button onClick={this.enableEdit.bind(this)}>Edit Post</Button>) : (null)}
+            {(!postLoading) ? (content) : (null)}
+            {(!postLoading) ? (username) : (null)}
+            {(!postLoading) ? (likeBox) : (null)}
+            {(!postLoading && isEdit) ? (<Button onClick={this.submitEdit.bind(this)}>Submit Edit</Button>) : (null)}
+            {(!postLoading && isEdit) ? (<Button onClick={this.cancelEdit.bind(this)}>Cancel Edit</Button>) : (null)}
+            {(!postLoading && !isEdit) ? (<Button onClick={this.enableEdit.bind(this)}>Edit Post</Button>) : (null)}
             </div>
         )
     }

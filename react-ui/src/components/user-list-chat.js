@@ -38,7 +38,6 @@ class UserListChat extends React.Component {
 function mapStateToProps(state, props) {
     return ({
         auth: state.app.auth,
-        friendsOnline: state.app.friendsOnline
     })
 }
 var Container = connect(mapStateToProps)(UserListChat);
