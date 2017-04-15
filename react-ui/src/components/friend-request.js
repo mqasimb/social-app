@@ -68,7 +68,7 @@ class FriendRequest extends React.Component {
             <div style={divSyle}>
             <Row>
             <Col xs={6} xsOffset={0} sm={4} smOffset={0}>
-            <img style={imageStyle} width={64} height={64} role="presentation" src={this.props.picture} /> <Link style={fontStyle} to={'/'+this.props.username}>{this.props.username}</Link>
+            <img style={imageStyle} width={64} height={64} role="presentation" src={this.props.picture} /> <Link style={fontStyle} to={'/profile/'+this.props.username}>{this.props.username}</Link>
             </Col>
             <Col style={colStyle} xs={6} xsOffset={0} sm={4} smOffset={4}>
             {(this.props.type === 'incoming') ? (<div>{acceptFriendRequestButton} {denyFriendRequestButton}</div>) : (cancelFriendRequestButton)}

@@ -72,26 +72,27 @@ var appReducer = function(state = initialState, action) {
         if(firstIndex > -1) {
             return {...state, 
                 mainProfile: {...state.mainProfile, 
-                    outgoingRequests: [...state.mainProfile.outgoingRequests.slice(0, firstIndex), ...state.mainProfile.outgoingRequests.slice(firstIndex + 1)], 
-                    Friends: [...state.mainProfile.Friends, {username: action.username}]}}
+                    Friends: [...state.mainProfile.Friends, state.mainProfile.outgoingRequests[firstIndex]],
+                    outgoingRequests: [...state.mainProfile.outgoingRequests.slice(0, firstIndex), ...state.mainProfile.outgoingRequests.slice(firstIndex + 1)]},
+                loadedProfile: {...state.loadedProfile,
+                    Friends: [...state.loadedProfile.Friends, state.mainProfile.outgoingRequests[firstIndex]]}}
         }
     }
 
     if(action.type === actions.REMOVED_AS_FRIEND) {
-        var firstIndex = newState.mainProfile.Friends.findIndex((request) => request.username == action.username)
-        if(firstIndex > -1) {
-            newState.mainProfile.Friends.splice(firstIndex, 1);
-            newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);  
-        }
-        var friendOnlineIndex = newState.friendsOnline.findIndex(function(friend) {
-            return friend.username == action.username;
-        })
+        var friendOnlineIndex = state.friendsOnline.findIndex((friend) => friend.username == action.username)
         if(friendOnlineIndex > -1) {
-            newState.friendsOnline.splice(friendOnlineIndex, 1);
-            newState.friendsOnline = newState.friendsOnline.slice(); 
+            state = {...state, friendsOnline: [...state.friendsOnline.slice(0, friendOnlineIndex), ...state.friendsOnline.slice(friendOnlineIndex + 1)]}
         }
-        return newState;
+        var firstIndex = state.mainProfile.Friends.findIndex((request) => request.username == action.username)
+        var loadedProfileIndex = state.loadedProfile.Friends.findIndex((request) => request.username == action.username)
+        if(firstIndex > -1) {
+            return {...state, 
+                mainProfile: {...state.mainProfile, 
+                    Friends: [...state.mainProfile.Friends.slice(0, firstIndex), ...state.mainProfile.Friends.slice(firstIndex + 1)]},
+                    loadedProfile: {...state.loadedProfile, 
+                    Friends: [...state.loadedProfile.Friends.slice(0, loadedProfileIndex), ...state.loadedProfile.Friends.slice(loadedProfileIndex + 1)]}}
+        }
     }
 
     if(action.type === actions.USER_CONNECT) {
@@ -198,12 +199,6 @@ var appReducer = function(state = initialState, action) {
         return {...state, chatMessages: {...state.chatMessages, [action.data.username]: [...state.chatMessages[action.data.username], action.data]}}
     }
 
-    if(action.type === actions.GET_SEARCH_USERNAMES_SUCCESS) {
-        newState.userSearchResults = action.data;
-        newState.userSearchResults = newState.userSearchResults.slice();
-        return newState;
-    }
-
     if(action.type === actions.SEND_FRIEND_REQUEST_SUCCESFUL) {
         newState.mainProfile.outgoingRequests.push({username: action.username, ProfilePicture: action.ProfilePicture});
         newState.mainProfile.outgoingRequests = newState.mainProfile.outgoingRequests.slice();
@@ -212,48 +207,40 @@ var appReducer = function(state = initialState, action) {
     }
     
     if(action.type === actions.CANCEL_FRIEND_REQUEST_SUCCESFUL) {
-        var firstIndex = newState.mainProfile.outgoingRequests.findIndex(function(request) {
-            return request.username == action.username;
-        })
+        var firstIndex = state.mainProfile.outgoingRequests.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
-            newState.mainProfile.outgoingRequests.splice(firstIndex, 1);
-            newState.mainProfile.outgoingRequests = newState.mainProfile.outgoingRequests.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+            return {...state, 
+                mainProfile: {...state.mainProfile, 
+                    outgoingRequests: [...state.mainProfile.outgoingRequests.slice(0, firstIndex), ...state.mainProfile.outgoingRequests.slice(firstIndex + 1)]}}
         }
-        return newState;
     }
       
     if(action.type === actions.CONFIRM_FRIEND_REQUEST_SUCCESFUL) {
-        var firstIndex = newState.mainProfile.incomingRequests.findIndex(function(request) {
-            return request.username == action.username;
-        })
+        var firstIndex = state.mainProfile.incomingRequests.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
-            newState.mainProfile.incomingRequests.splice(firstIndex, 1);
-            newState.mainProfile.incomingRequests = newState.mainProfile.incomingRequests.slice();
-            newState.mainProfile.Friends.push({username: action.username});
-            newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+            return {...state, 
+                mainProfile: {...state.mainProfile,
+                    Friends: [...state.mainProfile.Friends, state.mainProfile.incomingRequests[firstIndex]],
+                    incomingRequests: [...state.mainProfile.incomingRequests.slice(0, firstIndex), ...state.mainProfile.incomingRequests.slice(firstIndex + 1)]},
+                loadedProfile: {...state.loadedProfile,
+                    Friends: [...state.loadedProfile.Friends, state.mainProfile.incomingRequests[firstIndex]]}}
         }
-        return newState;
     }
     
     if(action.type === actions.REMOVE_FRIEND_REQUEST_SUCCESFUL) {
-        var firstIndex = newState.mainProfile.Friends.findIndex(function(request) {
-            return request.username == action.username;
-        })
-        if(firstIndex > -1) {
-            newState.mainProfile.Friends.splice(firstIndex, 1);
-            newState.mainProfile.Friends = newState.mainProfile.Friends.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);  
-        }
-        var friendOnlineIndex = newState.friendsOnline.findIndex(function(friend) {
-            return friend.username == action.username;
-        })
+        var friendOnlineIndex = state.friendsOnline.findIndex((friend) => friend.username == action.username)
         if(friendOnlineIndex > -1) {
-            newState.friendsOnline.splice(friendOnlineIndex, 1);
-            newState.friendsOnline = newState.friendsOnline.slice(); 
+            state = {...state, friendsOnline: [...state.friendsOnline.slice(0, friendOnlineIndex), ...state.friendsOnline.slice(friendOnlineIndex + 1)]}
         }
-        return newState;
+        var firstIndex = state.mainProfile.Friends.findIndex((request) => request.username == action.username)
+        var loadedProfileIndex = state.loadedProfile.Friends.findIndex((request) => request.username == action.username)
+        if(firstIndex > -1) {
+            return {...state, 
+                mainProfile: {...state.mainProfile, 
+                    Friends: [...state.mainProfile.Friends.slice(0, firstIndex), ...state.mainProfile.Friends.slice(firstIndex + 1)]},
+                    loadedProfile: {...state.loadedProfile, 
+                    Friends: [...state.loadedProfile.Friends.slice(0, loadedProfileIndex), ...state.loadedProfile.Friends.slice(loadedProfileIndex + 1)]}}
+        }
     }
     
     if(action.type === actions.DENY_FRIEND_REQUEST_SUCCESFUL) {
