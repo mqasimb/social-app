@@ -16,6 +16,6 @@ const reducer = combineReducers({
   notifications: notifications
 });
 
-const store = createStore(reducer, applyMiddleware(thunk, promise));
+const store = createStore(reducer, applyMiddleware(thunk, promise, logger));
 
 module.exports = store;

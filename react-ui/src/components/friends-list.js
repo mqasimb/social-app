@@ -4,6 +4,7 @@ const { Panel } = require('react-bootstrap');
 
 class FriendsList extends React.Component {
     render(props) {
+        const { list } = this.props;
         var panelStyle = {
             backgroundColor: '#253243',
             color: '#00fff9',
@@ -18,12 +19,12 @@ class FriendsList extends React.Component {
             paddingBottom: '40px',
             paddingTop: '20px'
         }
-        var friends = this.props.list.map((friend, index) => {
+        var friends = list.map((friend, index) => {
                 return <Friend key={index} username={friend.username} ProfilePicture={friend.ProfilePicture}/>;
             })
         return (
             <div className='friend-list'>
-            <Panel style={panelStyle}>Friends - {this.props.list.length}</Panel>
+            <Panel style={panelStyle}>Friends - {list.length}</Panel>
             <div style={paddingStyle}>
             {friends}
             </div>

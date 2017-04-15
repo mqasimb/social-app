@@ -437,21 +437,17 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.COMMENT_EDIT_SUCCESS) {
-        var newChange = [];
         var returnIndex = newState.postData.findIndex(function(post) {
             return post._id == action.postID;
         });
         if(returnIndex > -1) {
-            newChange = newState.postData.slice();
             var returnComment = newState.postData[returnIndex].comments.findIndex(function(comment) {
                 return comment._id == action.commentID;
             })
             if(returnComment > -1) {
-                newChange[returnIndex] = Object.assign({}, newState.postData[returnIndex]);
-                newChange[returnIndex].comments = newState.postData[returnIndex].comments.slice();
-                newChange[returnIndex].comments[returnComment] = Object.assign({}, newState.postData[returnIndex].comments[returnComment])
-                newChange[returnIndex].comments[returnComment].comment = action.data.comment;
-                newState.postData = newChange.slice()
+                newState.postData[returnIndex].comments[returnComment].comment = action.data.comment;
+                newState.postData[returnIndex].comments = newState.postData[returnIndex].comments.slice();
+                newState.postData = newState.postData.slice();
                 return newState;
             }
         }
@@ -459,20 +455,17 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.COMMENT_DELETE_SUCCESS) {
-        var newChange = [];
         var returnIndex = newState.postData.findIndex(function(post) {
             return post._id == action.postID;
         });
         if(returnIndex > -1) {
-            newChange = newState.postData.slice();
             var returnComment = newState.postData[returnIndex].comments.findIndex(function(comment) {
                 return comment._id == action.commentID;
             })
             if(returnComment > -1) {
-                newChange[returnIndex] = Object.assign({}, newState.postData[returnIndex]);
-                newChange[returnIndex].comments = newState.postData[returnIndex].comments.slice();
-                newChange[returnIndex].comments.splice(returnComment, 1);
-                newState.postData = newChange.slice()
+                newState.postData[returnIndex].comments.splice(returnComment, 1);
+                newState.postData[returnIndex].comments = newState.postData[returnIndex].comments.slice();
+                newState.postData = newState.postData.slice();
                 return newState;
             }
         }
@@ -492,9 +485,8 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.EDIT_INPUT) {
-        newChange = {};
-        newChange[action.inputName] = action.inputValue;
-        newState.editInput = Object.assign({}, newChange);
+        newState.editInput[action.inputName] = action.inputValue;
+        newState.editInput = Object.assign({}, newState.editInput);
         return newState;
     }
     
@@ -529,8 +521,7 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.POST_FETCH_SUCCESSFUL) {
-        var newChange = action.data.data;
-        newState.postData = newChange.slice();
+        newState.postData = action.data.data.slice();
         return newState;
     }
     
@@ -541,10 +532,9 @@ var appReducer = function(state, action) {
     }
     
     if(action.type === actions.USER_LOGGED_IN) {
-        var newChange = {};
-        newChange.authenticated = true;
-        newChange.user = action.user;
-        newState.auth = Object.assign({}, newChange);
+        newState.auth.authenticated = true;
+        newState.auth.user = action.user;
+        newState.auth = Object.assign({}, newState.auth);
         return newState;
     }
     

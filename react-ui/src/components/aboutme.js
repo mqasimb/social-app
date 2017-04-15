@@ -2,6 +2,8 @@ var React = require('react');
 
 class AboutMe extends React.Component {
     render(props) {
+        const { text } = this.props;
+        
     	var aboutMeStyle = {
             fontFamily: 'Ubuntu',
             fontSize: '1em',
@@ -10,7 +12,7 @@ class AboutMe extends React.Component {
         }
         return (
             <div style={aboutMeStyle}>
-            <p>{this.props.text}</p>
+            <p>{text}</p>
             </div>
         )
     }

@@ -64,6 +64,9 @@ class Profile extends React.Component {
         this.socket.emit('remove-friend', this.props.params.username, this.props.mainProfile.username);
     }
     render(props) {
+        const { auth, mainProfile, loadedProfile, changeAboutMe, postData } = this.props;
+        const { username } = this.props.params;
+
         var profileStyle = {
             paddingTop: '50px',
             backgroundImage: `url(${Wallpaper})`,
@@ -99,15 +102,15 @@ class Profile extends React.Component {
             marginTop: '20px',
             marginBottom: '20px'
         }
-        var acceptFriendRequest = this.props.mainProfile.incomingRequests.findIndex((request) => {
-            return request.username == this.props.params.username;
-        });
-        var cancelFriendRequest = this.props.mainProfile.outgoingRequests.findIndex((request) => {
-            return request.username == this.props.params.username;
-        });
-        var isFriend = this.props.mainProfile.Friends.findIndex((request) => {
-            return request.username == this.props.params.username;
-        });
+        var acceptFriendRequest = mainProfile.incomingRequests.findIndex((request) =>
+            request.username == username
+        );
+        var cancelFriendRequest = mainProfile.outgoingRequests.findIndex((request) =>
+            request.username == username
+        );
+        var isFriend = mainProfile.Friends.findIndex((request) => 
+            request.username == username
+        );
         var acceptFriendRequestButton = <Button style={buttonStyle} onClick={this.acceptRequest.bind(this)}>ACCEPT REQUEST</Button>;
         var denyFriendRequestButton = <Button style={buttonStyle} onClick={this.denyRequest.bind(this)}>DENY REQUEST</Button>;
         var cancelFriendRequestButton = <Button style={buttonStyle} onClick={this.cancelRequest.bind(this)}>CANCEL REQUEST</Button>;
@@ -117,25 +120,25 @@ class Profile extends React.Component {
             <div>
             <div className='profile-page-user' style={profileStyle}>
             <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
-            <ProfilePicture img={this.props.loadedProfile.ProfilePicture} onClick={this.open.bind(this)}/>
-            {(this.props.auth.user.username == this.props.params.username) ? (<Button style={buttonStyle} onClick={this.open.bind(this)}>CHANGE PICTURE</Button>) : (null)}
+            <ProfilePicture img={loadedProfile.ProfilePicture} onClick={this.open.bind(this)}/>
+            {(auth.user.username == username) ? (<Button style={buttonStyle} onClick={this.open.bind(this)}>CHANGE PICTURE</Button>) : (null)}
             </Col></Row>
             <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}><div style={profileNameStyle}>
-            {this.props.params.username}
+            {username}
             </div></Col></Row>
             <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
-            {(this.props.auth.user.username == this.props.params.username) ? (null) : ((acceptFriendRequest > -1) ? (<div>{acceptFriendRequestButton} {denyFriendRequestButton}</div>) : ((isFriend > -1) ? (removeFriendRequestButton) : ((cancelFriendRequest > -1) ? (cancelFriendRequestButton) : (sendFriendRequestButton))))}
+            {(auth.user.username == username) ? (null) : ((acceptFriendRequest > -1) ? (<div>{acceptFriendRequestButton} {denyFriendRequestButton}</div>) : ((isFriend > -1) ? (removeFriendRequestButton) : ((cancelFriendRequest > -1) ? (cancelFriendRequestButton) : (sendFriendRequestButton))))}
             </Col></Row>
             <ChangePictureModal setPicture={this.changeProfilePicture.bind(this)} close={this.close.bind(this)}/>
             <Row style={rowStyle}><Col xs={10} xsOffset={1} sm={10} smOffset={1}>
-            <AboutMe text={this.props.loadedProfile.AboutMe}/>
+            <AboutMe text={loadedProfile.AboutMe}/>
             </Col></Row>
             <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
-            {(this.props.auth.user.username == this.props.params.username) ? ((this.props.changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: this.props.loadedProfile.AboutMe}}/>) : (<Button style={buttonStyle} onClick={this.enableAboutMeChange.bind(this)}>EDIT ABOUT ME</Button>)) : (null)}
+            {(auth.user.username == username) ? ((changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: loadedProfile.AboutMe}}/>) : (<Button style={buttonStyle} onClick={this.enableAboutMeChange.bind(this)}>EDIT ABOUT ME</Button>)) : (null)}
             </Col></Row></div>
-            <Col xs={12} xsOffset={0} sm={12} smOffset={0} md={12} mdOffset={0} lg={8} lgOffset={0}><ProfilePosts posts={this.props.postData}/></Col>
-            {(this.props.loadedProfile.Friends !== undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><FriendsList list={this.props.loadedProfile.Friends}/></div></Col>) : (null)}
-            {(this.props.loadedProfile.favoriteGames !== undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><GamesList list={this.props.loadedProfile.favoriteGames}/></div></Col>) : (null)}
+            <Col xs={12} xsOffset={0} sm={12} smOffset={0} md={12} mdOffset={0} lg={8} lgOffset={0}><ProfilePosts posts={postData}/></Col>
+            {(loadedProfile.Friends !== undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><FriendsList list={loadedProfile.Friends}/></div></Col>) : (null)}
+            {(loadedProfile.favoriteGames !== undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><GamesList list={loadedProfile.favoriteGames}/></div></Col>) : (null)}
             </div>
         )
     }
@@ -144,9 +147,7 @@ class Profile extends React.Component {
 function mapStateToProps(state, props) {
     return ({
         auth: state.app.auth,
-        isEdit: state.app.isEdit,
         postData: state.app.postData,
-        commentsInput: state.app.commentsInput,
         loadedProfile: state.app.loadedProfile,
         mainProfile: state.app.mainProfile,
         changeAboutMe: state.app.changeAboutMe,

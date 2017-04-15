@@ -3,6 +3,7 @@ const { Link } = require('react-router');
 
 class Friend extends React.Component {
     render(props) {
+        const { ProfilePicture, username } = this.props;
         var imageStyle = {
             borderWidth: '5px',
             borderStyle: 'solid',
@@ -20,7 +21,7 @@ class Friend extends React.Component {
         }
         return (
             <div style={paddingStyle}>
-            <img style={imageStyle} width={64} height={64} role="presentation" src={this.props.ProfilePicture} /><Link to={'/profile/'+this.props.username}><span style={fontStyle}>{this.props.username}</span></Link>
+            <img style={imageStyle} width={64} height={64} role="presentation" src={ProfilePicture} /><Link to={'/profile/'+username}><span style={fontStyle}>{username}</span></Link>
             </div>
         )
     }

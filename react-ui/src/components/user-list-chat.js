@@ -11,6 +11,7 @@ class UserListChat extends React.Component {
             this.props.dispatch(actions.openChat({friend: this.props.friend, username: this.props.auth.user.username, roomName: roomName}))
         }
     render(props) {
+        const { picture, friend } = this.props;
         var imageStyle = {
             width: '40px',
             height: '40px'
@@ -28,7 +29,7 @@ class UserListChat extends React.Component {
         }
         return (
             <div style={divStyle} onClick={this.openChat.bind(this)}>
-            <img style={imageStyle} role="presentation" src={this.props.picture} /> <span style={fontStyle}>{this.props.friend}</span>
+            <img style={imageStyle} role="presentation" src={picture} /> <span style={fontStyle}>{friend}</span>
             </div>
         )
     }

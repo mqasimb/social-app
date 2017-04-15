@@ -19,10 +19,10 @@ const renderField = ({ input, label, name, type, controlId, placeholder, meta: {
 
 class AboutMeForm extends React.Component {
   render() {
-  const { handleSubmit, pristine, submitting } = this.props
+  const { handleSubmit, pristine, submitting, onSubmit, cancel } = this.props
   return (
       <div className='edit-aboutme-form'>
-            <Form horizontal onSubmit={handleSubmit(this.props.onSubmit.bind(this))}>
+            <Form horizontal onSubmit={handleSubmit(onSubmit.bind(this))}>
             <FormGroup controlId="formHorizontalEditAboutMe">
               <Col componentClass={ControlLabel} sm={2}>
                 About Me
@@ -40,7 +40,7 @@ class AboutMeForm extends React.Component {
             
             <FormGroup>
               <Col smOffset={2} sm={10}>
-                <Button type="submit" onClick={this.props.cancel.bind(this)}>Cancel Edit</Button>
+                <Button type="submit" onClick={cancel.bind(this)}>Cancel Edit</Button>
               </Col>
             </FormGroup>
             </Form>
