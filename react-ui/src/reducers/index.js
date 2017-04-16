@@ -84,13 +84,23 @@ var appReducer = function(state = initialState, action) {
             state = {...state, friendsOnline: [...state.friendsOnline.slice(0, friendOnlineIndex), ...state.friendsOnline.slice(friendOnlineIndex + 1)]}
         }
         var firstIndex = state.mainProfile.Friends.findIndex((request) => request.username == action.username)
-        var loadedProfileIndex = state.loadedProfile.Friends.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
-            return {...state, 
-                mainProfile: {...state.mainProfile, 
-                    Friends: [...state.mainProfile.Friends.slice(0, firstIndex), ...state.mainProfile.Friends.slice(firstIndex + 1)]},
+            if(state.loadedProfile.username === action.username) {
+                let loadedProfileIndex = state.loadedProfile.Friends.findIndex((request) => request.username == action.username)
+                return {...state, 
+                    mainProfile: {...state.mainProfile, 
+                        Friends: [...state.mainProfile.Friends.slice(0, firstIndex), ...state.mainProfile.Friends.slice(firstIndex + 1)]},
                     loadedProfile: {...state.loadedProfile, 
-                    Friends: [...state.loadedProfile.Friends.slice(0, loadedProfileIndex), ...state.loadedProfile.Friends.slice(loadedProfileIndex + 1)]}}
+                        Friends: [...state.loadedProfile.Friends.slice(0, loadedProfileIndex), ...state.loadedProfile.Friends.slice(loadedProfileIndex + 1)]
+                    }
+                }
+            }
+            else {
+                return {...state, 
+                    mainProfile: {...state.mainProfile, 
+                        Friends: [...state.mainProfile.Friends.slice(0, firstIndex), ...state.mainProfile.Friends.slice(firstIndex + 1)]}
+                }
+            }
         }
     }
 
@@ -146,40 +156,46 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.CHAT_SUBMIT) {
-        if(newState.chatImagesUploadUrl[action.data.friend]) {
-            newState.chatImagesUploadUrl[action.data.friend] = null;
-            newState.chatImagesUploadUrl = Object.assign({}, newState.chatImagesUploadUrl)
+        if(state.chatImagesUploadUrl[action.data.friend]) {
+            state = {...state, 
+                chatImagesUploadUrl: {...state.chatImagesUploadUrl, [action.data.friend]: null}
+            }
         }
-        if(newState.chatMessages[action.data.friend] === undefined) {
-            newState.chatMessages[action.data.friend] = [];
+        if(state.chatMessages[action.data.friend] === undefined) {
+            state = {...state, 
+                chatMessages: {...state.chatMessages, [action.data.friend]: []}
+            }
         }
-        newState.chatMessages[action.data.friend].push(action.data);
-        newState.chatMessages = Object.assign({}, newState.chatMessages);
-        return newState;
+        return {...state, 
+            chatMessages: {...state.chatMessages, [action.data.friend]: [...state.chatMessages[action.data.friend], action.data]}}
     }
 
     if(action.type === actions.OPEN_CHAT) {
-        if((action.data.friend != newState.auth.user.username)) {
-            newState.chatsOpen[action.data.friend] = action.data.roomName;
-            newState.chatsOpen = Object.assign({}, newState.chatsOpen);
+        if((action.data.friend != state.auth.user.username)) {
+            state = {...state, 
+                chatsOpen: {...state.chatsOpen, [action.data.friend]: action.data.roomName}
+            }
         }
-        if(newState.chatMessages[action.data.friend] === undefined) {
-            newState.chatMessages[action.data.friend] = [];
-            newState.chatMessages = Object.assign({}, newState.chatMessages);
+        if(state.chatMessages[action.data.friend] === undefined) {
+            state = {...state, 
+                chatMessages: {...state.chatMessages, [action.data.friend]: []}
+            }
         }
-        return newState;
+        return state;
     }
 
     if(action.type === actions.OPEN_CHAT_WITH_SOCKET) {
         if((action.data.username != newState.auth.user.username)) {
-            newState.chatsOpen[action.data.username] = action.data.roomName;
-            newState.chatsOpen = Object.assign({}, newState.chatsOpen);
+            state = {...state, 
+                chatsOpen: {...state.chatsOpen, [action.data.username]: action.data.roomName}
+            }
         }
         if(newState.chatMessages[action.data.username] === undefined) {
-            newState.chatMessages[action.data.username] = [];
-            newState.chatMessages = Object.assign({}, newState.chatMessages);
+            state = {...state, 
+                chatMessages: {...state.chatMessages, [action.data.username]: []}
+            }
         }
-        return newState;
+        return state;
     }
     
     if(action.type === actions.LOAD_OLDER_MESSAGES) {
@@ -199,10 +215,14 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.SEND_FRIEND_REQUEST_SUCCESFUL) {
-        newState.mainProfile.outgoingRequests.push({username: action.username, ProfilePicture: action.ProfilePicture});
-        newState.mainProfile.outgoingRequests = newState.mainProfile.outgoingRequests.slice();
-        newState.mainProfile = Object.assign({}, newState.mainProfile);
-        return newState;
+        return {...state, 
+            mainProfile: {...state.mainProfile, 
+                outgoingRequests: [...state.mainProfile.outgoingRequests, {
+                    username: action.username, 
+                    ProfilePicture: action.ProfilePicture
+                }]
+            }
+        }
     }
     
     if(action.type === actions.CANCEL_FRIEND_REQUEST_SUCCESFUL) {
@@ -217,12 +237,20 @@ var appReducer = function(state = initialState, action) {
     if(action.type === actions.CONFIRM_FRIEND_REQUEST_SUCCESFUL) {
         var firstIndex = state.mainProfile.incomingRequests.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
-            return {...state, 
-                mainProfile: {...state.mainProfile,
-                    Friends: [...state.mainProfile.Friends, state.mainProfile.incomingRequests[firstIndex]],
-                    incomingRequests: [...state.mainProfile.incomingRequests.slice(0, firstIndex), ...state.mainProfile.incomingRequests.slice(firstIndex + 1)]},
-                loadedProfile: {...state.loadedProfile,
-                    Friends: [...state.loadedProfile.Friends, state.mainProfile.incomingRequests[firstIndex]]}}
+            if(state.loadedProfile.username === action.username) {
+                return {...state, 
+                    mainProfile: {...state.mainProfile,
+                        Friends: [...state.mainProfile.Friends, state.mainProfile.incomingRequests[firstIndex]],
+                        incomingRequests: [...state.mainProfile.incomingRequests.slice(0, firstIndex), ...state.mainProfile.incomingRequests.slice(firstIndex + 1)]},
+                    loadedProfile: {...state.loadedProfile,
+                        Friends: [...state.loadedProfile.Friends, state.mainProfile.incomingRequests[firstIndex]]}}
+            }
+            else {
+                return {...state, 
+                    mainProfile: {...state.mainProfile,
+                        Friends: [...state.mainProfile.Friends, state.mainProfile.incomingRequests[firstIndex]],
+                        incomingRequests: [...state.mainProfile.incomingRequests.slice(0, firstIndex), ...state.mainProfile.incomingRequests.slice(firstIndex + 1)]}}    
+            }
         }
     }
     
@@ -243,15 +271,12 @@ var appReducer = function(state = initialState, action) {
     }
     
     if(action.type === actions.DENY_FRIEND_REQUEST_SUCCESFUL) {
-        var firstIndex = newState.mainProfile.incomingRequests.findIndex(function(request) {
-            return request.username == action.username;
-        })
+        var firstIndex = newState.mainProfile.incomingRequests.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
-            newState.mainProfile.incomingRequests.splice(firstIndex, 1);
-            newState.mainProfile.incomingRequests = newState.mainProfile.incomingRequests.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);  
+            return {...state, 
+                mainProfile: {...state.mainProfile, 
+                    incomingRequests: [...state.mainProfile.incomingRequests.slice(0, firstIndex), ...state.mainProfile.incomingRequests.slice(firstIndex + 1)]}}
         }
-        return newState;
     }
     
     

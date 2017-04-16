@@ -61,7 +61,7 @@ class FriendRequest extends React.Component {
             paddingTop: '21px',
             textAlign: 'center'
         }
-        var acceptFriendRequestButton = <Button style={blueButtonStyle}onClick={this.acceptRequest.bind(this)}>Accept</Button>;
+        var acceptFriendRequestButton = <Button style={blueButtonStyle} onClick={this.acceptRequest.bind(this)}>Accept</Button>;
         var denyFriendRequestButton = <Button style={whiteButtonStyle} onClick={this.denyRequest.bind(this)}>Deny</Button>;
         var cancelFriendRequestButton = <Button style={whiteButtonStyle} onClick={this.cancelRequest.bind(this)}>Cancel</Button>;
         return (
