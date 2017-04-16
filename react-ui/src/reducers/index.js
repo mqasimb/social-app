@@ -256,12 +256,9 @@ var appReducer = function(state = initialState, action) {
     
     
     if(action.type === actions.GET_MAIN_PROFILE_SUCCESS) {
-        newState.mainProfile = action.data;
-        newState.mainProfile = Object.assign({}, newState.mainProfile);
-        newState.friendsOnline = action.data.Friends.filter(function(friend) {
-            return friend.onlineStatus == true;
-        })
-        return newState;
+        return {...state, 
+            mainProfile: {...action.data}, 
+            friendsOnline: action.data.Friends.filter((friend) => friend.onlineStatus == true)}
     }
     
     if(action.type === actions.POST_PROFILE_ABOUT_ME_SUCCESFUL) {
@@ -347,74 +344,60 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.TOGGLE_EDIT_POST) {
-        newState.editPost[action.postID] = action.toggle;
-        newState.editPost = Object.assign({}, newState.editPost)
-        return newState;
+        return {...state, 
+            editPost: {...state.editPost, [action.postID]: action.toggle}}
     }
 
     if(action.type === actions.EDIT_POST_SUCCESSFUL) {
-        var firstIndex = newState.postData.findIndex(function(post) {
-            return post._id == action.postID;
-        });
+        var firstIndex = newState.postData.findIndex((post) => post._id == action.postID)
         if(firstIndex > -1) {
-            newState.postData = newState.postData.slice();
-            newState.postData[firstIndex] = Object.assign({}, newState.postData[firstIndex]);
-            newState.postData[firstIndex].content = action.values.content;
-            return newState;
+            return {...state, 
+                postData: [...state.postData.slice(0, firstIndex), 
+                {...state.postData[firstIndex], content: action.values.content},
+                ...state.postData.slice(firstIndex + 1)]}
             }
-        return newState;
     }
     
     if(action.type === actions.TOGGLE_MODAL) {
-        newState.showModal.toggle = action.toggle;
-        newState.showModal.postID = action.postID;
-        newState.showModal = Object.assign({}, newState.showModal);
-        return newState;
+        return {...state, 
+            showModal: {...state.showModal, toggle: action.toggle, postID: action.postID}}
     }
     
     if(action.type === actions.POST_SUCCESSFUL) {
-        newState.newPost.content = '';
-        newState.newPost.image = null;
-        newState.newPost = Object.assign({}, newState.newPost);
-        newState.uploadedFile = '';
-        newState.uploadedFileCloudinaryUrl = '';
-        return newState;
+        return {...state, 
+            newPost: {...state.newPost, content: '', image: null},
+            uploadedFile: '',
+            uploadedFileCloudinaryUrl: ''}
     }
     
     if(action.type === actions.COMMENT_EDIT_SUCCESS) {
-        var returnIndex = newState.postData.findIndex(function(post) {
-            return post._id == action.postID;
-        });
+        var returnIndex = state.postData.findIndex((post) => post._id == action.postID)
         if(returnIndex > -1) {
-            var returnComment = newState.postData[returnIndex].comments.findIndex(function(comment) {
-                return comment._id == action.commentID;
-            })
+            var returnComment = newState.postData[returnIndex].comments.findIndex((comment) => comment._id == action.commentID)
             if(returnComment > -1) {
-                newState.postData[returnIndex].comments[returnComment].comment = action.data.comment;
-                newState.postData[returnIndex].comments = newState.postData[returnIndex].comments.slice();
-                newState.postData = newState.postData.slice();
-                return newState;
+                return {...state, 
+                    postData: [...state.postData.slice(0, returnIndex), 
+                    {...state.postData[returnIndex], 
+                        comments: [...state.postData[returnIndex].comments.slice(0, returnComment), 
+                        {...state.postData[returnIndex].comments[returnComment], comment: action.data.comment},
+                        ...state.postData[returnIndex].comments.slice(returnComment + 1)]},
+                    ...state.postData.slice(returnIndex + 1)]}
             }
         }
-        return newState;
     }
     
     if(action.type === actions.COMMENT_DELETE_SUCCESS) {
-        var returnIndex = newState.postData.findIndex(function(post) {
-            return post._id == action.postID;
-        });
+        var returnIndex = state.postData.findIndex((post) => post._id == action.postID)
         if(returnIndex > -1) {
-            var returnComment = newState.postData[returnIndex].comments.findIndex(function(comment) {
-                return comment._id == action.commentID;
-            })
+            var returnComment = newState.postData[returnIndex].comments.findIndex((comment) => comment._id == action.commentID)
             if(returnComment > -1) {
-                newState.postData[returnIndex].comments.splice(returnComment, 1);
-                newState.postData[returnIndex].comments = newState.postData[returnIndex].comments.slice();
-                newState.postData = newState.postData.slice();
-                return newState;
+                return {...state, 
+                    postData: [...state.postData.slice(0, returnIndex), 
+                    {...state.postData[returnIndex], 
+                        comments: [...state.postData[returnIndex].comments.slice(0, returnComment), ...state.postData[returnIndex].comments.slice(returnComment + 1)]},
+                    ...state.postData.slice(returnIndex + 1)]}
             }
         }
-        return newState;
     }
     
     if(action.type === actions.UPLOAD_FILE) {
@@ -478,4 +461,3 @@ var appReducer = function(state = initialState, action) {
 }
 
 module.exports = appReducer;
-exports.initialState = initialState;
