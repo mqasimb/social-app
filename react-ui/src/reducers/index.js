@@ -39,8 +39,7 @@ var appReducer = function(state = initialState, action) {
 
     if(action.type === actions.CLOSE_CHAT) {
         delete newState.chatsOpen[action.username];
-        newState.chatsOpen = Object.assign({}, newState.chatsOpen);
-        return newState;
+        return {...state, chatsOpen: {...state.chatsOpen}};
     }
 
     if(action.type === actions.DENIED_FRIEND_REQUEST) {
@@ -266,66 +265,61 @@ var appReducer = function(state = initialState, action) {
     }
     
     if(action.type === actions.POST_PROFILE_ABOUT_ME_SUCCESFUL) {
-        newState.loadedProfile.AboutMe = action.aboutMe.aboutMe;
-        newState.loadedProfile = Object.assign({}, newState.loadedProfile);
-        return newState;
+        return {...state,
+            loadedProfile: {...state.loadedProfile, AboutMe: action.aboutMe.aboutMe}}
     }
      
     if(action.type === actions.CHANGE_ABOUT_ME) {
-        newState.changeAboutMe = action.toggle;
-        return newState;
+        return {...state,
+            changeAboutMe: action.toggle}
     }
     
     if(action.type === actions.POST_PROFILE_PIC_SUCCESFUL) {
-        newState.loadedProfile.ProfilePicture = newState.uploadedProfilePicCloudinaryUrl;
-        newState.loadedProfile = Object.assign({}, newState.loadedProfile);
-        newState.uploadedProfilePic = '';
-        newState.uploadedProfilePicCloudinaryUrl = '';
-        newState.showPictureModal = {toggle: false, username: null}
-        return newState;
+        return {...state,
+            loadedProfile: {...state.loadedProfile, ProfilePicture: state.uploadedProfilePicCloudinaryUrl},
+            uploadedProfilePic: '',
+            uploadedProfilePicCloudinaryUrl: '',
+            showPictureModal: {...state.showPictureModal, toggle: false, username: null}}
     }
     
     if(action.type === actions.UPLOAD_PROFILE_PIC) {
-        newState.uploadedProfilePic = action.files;
-        return newState;
+        return {...state,
+            uploadedProfilePic: action.files}
     }
     
     if(action.type === actions.SET_PROFILE_PIC_CLOUDINARY_URL) {
-        newState.uploadedProfilePicCloudinaryUrl = action.url;
-        return newState;
+        return {...state,
+            uploadedProfilePicCloudinaryUrl: action.url}
     }
     
     if(action.type === actions.CHANGE_PICTURE_MODAL) {
-        newState.showPictureModal = {toggle: action.toggle, username: action.username};
-        newState.showPictureModal = Object.assign({}, newState.showPictureModal)
-        return newState;
+        return {...state,
+            showPictureModal: {...state.showPictureModal, 
+                toggle: action.toggle, 
+                username: action.username}}
     }
     
     if(action.type === actions.GET_PROFILE_SUCCESS) {
-        newState.loadedProfile = Object.assign({}, action.data);
-        newState.postData = newState.loadedProfile.posts.slice();
-        return newState;
+        return {...state,
+            loadedProfile: {...action.data},
+            postData: [...action.data.posts]}
     }
     
     if(action.type === actions.TOGGLE_EDIT_COMMENT) {
-        newState.editComment[action.commentID] = action.toggle;
-        newState.editComment = Object.assign({}, newState.editComment)
-        return newState;
+        return {...state,
+            editComment: {...state.editComment, 
+                [action.commentID]: action.toggle}}
     }
 
     if(action.type === actions.COMMENT_SUBMIT_SUCCESS) {
-        var firstIndex = newState.postData.findIndex(function(post) {
-            return post._id == action.postID;
-        });
+        var firstIndex = newState.postData.findIndex((post) => post._id == action.postID)
         var commentIndex = action.serverData.comments.length-1;
         if(firstIndex > -1) {
-            newState.postData[firstIndex].comments.push({_id:action.serverData.comments[commentIndex]._id, comment: action.data.comment, username: newState.mainProfile.username, date: action.serverData.comments[commentIndex].date, post: action.postID, profile: newState.mainProfile})
-            newState.postData[firstIndex].comments = newState.postData[firstIndex].comments.slice();
-            newState.postData[firstIndex] = Object.assign({}, newState.postData[firstIndex]);
-            newState.postData = newState.postData.slice();
-            return newState;
+            return {...state, 
+                postData: [...state.postData.slice(0, firstIndex), 
+                {...state.postData[firstIndex], comments: [...state.postData[firstIndex].comments, {_id:action.serverData.comments[commentIndex]._id, comment: action.data.comment, username: newState.mainProfile.username, date: action.serverData.comments[commentIndex].date, post: action.postID, profile: newState.mainProfile}]},
+                ...state.postData.slice(firstIndex + 1)]}
             }
-        return newState;
     }
 
     if(action.type === actions.LIKE_STATUS_CHANGE_SUCCESSFUL) {
@@ -424,71 +418,60 @@ var appReducer = function(state = initialState, action) {
     }
     
     if(action.type === actions.UPLOAD_FILE) {
-        newState.uploadedFile = action.files;
-        return newState;
+        return {...state, uploadedFile: action.files}
     }
     
     if(action.type === actions.SET_UPLOAD_FILE_CLOUDINARY_URL) {
-        newState.newPost = Object.assign({}, newState.newPost);
-        newState.uploadedFileCloudinaryUrl = action.url;
-        newState.newPost.image = action.url;
-        return newState;
+        return {...state, 
+            uploadedFileCloudinaryUrl: action.url, 
+            newPost: {...state.newPost, image: action.url}}
     }
     
     if(action.type === actions.EDIT_INPUT) {
-        newChange = {};
-        newChange[action.inputName] = action.inputValue;
-        newState.editInput = Object.assign({}, newChange);
-        return newState;
+        return {...state, 
+            editInput: {...state.editInput, [action.inputName]: action.inputValue}}
     }
     
     if(action.type === actions.EDIT_POST_ENABLE) {
-        newState.isEdit = true;
-        return newState;
+        return {...state,
+            isEdit: true}
     }
     
     if(action.type === actions.EDIT_POST_DISABLE) {
-        newState.isEdit = false;
-        return newState;
+        return {...state,
+            isEdit: false}
     }
     
     if(action.type === actions.SINGLE_POST_FETCH_SUCCESSFUL) {
-        newState.singlePost = action.data.data;
-        newState.singlePost = Object.assign({}, newState.singlePost);
-        newState.postLoading = false;
-        return newState;
+        return {...state,
+            singlePost: {...action.data.data},
+            postLoading: false}
     }
     
     if(action.type === actions.DISMOUNT_SINGLE_POST) {
-        newState.isEdit = false;
-        newState.postLoading = true;
-        newState.singlePost = Object.assign({});
-        return newState;
+         return {...state,
+            singlePost: {...{}},
+            postLoading: true,
+            isEdit: false}
     }
     
     if(action.type === actions.POST_FETCH_SUCCESSFUL) {
-        var newChange = action.data.data;
-        newState.postData = newChange.slice();
-        return newState;
+        return {...state,
+            postData: [...action.data.data]}
     }
     
     if(action.type === actions.UPDATE_POST_INPUT) {
-        newState.newPost = Object.assign({}, newState.newPost);
-        newState.newPost[action.inputName] = action.inputValue;
-        return newState;
+        return {...state,
+            newPost: {...state.newPost, [action.inputName]: action.inputValue}}
     }
     
     if(action.type === actions.USER_LOGGED_IN) {
-        newState.auth = Object.assign({}, newState.auth);
-        newState.auth.authenticated = true;
-        newState.auth.user = Object.assign({}, action.user);
-        return newState;
+        return {...state,
+            auth: {...state.auth, authenticated: true, user: {...action.user}}}
     }
     
     if(action.type === actions.USER_LOGGED_OUT) {
-        newState = Object.assign({}, initialState)
-        newState.chatsOpen = Object.assign({});
-        return newState;
+        return {...initialState, chatsOpen: {...{}}}
     }
     
     return state;
