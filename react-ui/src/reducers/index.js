@@ -11,7 +11,6 @@ var initialState = {
         commentsInput: {},
         uploadedFile: '',
         uploadedFileCloudinaryUrl: '',
-        flashMessages: {},
         showModal: {toggle: false, postID: null},
         showPictureModal: {toggle: false, username: null},
         editComment: {},
@@ -23,7 +22,6 @@ var initialState = {
         uploadedProfilePicCloudinaryUrl: '',
         profilePosts: [],
         changeAboutMe: false,
-        userSearchResults: [],
         friendsOnline: [],
         chatsOpen: {},
         chatImagesUpload: {},
@@ -31,14 +29,13 @@ var initialState = {
     };
 
 var appReducer = function(state = initialState, action) {
-    var newState = Object.assign({}, state);
 
     if(action.type === actions.LIKE_GAME) {
         return {...state, mainProfile: {...state.mainProfile, favoriteGames: [...action.data.favoriteGames]}}
     }
 
     if(action.type === actions.CLOSE_CHAT) {
-        delete newState.chatsOpen[action.username];
+        delete state.chatsOpen[action.username];
         return {...state, chatsOpen: {...state.chatsOpen}};
     }
 
@@ -118,7 +115,7 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.USER_DISCONNECT) {
-        var firstIndex = newState.mainProfile.Friends.findIndex((friend) => friend.username == action.username)
+        var firstIndex = state.mainProfile.Friends.findIndex((friend) => friend.username == action.username)
         if(firstIndex > -1) {
             state = {...state, 
                 mainProfile: {...state.mainProfile, 
@@ -139,20 +136,26 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.SAVE_MESSAGES_TO_PROFILE) {
-        var firstIndex = newState.mainProfile.messages.findIndex((friend) => friend.friend === action.friend)
+        var firstIndex = state.mainProfile.messages.findIndex((friend) => friend.friend === action.friend)
         if(firstIndex > -1) {
-            newState.mainProfile.messages[firstIndex].messages.push(action.data);
-            newState.mainProfile.messages[firstIndex].messages = newState.mainProfile.messages[firstIndex].messages.slice();
-            newState.mainProfile.messages[firstIndex] = Object.assign({}, newState.mainProfile.messages[firstIndex]);
-            newState.mainProfile.messages = newState.mainProfile.messages.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);
+            return {...state, 
+                mainProfile: {...state.mainProfile, 
+                    messages: [...state.mainProfile.messages.slice(0, firstIndex), 
+                        {...state.mainProfile.messages[firstIndex], messages: [...state.mainProfile.messages[firstIndex].messages, action.data]},
+                        ...state.mainProfile.messages.slice(firstIndex + 1)
+                    ]
+                }
+            }
         }
         else {
-            newState.mainProfile.messages.push({friend: action.friend, messages: [action.data]});
-            newState.mainProfile.messages = newState.mainProfile.messages.slice();
-            newState.mainProfile = Object.assign({}, newState.mainProfile);
+            return {...state, 
+                mainProfile: {...state.mainProfile, 
+                    messages: [...state.mainProfile.messages, 
+                        {friend: action.friend, messages: [action.data]}
+                    ]
+                }
+            }
         }
-        return newState;
     }
 
     if(action.type === actions.CHAT_SUBMIT) {
@@ -185,12 +188,12 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.OPEN_CHAT_WITH_SOCKET) {
-        if((action.data.username != newState.auth.user.username)) {
+        if((action.data.username != state.auth.user.username)) {
             state = {...state, 
                 chatsOpen: {...state.chatsOpen, [action.data.username]: action.data.roomName}
             }
         }
-        if(newState.chatMessages[action.data.username] === undefined) {
+        if(state.chatMessages[action.data.username] === undefined) {
             state = {...state, 
                 chatMessages: {...state.chatMessages, [action.data.username]: []}
             }
@@ -271,7 +274,7 @@ var appReducer = function(state = initialState, action) {
     }
     
     if(action.type === actions.DENY_FRIEND_REQUEST_SUCCESFUL) {
-        var firstIndex = newState.mainProfile.incomingRequests.findIndex((request) => request.username == action.username)
+        var firstIndex = state.mainProfile.incomingRequests.findIndex((request) => request.username == action.username)
         if(firstIndex > -1) {
             return {...state, 
                 mainProfile: {...state.mainProfile, 
@@ -334,38 +337,36 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.COMMENT_SUBMIT_SUCCESS) {
-        var firstIndex = newState.postData.findIndex((post) => post._id == action.postID)
+        var firstIndex = state.postData.findIndex((post) => post._id == action.postID)
         var commentIndex = action.serverData.comments.length-1;
         if(firstIndex > -1) {
             return {...state, 
                 postData: [...state.postData.slice(0, firstIndex), 
-                {...state.postData[firstIndex], comments: [...state.postData[firstIndex].comments, {_id:action.serverData.comments[commentIndex]._id, comment: action.data.comment, username: newState.mainProfile.username, date: action.serverData.comments[commentIndex].date, post: action.postID, profile: newState.mainProfile}]},
+                {...state.postData[firstIndex], comments: [...state.postData[firstIndex].comments, {_id:action.serverData.comments[commentIndex]._id, comment: action.data.comment, username: state.mainProfile.username, date: action.serverData.comments[commentIndex].date, post: action.postID, profile: state.mainProfile}]},
                 ...state.postData.slice(firstIndex + 1)]}
             }
     }
 
     if(action.type === actions.LIKE_STATUS_CHANGE_SUCCESSFUL) {
-        var firstIndex = newState.postData.findIndex(function(post) {
-            return post._id == action.postID;
-        });
+        var firstIndex = state.postData.findIndex((post) => post._id == action.postID)
         if(firstIndex > -1) {
-            var returnIndex = newState.postData[firstIndex].likes.findIndex(function(user) { 
-                return user.username == action.userID;
-            })
+            var returnIndex = state.postData[firstIndex].likes.findIndex((user) => user.username == action.userID)
             if(returnIndex > -1) {
                 //remove like
-                newState.postData[firstIndex].likes.splice(returnIndex, 1);
+                return {...state, 
+                    postData: [...state.postData.slice(0, firstIndex),
+                    {...state.postData[firstIndex], 
+                        likes: [...state.postData[firstIndex].likes.slice(0, returnIndex), ...state.postData[firstIndex].likes.slice(returnIndex + 1)]},
+                    ...state.postData.slice(firstIndex + 1)]}
             }
             else {
-                //add like
-                newState.postData[firstIndex].likes.push({username: action.userID, like: true})
+                return {...state, 
+                    postData: [...state.postData.slice(0, firstIndex),
+                    {...state.postData[firstIndex], 
+                        likes: [...state.postData[firstIndex].likes, {username: action.userID, like: true}]},
+                    ...state.postData.slice(firstIndex + 1)]}
             }
-            newState.postData[firstIndex].likes = newState.postData[firstIndex].likes.slice();
-            newState.postData[firstIndex] = Object.assign({}, newState.postData[firstIndex]);
-            newState.postData = newState.postData.slice();
-            return newState;
-            }
-        return newState;
+        }
     }
 
     if(action.type === actions.TOGGLE_EDIT_POST) {
@@ -374,7 +375,7 @@ var appReducer = function(state = initialState, action) {
     }
 
     if(action.type === actions.EDIT_POST_SUCCESSFUL) {
-        var firstIndex = newState.postData.findIndex((post) => post._id == action.postID)
+        var firstIndex = state.postData.findIndex((post) => post._id == action.postID)
         if(firstIndex > -1) {
             return {...state, 
                 postData: [...state.postData.slice(0, firstIndex), 
@@ -398,7 +399,7 @@ var appReducer = function(state = initialState, action) {
     if(action.type === actions.COMMENT_EDIT_SUCCESS) {
         var returnIndex = state.postData.findIndex((post) => post._id == action.postID)
         if(returnIndex > -1) {
-            var returnComment = newState.postData[returnIndex].comments.findIndex((comment) => comment._id == action.commentID)
+            var returnComment = state.postData[returnIndex].comments.findIndex((comment) => comment._id == action.commentID)
             if(returnComment > -1) {
                 return {...state, 
                     postData: [...state.postData.slice(0, returnIndex), 
@@ -414,7 +415,7 @@ var appReducer = function(state = initialState, action) {
     if(action.type === actions.COMMENT_DELETE_SUCCESS) {
         var returnIndex = state.postData.findIndex((post) => post._id == action.postID)
         if(returnIndex > -1) {
-            var returnComment = newState.postData[returnIndex].comments.findIndex((comment) => comment._id == action.commentID)
+            var returnComment = state.postData[returnIndex].comments.findIndex((comment) => comment._id == action.commentID)
             if(returnComment > -1) {
                 return {...state, 
                     postData: [...state.postData.slice(0, returnIndex), 
