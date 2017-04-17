@@ -5,8 +5,8 @@ const actions = require('../actions/index');
 
 const validate = values => {
   const errors = {}
-  if (!values.comment) {
-    errors.username = 'Please some text for the post'
+  if (!values.content) {
+    errors.content = 'Please some text for the post'
   }
   return errors
 }
@@ -19,9 +19,6 @@ const renderField = ({ input, label, name, type, controlId, placeholder, meta: {
 )
 
 class EditPostForm extends React.Component {
-    submitLogin(values) {
-        this.props.dispatch(actions.registerAction(values))
-    }
   render() {
   const { handleSubmit, pristine, submitting } = this.props
   return (

@@ -4,8 +4,8 @@ const { Form, FormControl, FormGroup, Button, Col, ControlLabel} = require('reac
 
 const validate = values => {
   const errors = {}
-  if (!values.comment) {
-    errors.username = 'Please enter a message'
+  if (!values.message) {
+    errors.message = 'Please enter a message'
   }
   return errors
 }

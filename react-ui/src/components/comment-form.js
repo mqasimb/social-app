@@ -6,7 +6,7 @@ const actions = require('../actions/index');
 const validate = values => {
   const errors = {}
   if (!values.comment) {
-    errors.username = 'Please enter a comment'
+    errors.comment = 'Please enter a comment'
   }
   return errors
 }
@@ -21,9 +21,6 @@ const renderField = ({ input, label, name, type, controlId, placeholder, meta: {
 )
 
 class CommentForm extends React.Component {
-    submitLogin(values) {
-        this.props.dispatch(actions.registerAction(values))
-    }
   render() {
   var formStyle = {
     paddingTop: '30px',

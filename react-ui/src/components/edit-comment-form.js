@@ -5,7 +5,7 @@ const { Form, FormControl, FormGroup, Button, Col, ControlLabel} = require('reac
 const validate = values => {
   const errors = {}
   if (!values.comment) {
-    errors.username = 'Please enter a comment'
+    errors.comment = 'Please enter a comment'
   }
   return errors
 }
@@ -19,7 +19,6 @@ const renderField = ({ input, label, name, type, controlId, placeholder, meta: {
 
 class EditCommentForm extends React.Component {
   render() {
-      console.log(this.props)
   const { handleSubmit, pristine, submitting } = this.props
   return (
       <div className='edit-comment-form'>

@@ -8,11 +8,10 @@ class AsyncSearch extends React.Component{
     super(props);
     this.state = {options: []}
   }
-  _handleSearch(query) {
+  handleSearch(query) {
     if (!query) {
       return;
     }
-
     axios.post(`/api/search/profile`, {search:query})
       .then(resp => resp)
       .then(json => {
@@ -26,7 +25,7 @@ class AsyncSearch extends React.Component{
     return (
       <AsyncTypeahead
         labelKey="username"
-        onSearch={this._handleSearch.bind(this)}
+        onSearch={this.handleSearch.bind(this)}
         options={this.state.options}
         placeholder="Search for user..."
         renderMenuItemChildren={(option, props, index) => (

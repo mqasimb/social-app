@@ -4,8 +4,8 @@ const { Form, FormControl, FormGroup, Button, Col, ControlLabel, Row} = require(
 
 const validate = values => {
   const errors = {}
-  if (!values.comment) {
-    errors.username = 'Please enter a value'
+  if (!values.search) {
+    errors.search = 'Please enter a game'
   }
   return errors
 }
