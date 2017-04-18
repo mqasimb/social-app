@@ -30,7 +30,7 @@ class Home extends React.Component {
         var arrayPosts = this.props.postData.map(function(post, index) {
             return <Post content={post.content} profilePicture={post.profile.ProfilePicture} date={post.date} name={post.name} key={uuid.v1()} id={post._id} likes={post.likes} comments={post.comments} image={post.image}/>
         })
-        var newIssueStyle={
+        var boxStyle={
             paddingTop: '15px',
             paddingBottom: '15px',
             marginTop: '10px',
@@ -59,7 +59,7 @@ class Home extends React.Component {
         var jumbotronStyle = {
             backgroundColor: '#ffffff',
             color: '#337AB7',
-            margin: '20px auto',
+            margin: '0 auto',
             padding: '20px',
             textAlign: 'center'
         }
@@ -67,7 +67,7 @@ class Home extends React.Component {
             backgroundColor: '#0E86CA',
             color: '#ffffff',
             fontFamily: 'Ubuntu',
-            fontSize: '1em',
+            fontSize: '1.25em',
             paddingTop: '5px',
             paddingBottom: '5px',
             paddingRight: '10px',
@@ -79,11 +79,13 @@ class Home extends React.Component {
         }
         var demoButtonTextStyle = {
             textAlign: 'center',
-            color: '#ffffff'
+            color: '#ffffff',
         }
         var listStyle = {
-            textAlign: 'center',
-            marginTop: '50px'
+            textAlign: 'center'
+        }
+        var formStyle = {
+            paddingBottom: '60px'
         }
         return (
             <div>
@@ -93,22 +95,22 @@ class Home extends React.Component {
                 {arrayPosts.reverse()}
                 </div>
             </div>) : (
-            <div style={newIssueStyle}>
+            <div style={boxStyle}>
             <Jumbotron style={jumbotronStyle}>
             <span style={mainTextStyle}>{'Social Gamers'}</span><br/>
             <span style={textStyle}>Connect With Gamers Across The Galaxy</span><br/>
             <img role="presentation" src={MilkyWaySVG} style={svgStyle}/>
-            <FormGroup>
-              <Col style={demoButtonTextStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
-                <Button onClick={this.submitLoginDemoAccount.bind(this)} style={demoButtonStyle}>Demo Account / Login</Button>
-              </Col>
-            </FormGroup>
             </Jumbotron>
             <div style={listStyle}>
             <span style={textStyle}>Share Updates With Other Users</span><br/><img role="presentation" src={GameControllerSVG} style={svgStyle}/><br/>
             <span style={textStyle}>Chat With Fellow Gamers!</span><br/><img role="presentation" src={ChatSVG} style={svgStyle}/><br/>
             <span style={textStyle}>Sign Up Today And Make Some Awesome Friends!</span><br/><img role="presentation" src={GroupSVG} style={svgStyle}/><br/>
             </div>
+            <FormGroup style= {formStyle}>
+              <Col style={demoButtonTextStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
+                <Button onClick={this.submitLoginDemoAccount.bind(this)} style={demoButtonStyle}>Demo Account / Login</Button>
+              </Col>
+            </FormGroup>
             </div>
             )}
             </div>

@@ -75,7 +75,7 @@ class NewPost extends React.Component {
             borderColor: '#1683ac'
         }
         var buttonCenter = {
-            textAlign: 'center'
+            textAlign: 'right'
         }
         var rowStylePadding = {
             paddingBottom: '30px'
@@ -94,7 +94,7 @@ class NewPost extends React.Component {
             <Col xs={2} xsOffset={1} md={2} mdOffset={2} lg={2}>
             <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}>{(this.props.uploadedFileCloudinaryUrl) ? (<div><img role="presentation" src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/><p>Drop files here to upload (or click)</p></div>) : (<p>Drop files here to upload (or click)</p>)}</Dropzone>
             </Col>
-            <Col style={buttonCenter} xs={2} xsOffset={5} smOffset={5} mdOffset={4} md={2} lg={2}>
+            <Col style={buttonCenter} xs={4} xsOffset={4} smOffset={4} mdOffset={4} md={2} lg={2}>
             <Button style={buttonStyle} onClick={this.postForm.bind(this)} bsStyle="info" disabled={!this.props.newPost.content}>Post</Button>
             </Col>
             </Row>
