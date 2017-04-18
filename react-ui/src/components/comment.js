@@ -30,7 +30,9 @@ class Comment extends React.Component {
       }
       var buttondivStyle = {
             display: 'inline-block',
-            fontSize: '.85em'
+            fontSize: '.85em',
+            cursor: 'pointer',
+            marginRight: '10px'
       }
       var dateStyle = {
             fontSize: '0.85em'

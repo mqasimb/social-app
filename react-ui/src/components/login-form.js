@@ -23,10 +23,10 @@ const renderField = ({ input, label, name, type, controlId, placeholder, meta: {
 )
 
 class LoginForm extends React.Component {
-    submitLogin(values) {
-      console.log(values)
-        this.props.dispatch(actions.registerAction(values))
-    }
+  submitLogin(values) {
+    console.log(values)
+      this.props.dispatch(actions.registerAction(values))
+  }
   render() {
   var formStyle = {
     backgroundColor: '#ffffff',
@@ -75,22 +75,13 @@ class LoginForm extends React.Component {
   var demoReminderStyle = {
       textAlign: 'center',
       paddingTop: '20px'
-    }
+  }
   const { handleSubmit, pristine, submitting } = this.props
   return (
     <Col xs={12} xsOffset={0} sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
       <div className='login-form'>
             <Form horizontal style={formStyle} onSubmit={handleSubmit(this.props.onSubmit.bind(this))}>
             <Panel style={panelStyle}>LOGIN</Panel>
-
-            <div style={demoReminderStyle}>
-            Click to access the demo account
-            </div>
-            <FormGroup>
-              <Col style={textStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
-                <Button onClick={this.props.demoButtonAction} style={demoButtonStyle}>Demo Account / Login</Button>
-              </Col>
-            </FormGroup>
 
             <FormGroup controlId="formHorizontalUsername">
               <Row><Col componentClass={ControlLabel} style={textStyle} xsOffset={3} smOffset={3} xs={6} sm={6}>
@@ -119,6 +110,15 @@ class LoginForm extends React.Component {
             <FormGroup>
               <Col style={textStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
                 <Button style={buttonStyle} type="submit" disabled={pristine || submitting}>Submit</Button>
+              </Col>
+            </FormGroup>
+
+            <div style={demoReminderStyle}>
+            Click to access the demo account
+            </div>
+            <FormGroup>
+              <Col style={textStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
+                <Button onClick={this.props.demoButtonAction} style={demoButtonStyle}>Demo Account / Login</Button>
               </Col>
             </FormGroup>
             </Form>

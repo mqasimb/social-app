@@ -61,8 +61,9 @@ class Post extends React.Component {
         }
         var buttondivStyle = {
             display: 'inline-block',
-            paddingLeft: '20px',
-            fontSize: '.75em'
+            marginLeft: '20px',
+            fontSize: '.75em',
+            cursor: 'pointer'
         }
         var deleteButton = <div style={buttondivStyle} onClick={this.open.bind(this)}><img style={editButtonStyle} role="presentation" src={DeleteButton} />Delete</div>;
         var editButton = <div style={buttondivStyle}  onClick={this.enableEdit.bind(this)}><img style={editButtonStyle} role="presentation" src={PencilEditButton} />Edit</div>;

@@ -66,7 +66,7 @@ class GameSearch extends React.Component{
       var data = this.props.mainProfile.favoriteGames.find((favoriteGame) => { 
           return favoriteGame.id === game.id;
       });
-      return <div style={listStyle} key={index}>{(data) ? (<Button style={blueButtonStyle} onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Liked</Button>) : (<Button style={whiteButtonStyle} onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Like</Button>)}<img style={imageStyle} width={64} height={64} role="presentation" src={game.cover.url}/><Link><span style={textStyle}>{game.name}</span></Link></div>
+      return <div style={listStyle} key={index}>{(data) ? (<Button style={blueButtonStyle} onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Liked</Button>) : (<Button style={whiteButtonStyle} onClick={this.likeGame.bind(this, game.name, game.id, game.cover.url)}>Like</Button>)}<img style={imageStyle} width={64} height={64} role="presentation" src={game.cover.url}/><span style={textStyle}>{game.name}</span></div>
     }
   )
     return (
