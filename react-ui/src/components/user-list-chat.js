@@ -4,12 +4,12 @@ const actions = require('../actions/index');
 
 class UserListChat extends React.Component {
     openChat() {
-            var friend = this.props.friend.toLowerCase();
-            var username = this.props.auth.user.username.toLowerCase();
-            var roomName = (friend < username) ? (friend+'-'+username) : (username+'-'+friend);
-            this.props.socket.emit('chat-started', {friend: this.props.friend, username: this.props.auth.user.username, roomName: roomName})
-            this.props.dispatch(actions.openChat({friend: this.props.friend, username: this.props.auth.user.username, roomName: roomName}))
-        }
+        var friend = this.props.friend.toLowerCase();
+        var username = this.props.auth.user.username.toLowerCase();
+        var roomName = (friend < username) ? (friend+'-'+username) : (username+'-'+friend);
+        this.props.socket.emit('chat-started', {friend: this.props.friend, username: this.props.auth.user.username, roomName: roomName})
+        this.props.dispatch(actions.openChat({friend: this.props.friend, username: this.props.auth.user.username, roomName: roomName}))
+    }
     render(props) {
         const { picture, friend } = this.props;
         var imageStyle = {
@@ -29,7 +29,7 @@ class UserListChat extends React.Component {
         }
         return (
             <div style={divStyle} onClick={this.openChat.bind(this)}>
-            <img style={imageStyle} role="presentation" src={picture} /> <span style={fontStyle}>{friend}</span>
+                <img style={imageStyle} role="presentation" src={picture} /> <span style={fontStyle}>{friend}</span>
             </div>
         )
     }

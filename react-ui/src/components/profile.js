@@ -104,13 +104,13 @@ class Profile extends React.Component {
         }
         var acceptFriendRequest = mainProfile.incomingRequests.findIndex((request) =>
             request.username == username
-        );
+        )
         var cancelFriendRequest = mainProfile.outgoingRequests.findIndex((request) =>
             request.username == username
-        );
+        )
         var isFriend = mainProfile.Friends.findIndex((request) => 
             request.username == username
-        );
+        )
         var acceptFriendRequestButton = <Button style={buttonStyle} onClick={this.acceptRequest.bind(this)}>ACCEPT REQUEST</Button>;
         var denyFriendRequestButton = <Button style={buttonStyle} onClick={this.denyRequest.bind(this)}>DENY REQUEST</Button>;
         var cancelFriendRequestButton = <Button style={buttonStyle} onClick={this.cancelRequest.bind(this)}>CANCEL REQUEST</Button>;
@@ -118,27 +118,42 @@ class Profile extends React.Component {
         var removeFriendRequestButton = <Button style={buttonStyle} onClick={this.removeFriend.bind(this)}>REMOVE FRIEND</Button>;
         return (
             <div>
-            <div className='profile-page-user' style={profileStyle}>
-            <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
-            <ProfilePicture img={loadedProfile.ProfilePicture} onClick={this.open.bind(this)}/>
-            {(auth.user.username == username) ? (<Button style={buttonStyle} onClick={this.open.bind(this)}>CHANGE PICTURE</Button>) : (null)}
-            </Col></Row>
-            <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}><div style={profileNameStyle}>
-            {username}
-            </div></Col></Row>
-            <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
-            {(auth.user.username == username) ? (null) : ((acceptFriendRequest > -1) ? (<div>{acceptFriendRequestButton} {denyFriendRequestButton}</div>) : ((isFriend > -1) ? (removeFriendRequestButton) : ((cancelFriendRequest > -1) ? (cancelFriendRequestButton) : (sendFriendRequestButton))))}
-            </Col></Row>
-            <ChangePictureModal setPicture={this.changeProfilePicture.bind(this)} close={this.close.bind(this)}/>
-            <Row style={rowStyle}><Col xs={10} xsOffset={1} sm={10} smOffset={1}>
-            <AboutMe text={loadedProfile.AboutMe}/>
-            </Col></Row>
-            <Row style={rowStyle}><Col xs={6} xsOffset={3} sm={6} smOffset={3}>
-            {(auth.user.username == username) ? ((changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: loadedProfile.AboutMe}}/>) : (<Button style={buttonStyle} onClick={this.enableAboutMeChange.bind(this)}>EDIT ABOUT ME</Button>)) : (null)}
-            </Col></Row></div>
-            <Col xs={12} xsOffset={0} sm={12} smOffset={0} md={12} mdOffset={0} lg={8} lgOffset={0}><ProfilePosts posts={postData}/></Col>
-            {(loadedProfile.Friends !== undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><FriendsList list={loadedProfile.Friends}/></div></Col>) : (null)}
-            {(loadedProfile.favoriteGames !== undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><GamesList list={loadedProfile.favoriteGames}/></div></Col>) : (null)}
+                <div className='profile-page-user' style={profileStyle}>
+                    <Row style={rowStyle}>
+                        <Col xs={6} xsOffset={3} sm={6} smOffset={3}>
+                            <ProfilePicture img={loadedProfile.ProfilePicture} onClick={this.open.bind(this)}/>
+                            {(auth.user.username == username) ? (<Button style={buttonStyle} onClick={this.open.bind(this)}>CHANGE PICTURE</Button>) : (null)}
+                        </Col>
+                    </Row>
+                    <Row style={rowStyle}>
+                        <Col xs={6} xsOffset={3} sm={6} smOffset={3}>
+                            <div style={profileNameStyle}>
+                                {username}
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row style={rowStyle}>
+                        <Col xs={6} xsOffset={3} sm={6} smOffset={3}>
+                            {(auth.user.username == username) ? (null) : ((acceptFriendRequest > -1) ? (<div>{acceptFriendRequestButton} {denyFriendRequestButton}</div>) : ((isFriend > -1) ? (removeFriendRequestButton) : ((cancelFriendRequest > -1) ? (cancelFriendRequestButton) : (sendFriendRequestButton))))}
+                        </Col>
+                    </Row>
+                    <ChangePictureModal setPicture={this.changeProfilePicture.bind(this)} close={this.close.bind(this)}/>
+                    <Row style={rowStyle}>
+                        <Col xs={10} xsOffset={1} sm={10} smOffset={1}>
+                            <AboutMe text={loadedProfile.AboutMe}/>
+                        </Col>
+                    </Row>
+                    <Row style={rowStyle}>
+                        <Col xs={6} xsOffset={3} sm={6} smOffset={3}>
+                            {(auth.user.username == username) ? ((changeAboutMe) ? (<AboutMeForm form='AboutMeForm' cancel={this.aboutMeCancelEdit.bind(this)} onSubmit={this.changeAboutMe.bind(this)} initialValues={{aboutMe: loadedProfile.AboutMe}}/>) : (<Button style={buttonStyle} onClick={this.enableAboutMeChange.bind(this)}>EDIT ABOUT ME</Button>)) : (null)}
+                        </Col>
+                    </Row>
+                </div>
+                <Col xs={12} xsOffset={0} sm={12} smOffset={0} md={12} mdOffset={0} lg={8} lgOffset={0}>
+                    <ProfilePosts posts={postData}/>
+                </Col>
+                {(loadedProfile.Friends !== undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><FriendsList list={loadedProfile.Friends}/></div></Col>) : (null)}
+                {(loadedProfile.favoriteGames !== undefined) ? (<Col xs={12} xsOffset={0} sm={8} smOffset={3} md={8} mdOffset={3} lg={4} lgOffset={0}><div style={friendListStyle}><GamesList list={loadedProfile.favoriteGames}/></div></Col>) : (null)}
             </div>
         )
     }

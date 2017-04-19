@@ -19,15 +19,15 @@ class FriendsList extends React.Component {
             paddingBottom: '40px',
             paddingTop: '20px'
         }
-        var friends = list.map((friend, index) => {
-                return <Friend key={index} username={friend.username} ProfilePicture={friend.ProfilePicture}/>;
-            })
+        var friends = list.map((friend, index) =>
+                <Friend key={index} username={friend.username} ProfilePicture={friend.ProfilePicture}/>
+        )
         return (
             <div className='friend-list'>
-            <Panel style={panelStyle}>Friends - {list.length}</Panel>
-            <div style={paddingStyle}>
-            {friends}
-            </div>
+                <Panel style={panelStyle}>Friends - {list.length}</Panel>
+                <div style={paddingStyle}>
+                    {friends}
+                </div>
             </div>
         )
     }

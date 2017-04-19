@@ -12,7 +12,7 @@ class AboutMe extends React.Component {
         }
         return (
             <div style={aboutMeStyle}>
-            <p>{text}</p>
+                <p>{text}</p>
             </div>
         )
     }

@@ -21,7 +21,7 @@ class Friend extends React.Component {
         }
         return (
             <div style={paddingStyle}>
-            <img style={imageStyle} width={64} height={64} role="presentation" src={ProfilePicture} /><Link to={'/profile/'+username}><span style={fontStyle}>{username}</span></Link>
+                <img style={imageStyle} width={64} height={64} role="presentation" src={ProfilePicture} /><Link to={'/profile/'+username}><span style={fontStyle}>{username}</span></Link>
             </div>
         )
     }

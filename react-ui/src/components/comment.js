@@ -44,17 +44,17 @@ class Comment extends React.Component {
       var editOn = <ListGroupItem><EditCommentForm form={this.props.id} onSubmit={this.editComment.bind(this)} cancel={this.cancelEdit.bind(this)} initialValues={{comment: this.props.comment}} /></ListGroupItem>;
         return (
             <div>
-            {(this.props.editComment[this.props.id]) ? (editOn) : (<Media>
-             <Media.Left>
-                <img width={64} height={64} role="presentation" src={this.props.profilePicture}/>
-              </Media.Left>
-              <Media.Body>
-                <Media.Heading>{this.props.username}</Media.Heading>
-                <span style={dateStyle}>{this.props.date}</span><br/>
-                <span className="comment-buttons">{isEdit} {isDelete}</span>
-                <p>{this.props.comment}</p>
-              </Media.Body>
-            </Media>)}
+                {(this.props.editComment[this.props.id]) ? (editOn) : (<Media>
+                    <Media.Left>
+                        <img width={64} height={64} role="presentation" src={this.props.profilePicture}/>
+                    </Media.Left>
+                    <Media.Body>
+                        <Media.Heading>{this.props.username}</Media.Heading>
+                        <span style={dateStyle}>{this.props.date}</span><br/>
+                        <span className="comment-buttons">{isEdit} {isDelete}</span>
+                        <p>{this.props.comment}</p>
+                    </Media.Body>
+                </Media>)}
             </div>
         )
     }

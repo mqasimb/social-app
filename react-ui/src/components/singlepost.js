@@ -54,13 +54,13 @@ class SinglePost extends React.Component {
         }
         return (
             <div>
-            <button onClick={this.returnHome.bind(this)}>Return Home</button>
-            {(!postLoading) ? (content) : (null)}
-            {(!postLoading) ? (username) : (null)}
-            {(!postLoading) ? (likeBox) : (null)}
-            {(!postLoading && isEdit) ? (<Button onClick={this.submitEdit.bind(this)}>Submit Edit</Button>) : (null)}
-            {(!postLoading && isEdit) ? (<Button onClick={this.cancelEdit.bind(this)}>Cancel Edit</Button>) : (null)}
-            {(!postLoading && !isEdit) ? (<Button onClick={this.enableEdit.bind(this)}>Edit Post</Button>) : (null)}
+                <button onClick={this.returnHome.bind(this)}>Return Home</button>
+                {(!postLoading) ? (content) : (null)}
+                {(!postLoading) ? (username) : (null)}
+                {(!postLoading) ? (likeBox) : (null)}
+                {(!postLoading && isEdit) ? (<Button onClick={this.submitEdit.bind(this)}>Submit Edit</Button>) : (null)}
+                {(!postLoading && isEdit) ? (<Button onClick={this.cancelEdit.bind(this)}>Cancel Edit</Button>) : (null)}
+                {(!postLoading && !isEdit) ? (<Button onClick={this.enableEdit.bind(this)}>Edit Post</Button>) : (null)}
             </div>
         )
     }

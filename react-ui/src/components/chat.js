@@ -52,8 +52,18 @@ class Chat extends React.Component {
     }
     render(props) {
         const { mainProfile, chatMessages, name } = this.props;
-
-        var dropzoneStyle = {position: 'absolute', bottom: '25', right: '85', zIndex: '1', textAlign: 'center', display: 'inline-block', width:20, height:20, cursor: 'pointer', color: '#1d2838'}
+        var dropzoneStyle = {
+            position: 'absolute', 
+            bottom: '25', 
+            right: '85', 
+            zIndex: '1', 
+            textAlign: 'center', 
+            display: 'inline-block', 
+            width:20, 
+            height:20, 
+            cursor: 'pointer', 
+            color: '#1d2838'
+        }
         var chatBoxStyle = {
             width: 300,
             height: 300,
@@ -83,12 +93,12 @@ class Chat extends React.Component {
         var loadHistoryButton = (firstIndex > -1) ? ((mainProfile.messages[firstIndex].messages.length > chatMessages[name].length) ? (<Button onClick={this.loadMessageHistory.bind(this)}>Load Message History</Button>) : (null)) : (null)
         return (
             <div style={chatBoxStyle}>
-            <div style={chatHeaderStyle}>{name} {loadHistoryButton}<Glyphicon style={glyphStyle} onClick={this.closeChat.bind(this)} glyph="remove"/></div>
-            <ChatBox name={name}/>
-            <div style={chatBottomStyle}>
-            <MessageForm onSubmit={this._handleSubmit.bind(this)} form={"MessageForm -"+name}/>
-            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}><Glyphicon glyph="picture"/></Dropzone>
-            </div>
+                <div style={chatHeaderStyle}>{name} {loadHistoryButton}<Glyphicon style={glyphStyle} onClick={this.closeChat.bind(this)} glyph="remove"/></div>
+                <ChatBox name={name}/>
+                <div style={chatBottomStyle}>
+                    <MessageForm onSubmit={this._handleSubmit.bind(this)} form={"MessageForm -"+name}/>
+                    <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}><Glyphicon glyph="picture"/></Dropzone>
+                </div>
             </div>
         )
     }

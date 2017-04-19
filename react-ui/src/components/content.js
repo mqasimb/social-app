@@ -1,12 +1,12 @@
-var React = require('react');
+const React = require('react');
 
 class Content extends React.Component {
     render() {
         return(
             <div>
-            {this.props.content}
+            	{this.props.content}
             </div>
-            )
+        )
     }
 }
 

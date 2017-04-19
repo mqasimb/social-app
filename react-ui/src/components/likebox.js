@@ -28,15 +28,15 @@ class LikeBox extends React.Component {
         }
         var LikeButton = <Button style={whiteButtonStyle} onClick={this.props.onClick}>Like</Button>;
         var LikedButton = <Button style={blueButtonStyle} onClick={this.props.onClick}>Liked</Button>;
-        var isLiked = this.props.likes.findIndex((item) => {
-            return item.username === this.props.username;
-        })
+        var isLiked = this.props.likes.findIndex((item) =>
+            item.username === this.props.username
+        )
         return(
             <div style={likeBoxStyle}>
-            {(isLiked > -1) ? (LikedButton) : (LikeButton)}
-            <Badge style={badgeStyle}>{this.props.likes.length}</Badge>
+                {(isLiked > -1) ? (LikedButton) : (LikeButton)}
+                <Badge style={badgeStyle}>{this.props.likes.length}</Badge>
             </div>
-            )
+        )
     }
 }
 

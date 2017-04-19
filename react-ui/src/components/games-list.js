@@ -18,15 +18,15 @@ class GamesList extends React.Component {
             paddingBottom: '40px',
             paddingTop: '20px'
         }
-        var games = this.props.list.map((game, index) => {
-                return <Game key={index} id={game.id} name={game.name} cover={game.cover}/>;
-            })
+        var games = this.props.list.map((game, index) =>
+                <Game key={index} id={game.id} name={game.name} cover={game.cover}/>
+        )
         return (
             <div className='game-list'>
-            <Panel style={panelStyle}>Games - {this.props.list.length}</Panel>
-            <div style={paddingStyle}>
-            {games}
-            </div>
+                <Panel style={panelStyle}>Games - {this.props.list.length}</Panel>
+                <div style={paddingStyle}>
+                    {games}
+                </div>
             </div>
         )
     }

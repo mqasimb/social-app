@@ -89,25 +89,26 @@ class Post extends React.Component {
         var image = (this.props.image) ? (<img style={postImageStyle} role="presentation" src={this.props.image}/>) : (null)
         return (
             <div className='singlePost' style={postStyle}>
-            {(this.props.editPost[this.props.id]) ? (editOn) : (<Media>
-             <Media.Left>
-                <img width={64} height={64} role="presentation" src={this.props.profilePicture}/>
-              </Media.Left>
-              <Media.Body>
-                <Media.Heading><Link to={'/profile/'+this.props.name}>{this.props.name}</Link>
-                {isEdit}
-                {isDelete}
-              </Media.Heading>
-                <p>{moment(this.props.date).format('MMMM Do YYYY, h:mm a')}</p>
-                <Content content={this.props.content}/>
-                {image}
-            <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
-            <DeleteModal key={uuid.v4()} delete={this.deleteClick.bind(this)} close={this.close.bind(this)}/>
-            <CommentForm onSubmit={this.submitComment.bind(this)} form={this.props.id}/>
-            {(this.props.comments.length > 0) ? (<h2>Comments</h2>) : (null)}
-            <CommentList comments={this.props.comments}/>
-              </Media.Body>
-            </Media>)}
+                {(this.props.editPost[this.props.id]) ? (editOn) : (
+                <Media>
+                    <Media.Left>
+                        <img width={64} height={64} role="presentation" src={this.props.profilePicture}/>
+                    </Media.Left>
+                    <Media.Body>
+                        <Media.Heading><Link to={'/profile/'+this.props.name}>{this.props.name}</Link>
+                            {isEdit}
+                            {isDelete}
+                        </Media.Heading>
+                        <p>{moment(this.props.date).format('MMMM Do YYYY, h:mm a')}</p>
+                        <Content content={this.props.content}/>
+                        {image}
+                        <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
+                        <DeleteModal key={uuid.v4()} delete={this.deleteClick.bind(this)} close={this.close.bind(this)}/>
+                        <CommentForm onSubmit={this.submitComment.bind(this)} form={this.props.id}/>
+                        {(this.props.comments.length > 0) ? (<h2>Comments</h2>) : (null)}
+                        <CommentList comments={this.props.comments}/>
+                    </Media.Body>
+                </Media>)}
             </div>
         )
     }

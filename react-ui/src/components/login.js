@@ -6,19 +6,19 @@ const LoginForm = require('./login-form');
 
 class Login extends React.Component {
     submitLogin(values) {
-          this.props.dispatch(actions.loginAction(values)).then(function(bool) {
-           if(bool) {
-               //If user logs in succesfully redirect to the home page
-               router.browserHistory.push('/');
-           } 
-        });
+        this.props.dispatch(actions.loginAction(values)).then(function(bool) {
+            if(bool) {
+                //If user logs in succesfully redirect to the home page
+                router.browserHistory.push('/');
+            } 
+        })
     }
     submitLoginDemoAccount() {
-          this.props.dispatch(actions.loginAction({username:'DemoAccount', password:'123456789'})).then(function(bool) {
-           if(bool) {
-               //If user logs in succesfully redirect to the home page
-               router.browserHistory.push('/');
-           } 
+        this.props.dispatch(actions.loginAction({username:'DemoAccount', password:'123456789'})).then(function(bool) {
+            if(bool) {
+                //If user logs in succesfully redirect to the home page
+                router.browserHistory.push('/');
+            } 
         });
     }
     inputChange(event) {
@@ -28,9 +28,9 @@ class Login extends React.Component {
     render(props) {
         return (
             <div>
-            <LoginForm demoButtonAction={this.submitLoginDemoAccount.bind(this)} onSubmit={this.submitLogin}/>
+                <LoginForm demoButtonAction={this.submitLoginDemoAccount.bind(this)} onSubmit={this.submitLogin}/>
             </div>
-            )
+        )
     }
 }
 

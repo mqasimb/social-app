@@ -19,7 +19,7 @@ class Game extends React.Component {
         }
         return (
             <div style={paddingStyle}>
-            <img style={imageStyle} width={64} height={64} role="presentation" src={this.props.cover} /><span style={fontStyle}>{this.props.name}</span>
+                <img style={imageStyle} width={64} height={64} role="presentation" src={this.props.cover} /><span style={fontStyle}>{this.props.name}</span>
             </div>
         )
     }

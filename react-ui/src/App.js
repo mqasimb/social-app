@@ -42,13 +42,13 @@ class App extends React.Component {
             textAlign: 'center'
         }
         var loggedOutUser = <Nav pullRight>
-        <LinkContainer to='/login'><NavItem eventKey={1}><span className='nav-text'>Login</span></NavItem></LinkContainer>
-        <LinkContainer to='/register'><NavItem eventKey={2}><span className='nav-text'>Register</span></NavItem></LinkContainer>
-        </Nav>;
+                <LinkContainer to='/login'><NavItem eventKey={1}><span className='nav-text'>Login</span></NavItem></LinkContainer>
+                <LinkContainer to='/register'><NavItem eventKey={2}><span className='nav-text'>Register</span></NavItem></LinkContainer>
+            </Nav>;
         var loggedInUser = <Nav pullRight><LinkContainer className="nav-text-container" to={'/profile/'+this.props.auth.user.username}><NavItem style={LinkStyle}><div style={navButtonStyle}><img className style={iconSize} role="presentation" src={UserIcon}/></div><span className='nav-text'>{this.props.auth.user.username}</span></NavItem></LinkContainer>
-        <LinkContainer className="nav-text-container" to='/gamesearch'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} role="presentation" src={GamepadIcon}/></div><span className='nav-text'>Search Games</span></NavItem></LinkContainer>
-        <LinkContainer className="nav-text-container" to='/friendRequests'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} role="presentation" src={AddFriendIcon}/></div><span className='nav-text'>Friend Requests</span></NavItem></LinkContainer>
-        <NavItem className="nav-text-container" style={LinkStyle} href='' onClick={this.userLogout.bind(this)}><div style={navButtonStyle}><img style={iconSize} role="presentation" src={LogOutIcon}/></div><span className='nav-text'>Logout</span></NavItem></Nav>;
+                <LinkContainer className="nav-text-container" to='/gamesearch'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} role="presentation" src={GamepadIcon}/></div><span className='nav-text'>Search Games</span></NavItem></LinkContainer>
+                <LinkContainer className="nav-text-container" to='/friendRequests'><NavItem style={LinkStyle}><div style={navButtonStyle}><img style={iconSize} role="presentation" src={AddFriendIcon}/></div><span className='nav-text'>Friend Requests</span></NavItem></LinkContainer>
+            <NavItem className="nav-text-container" style={LinkStyle} href='' onClick={this.userLogout.bind(this)}><div style={navButtonStyle}><img style={iconSize} role="presentation" src={LogOutIcon}/></div><span className='nav-text'>Logout</span></NavItem></Nav>;
         var topStyle={
             'overflowX': 'hidden',
             fontFamily: 'Ubuntu',
@@ -57,15 +57,15 @@ class App extends React.Component {
         }
         var {notifications} = this.props;
         const notificationStyle = {
-          NotificationItem: { // Override the notification item 
-            DefaultStyle: { // Applied to every notification, regardless of the notification level 
-              margin: '10px 5px 2px 1px'
-            },
-     
-            success: { // Applied only to the success notification item 
-              color: 'red'
+            NotificationItem: { // Override the notification item 
+                DefaultStyle: { // Applied to every notification, regardless of the notification level 
+                margin: '10px 5px 2px 1px'
+                },
+
+                success: { // Applied only to the success notification item 
+                    color: 'red'
+                }
             }
-          }
         };
         const navBarStyle = {
             'backgroundColor': '#1D2838',
@@ -84,32 +84,32 @@ class App extends React.Component {
         }
         return (
             <div className="top-nav" style={topStyle}>
-            <Notifications
-                notifications={notifications}
-                style={notificationStyle}
-              />
-            <div className='nav-bar'>
-            <Navbar className="fixed-top-nav" fixedTop style={navBarStyle}>
-                <Navbar.Header>
-                  <Navbar.Brand>
-                    <Link to='/' style={brandStyle}>Social Gamers</Link>
-                  </Navbar.Brand>
-                  <Navbar.Toggle />
-                </Navbar.Header>
-                <Navbar.Form pullLeft>
-                {(isLoggedIn) ? (<AsyncSearch />) : (null)}
-                </Navbar.Form>
-                <Navbar.Collapse>
-                    {(isLoggedIn) ? (loggedInUser) : (loggedOutUser)}
-                </Navbar.Collapse>
-              </Navbar>
-              </div>
-              <div className='children' style={backgroundStyle}>
-              {this.props.children}
-              </div>
-              {(isLoggedIn) ? (<ChatContainer/>) : (null)}
-        </div>
-            )
+                <Notifications
+                    notifications={notifications}
+                    style={notificationStyle}
+                  />
+                <div className='nav-bar'>
+                    <Navbar className="fixed-top-nav" fixedTop style={navBarStyle}>
+                        <Navbar.Header>
+                            <Navbar.Brand>
+                                <Link to='/' style={brandStyle}>Social Gamers</Link>
+                            </Navbar.Brand>
+                            <Navbar.Toggle />
+                        </Navbar.Header>
+                        <Navbar.Form pullLeft>
+                            {(isLoggedIn) ? (<AsyncSearch />) : (null)}
+                        </Navbar.Form>
+                        <Navbar.Collapse>
+                            {(isLoggedIn) ? (loggedInUser) : (loggedOutUser)}
+                        </Navbar.Collapse>
+                    </Navbar>
+                </div>
+                <div className='children' style={backgroundStyle}>
+                    {this.props.children}
+                </div>
+                {(isLoggedIn) ? (<ChatContainer/>) : (null)}
+            </div>
+        )
     }
 }
 

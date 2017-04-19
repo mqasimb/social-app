@@ -24,12 +24,12 @@ class Home extends React.Component {
         }
     }
     submitLoginDemoAccount() {
-          this.props.dispatch(actions.loginAction({username:'DemoAccount', password:'123456789'}))
+        this.props.dispatch(actions.loginAction({username:'DemoAccount', password:'123456789'}))
     }
     render() {
-        var arrayPosts = this.props.postData.map(function(post, index) {
-            return <Post content={post.content} profilePicture={post.profile.ProfilePicture} date={post.date} name={post.name} key={uuid.v1()} id={post._id} likes={post.likes} comments={post.comments} image={post.image}/>
-        })
+        var arrayPosts = this.props.postData.map((post, index) =>
+            <Post content={post.content} profilePicture={post.profile.ProfilePicture} date={post.date} name={post.name} key={uuid.v1()} id={post._id} likes={post.likes} comments={post.comments} image={post.image}/>
+        )
         var boxStyle={
             paddingTop: '15px',
             paddingBottom: '15px',
@@ -89,32 +89,32 @@ class Home extends React.Component {
         }
         return (
             <div>
-            {(this.props.auth.authenticated) ? (<div>
-                <NewPost />
-                <div className='posts'>
-                {arrayPosts.reverse()}
+                {(this.props.auth.authenticated) ? (<div>
+                    <NewPost />
+                    <div className='posts'>
+                        {arrayPosts.reverse()}
+                    </div>
+                </div>) : (
+                <div style={boxStyle}>
+                    <Jumbotron style={jumbotronStyle}>
+                        <span style={mainTextStyle}>{'Social Gamers'}</span><br/>
+                        <span style={textStyle}>Connect With Gamers Across The Galaxy</span><br/>
+                        <img role="presentation" src={MilkyWaySVG} style={svgStyle}/>
+                    </Jumbotron>
+                    <div style={listStyle}>
+                        <span style={textStyle}>Share Updates With Other Users</span><br/><img role="presentation" src={GameControllerSVG} style={svgStyle}/><br/>
+                        <span style={textStyle}>Chat With Fellow Gamers!</span><br/><img role="presentation" src={ChatSVG} style={svgStyle}/><br/>
+                        <span style={textStyle}>Sign Up Today And Make Some Awesome Friends!</span><br/><img role="presentation" src={GroupSVG} style={svgStyle}/><br/>
+                    </div>
+                    <FormGroup style= {formStyle}>
+                        <Col style={demoButtonTextStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
+                            <Button onClick={this.submitLoginDemoAccount.bind(this)} style={demoButtonStyle}>Demo Account / Login</Button>
+                        </Col>
+                    </FormGroup>
                 </div>
-            </div>) : (
-            <div style={boxStyle}>
-            <Jumbotron style={jumbotronStyle}>
-            <span style={mainTextStyle}>{'Social Gamers'}</span><br/>
-            <span style={textStyle}>Connect With Gamers Across The Galaxy</span><br/>
-            <img role="presentation" src={MilkyWaySVG} style={svgStyle}/>
-            </Jumbotron>
-            <div style={listStyle}>
-            <span style={textStyle}>Share Updates With Other Users</span><br/><img role="presentation" src={GameControllerSVG} style={svgStyle}/><br/>
-            <span style={textStyle}>Chat With Fellow Gamers!</span><br/><img role="presentation" src={ChatSVG} style={svgStyle}/><br/>
-            <span style={textStyle}>Sign Up Today And Make Some Awesome Friends!</span><br/><img role="presentation" src={GroupSVG} style={svgStyle}/><br/>
+                )}
             </div>
-            <FormGroup style= {formStyle}>
-              <Col style={demoButtonTextStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
-                <Button onClick={this.submitLoginDemoAccount.bind(this)} style={demoButtonStyle}>Demo Account / Login</Button>
-              </Col>
-            </FormGroup>
-            </div>
-            )}
-            </div>
-            )
+        )
     }
 }
 

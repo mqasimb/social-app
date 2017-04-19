@@ -13,9 +13,9 @@ class Register extends React.Component {
     render(props) {
         return (
             <div>
-            <RegistrationForm/>
+                <RegistrationForm/>
             </div>
-            )
+        )
     }
 }
 

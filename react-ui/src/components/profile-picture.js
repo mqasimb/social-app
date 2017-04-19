@@ -1,4 +1,4 @@
-var React = require('react');
+const React = require('react');
 
 class ProfilePicture extends React.Component {
     render(props) {
@@ -12,7 +12,7 @@ class ProfilePicture extends React.Component {
     	}
         return (
             <div>
-            <img style={pictureStyle} role="presentation" src={this.props.img}/>
+                <img style={pictureStyle} role="presentation" src={this.props.img}/>
             </div>
         )
     }
