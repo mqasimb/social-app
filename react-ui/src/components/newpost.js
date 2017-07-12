@@ -1,13 +1,19 @@
-const React = require('react');
-const { connect } = require('react-redux');
-const actions = require('../actions/index');
-const axios = require('axios');
-const Dropzone = require('react-dropzone');
-const request = require('superagent');
-const { FormGroup, FormControl, ControlLabel, Button, Col, Row } = require('react-bootstrap');
+import React from 'react'
+import { connect } from 'react-redux'
+import actions from '../actions/index'
+import axios from 'axios'
+import Dropzone from 'react-dropzone'
+import request from 'superagent'
+import { FormGroup, FormControl, ControlLabel, Button, Col, Row } from 'react-bootstrap'
 import CheckboxPen from '../icons/checkbox-pen-outline.svg'
 
 class NewPost extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showUploadBox: false
+        }
+    }
     postForm(event) {
         event.preventDefault();
         this.props.dispatch(actions.submitPostToServer(this.props.newPost));
@@ -43,10 +49,28 @@ class NewPost extends React.Component {
                 });
             })
     }
+    toggleUpload(toggle) {
+        this.setState({
+            showUploadBox: toggle
+        })
+    }
     
     render() {
-        var imgStyle = {width: 100, height: 100}
-        var dropzoneStyle = {textAlign: 'center', display: 'inline-block', width:150, height:150, borderStyle:'solid', borderColor: '#1d2838', backgroundColor: '#1d2838', cursor: 'pointer', color: '#06D7D4'}
+        var imgStyle = {
+            width: 100, 
+            height: 100
+        }
+        var dropzoneStyle = {
+            textAlign: 'center', 
+            display: 'inline-block', 
+            width:150, 
+            height:125, 
+            borderStyle:'solid', 
+            borderColor: '#1d2838', 
+            backgroundColor: '#1d2838', 
+            cursor: 'pointer', 
+            color: '#06D7D4'
+        }
         var newPostStyle={
             'backgroundColor': '#253243',
             'fontFamily': 'Ubuntu, sans-serif',
@@ -96,9 +120,15 @@ class NewPost extends React.Component {
                         </Col>
                     </Row>
                     <Row style={rowStylePadding}>
-                        <Col xs={2} xsOffset={1} md={2} mdOffset={2} lg={2}>
-                            <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}>{(this.props.uploadedFileCloudinaryUrl) ? (<div><img role="presentation" src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/><p>Drop files here to upload (or click)</p></div>) : (<p>Drop files here to upload (or click)</p>)}</Dropzone>
-                        </Col>
+                        {(this.state.showUploadBox) ? (
+                            <Col xs={2} xsOffset={1} md={2} mdOffset={2} lg={2}>
+                                <Dropzone style={dropzoneStyle} multiple={false} accept="image/*" onDrop={this.onImageDrop.bind(this)}>{(this.props.uploadedFileCloudinaryUrl) ? (<div><img role="presentation" src={this.props.uploadedFileCloudinaryUrl} style={imgStyle}/><p>Drop files here to upload (or click)</p></div>) : (<p>Drop files here to upload (or click)</p>)}</Dropzone>
+                            </Col>
+                        ) : (
+                            <Col xs={2} xsOffset={1} md={2} mdOffset={2} lg={2}>
+                                <Button style={buttonStyle} onClick={this.toggleUpload.bind(this, true)} bsStyle="info">Upload Image</Button>
+                            </Col>
+                        )}
                         <Col style={buttonCenter} xs={4} xsOffset={4} smOffset={4} mdOffset={4} md={2} lg={2}>
                             <Button style={buttonStyle} onClick={this.postForm.bind(this)} bsStyle="info" disabled={!this.props.newPost.content}>Post</Button>
                         </Col>

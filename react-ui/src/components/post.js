@@ -6,7 +6,7 @@ const LikeBox = require('./likebox');
 const actions = require('../actions/index');
 const CommentList = require('./commentlist');
 const CommentForm = require('./comment-form');
-const { Media, ListGroupItem } = require('react-bootstrap');
+const { Media, ListGroupItem, Modal, Button } = require('react-bootstrap');
 const { reset } = require('redux-form');
 const uuid = require('uuid');
 const DeleteModal = require('./delete-modal');
@@ -17,6 +17,12 @@ import PencilEditButton from '../icons/pencil-edit-button.svg'
 import DeleteButton from '../icons/cancel.svg'
 
 class Post extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            imageModal: false
+        }
+    }
     likeBoxClick(event) {
         event.preventDefault();
         this.props.dispatch(actions.updateLikeStatus(this.props.id, this.props.auth.user._id));
@@ -47,6 +53,16 @@ class Post extends React.Component {
     submitComment(values) {
         this.props.dispatch(actions.submitComment(this.props.id, values))
         this.props.dispatch(reset(this.props.id));
+    }
+    openImageModal() {
+        this.setState({
+            imageModal: true
+        })
+    }
+    closeImage() {
+        this.setState({
+            imageModal: false
+        })   
     }
     close() {
         this.props.dispatch(actions.toggleModal(null, false));
@@ -86,7 +102,7 @@ class Post extends React.Component {
             borderColor: '#00fff9',
             borderWidth: '1px'
         }
-        var image = (this.props.image) ? (<img style={postImageStyle} role="presentation" src={this.props.image}/>) : (null)
+        var image = (this.props.image) ? (<img style={postImageStyle} onClick={this.openImageModal.bind(this)} role="presentation" src={this.props.image}/>) : (null)
         return (
             <div className='singlePost' style={postStyle}>
                 {(this.props.editPost[this.props.id]) ? (editOn) : (
@@ -102,6 +118,17 @@ class Post extends React.Component {
                         <p>{moment(this.props.date).format('MMMM Do YYYY, h:mm a')}</p>
                         <Content content={this.props.content}/>
                         {image}
+                        <Modal show={this.state.imageModal} onHide={this.closeImage.bind(this)}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Please upload new picture</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <img style={{width: '100%'}} onClick={this.openImageModal.bind(this)} role="presentation" src={this.props.image}/>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button onClick={this.closeImage.bind(this)}>Close</Button>
+                            </Modal.Footer>
+                        </Modal>
                         <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
                         <DeleteModal key={uuid.v4()} delete={this.deleteClick.bind(this)} close={this.close.bind(this)}/>
                         <CommentForm onSubmit={this.submitComment.bind(this)} form={this.props.id}/>
