@@ -3,6 +3,7 @@ const { Field, reduxForm } = require('redux-form');
 const { Panel, Form, FormControl, FormGroup, Button, Checkbox, Col, ControlLabel, Row} = require('react-bootstrap');
 const actions = require('../actions/index');
 const { connect } = require('react-redux');
+const router = require('react-router');
 
 const validate = values => {
     const errors = {}
@@ -24,7 +25,20 @@ const renderField = ({ input, label, name, type, controlId, placeholder, meta: {
 
 class LoginForm extends React.Component {
     submitLogin(values) {
-        this.props.dispatch(actions.registerAction(values))
+        this.props.dispatch(actions.loginAction(values)).then(function(bool) {
+            if(bool) {
+                //If user logs in succesfully redirect to the home page
+                router.browserHistory.push('/');
+            } 
+        })
+    }
+    submitLoginDemoAccount() {
+        this.props.dispatch(actions.loginAction({username:'DemoAccount', password:'123456789'})).then(function(bool) {
+            if(bool) {
+                //If user logs in succesfully redirect to the home page
+                router.browserHistory.push('/');
+            } 
+        });
     }
     render() {
         var formStyle = {
@@ -79,7 +93,7 @@ class LoginForm extends React.Component {
         return (
             <Col xs={12} xsOffset={0} sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
                 <div className='login-form'>
-                    <Form horizontal style={formStyle} onSubmit={handleSubmit(this.props.onSubmit.bind(this))}>
+                    <Form horizontal style={formStyle} onSubmit={handleSubmit(this.submitLogin.bind(this))}>
                         <Panel style={panelStyle}>LOGIN</Panel>
 
                         <FormGroup controlId="formHorizontalUsername">
@@ -121,7 +135,7 @@ class LoginForm extends React.Component {
                         </div>
                         <FormGroup>
                             <Col style={textStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
-                                <Button onClick={this.props.demoButtonAction} style={demoButtonStyle}>Demo Account / Login</Button>
+                                <Button onClick={this.submitLoginDemoAccount} style={demoButtonStyle}>Demo Account / Login</Button>
                             </Col>
                         </FormGroup>
                     </Form>
@@ -130,14 +144,6 @@ class LoginForm extends React.Component {
         )
     }
 }
-
-function mapStateToProps(state) {
-    return ({
-        state: state
-    })
-}
-
-LoginForm = connect(mapStateToProps)(LoginForm);
 
 LoginForm = reduxForm({
   form: 'LoginForm',  // a unique identifier for this form

@@ -136,21 +136,13 @@ class RegistrationForm extends React.Component {
                         </FormGroup>
                     </Form>
                     <div style={bottomReminderStyle}>
-                    Do you already have an account? <Link style={linkStyle} to='login'>Login</Link>
+                        Do you already have an account? <Link style={linkStyle} to='login'>Login</Link>
                     </div>
                 </div>
             </Col>
         )
     }
 }
-
-function mapStateToProps(state) {
-    return ({
-        state: state
-    })
-}
-
-RegistrationForm = connect(mapStateToProps)(RegistrationForm);
 
 RegistrationForm = reduxForm({
   form: 'RegistrationForm',  // a unique identifier for this form

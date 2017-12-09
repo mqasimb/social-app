@@ -1,26 +1,27 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-const App = require('./App');
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
 
 import './index.css';
 
-const { Provider } = require('react-redux');
+import { Provider } from 'react-redux'
+import store from './store'
+import { setAuthorizationToken, userLoggedIn } from './actions/index'
+import jwtdecode from 'jwt-decode'
+
+import Login from './components/login'
+import Register from './components/register'
+import SinglePost from './components/singlepost'
+import Profile from './components/profile'
+import Home from './components/home'
+import FriendRequestsContainer from './components/friend-requests-container'
+import GameSearch from './components/game-search'
+
 const router = require('react-router');
 const Router = router.Router;
 const Route = router.Route;
 const IndexRoute = router.IndexRoute;
 const browserHistory = router.browserHistory;
-const store = require('./store');
-const { setAuthorizationToken, userLoggedIn } = require('./actions/index')
-const jwtdecode = require('jwt-decode');
-
-const Login = require('./components/login');
-const Register = require('./components/register');
-const SinglePost = require('./components/singlepost');
-const Profile = require('./components/profile');
-const Home = require('./components/home');
-const FriendRequestsContainer = require('./components/friend-requests-container');
-const GameSearch = require('./components/game-search');
 
 if(localStorage.jwt) {
     setAuthorizationToken(localStorage.jwt);
