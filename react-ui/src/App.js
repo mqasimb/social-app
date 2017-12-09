@@ -20,14 +20,6 @@ class App extends React.Component {
         this.props.dispatch(actions.logoutAction());
         router.browserHistory.push('/login');
     }
-    userLogin(event) {
-        event.preventDefault();
-        router.browserHistory.push('/login');
-    }
-    userRegister(event) {
-        event.preventDefault();
-        router.browserHistory.push('/register');
-    }
     render(props) {
         var isLoggedIn = this.props.auth.authenticated;
         const LinkStyle = {
@@ -116,9 +108,7 @@ class App extends React.Component {
 function mapStateToProps(state, props) {
     return ({
         auth: state.app.auth,
-        userSearchResults: state.app.userSearchResults,
-        notifications: state.notifications,
-        mainProfile: state.app.mainProfile
+        notifications: state.notifications
     })
 }
 

@@ -135,7 +135,7 @@ class LoginForm extends React.Component {
                         </div>
                         <FormGroup>
                             <Col style={textStyle} xs={6} xsOffset={3} sm={6} smOffset={3}>
-                                <Button onClick={this.submitLoginDemoAccount} style={demoButtonStyle}>Demo Account / Login</Button>
+                                <Button onClick={this.submitLoginDemoAccount.bind(this)} style={demoButtonStyle}>Demo Account / Login</Button>
                             </Col>
                         </FormGroup>
                     </Form>

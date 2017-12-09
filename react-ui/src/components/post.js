@@ -120,13 +120,13 @@ class Post extends React.Component {
                         {image}
                         <Modal show={this.state.imageModal} onHide={this.closeImage.bind(this)}>
                             <Modal.Header closeButton>
-                                <Modal.Title>Please upload new picture</Modal.Title>
+                                <Modal.Title>{this.props.content}</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <img style={{width: '100%'}} onClick={this.openImageModal.bind(this)} role="presentation" src={this.props.image}/>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button onClick={this.closeImage.bind(this)}>Close</Button>
+                                
                             </Modal.Footer>
                         </Modal>
                         <LikeBox username={this.props.auth.user._id} likes={this.props.likes} onClick={this.likeBoxClick.bind(this)}/>
