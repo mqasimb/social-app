@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import actions from '../actions/index'
+import * as actions from '../actions/index'
 import axios from 'axios'
 import Dropzone from 'react-dropzone'
 import request from 'superagent'
